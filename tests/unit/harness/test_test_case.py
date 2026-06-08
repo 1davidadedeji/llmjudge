@@ -28,3 +28,9 @@ def test_is_rag_case() -> None:
     """RAG flag reflects presence of retrieval context."""
     assert LLMTestCase(input="q", actual_output="a", retrieval_context=["p"]).is_rag_case
     assert not LLMTestCase(input="q", actual_output="a").is_rag_case
+
+def test_has_expected_output() -> None:
+    """Expected-output flag reflects the field."""
+    assert not LLMTestCase(input="q", actual_output="a").has_expected_output
+    case = LLMTestCase(input="q", actual_output="a", expected_output="e")
+    assert case.has_expected_output
