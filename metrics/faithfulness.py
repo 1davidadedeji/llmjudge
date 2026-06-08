@@ -32,6 +32,8 @@ class FaithfulnessMetric:
 
     def __init__(self, judge: JudgeClient, threshold: float = 0.8) -> None:
         """Stores the judge client and pass threshold."""
+        if not 0.0 <= threshold <= 1.0:
+            raise ValueError("threshold must be in [0, 1]")
         self.judge = judge
         self.threshold = threshold
 
