@@ -15,3 +15,15 @@ body {
   padding: 1rem 2rem;
   border-bottom: 1px solid #30363d;
 }
+
+.run-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.run-table th,
+.run-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #30363d;
+  text-align: left;
+}
