@@ -43,3 +43,9 @@ def test_threshold_out_of_range_rejected() -> None:
 
     with pytest.raises(ValueError):
         FaithfulnessMetric(StubJudge([]), threshold=1.5)
+
+def test_half_claims_entailed() -> None:
+    """Mixed verdicts yield a fractional score."""
+    metric = FaithfulnessMetric(StubJudge(["yes", "no"]))
+    case = make_case("The sky is blue. The moon is made of cheese.", ["The sky is blue."])
+    assert metric.measure(case) == 0.5
