@@ -23,3 +23,8 @@ def test_defaults_empty() -> None:
     assert case.expected_output is None
     assert case.retrieval_context == []
     assert case.metadata == {}
+
+def test_is_rag_case() -> None:
+    """RAG flag reflects presence of retrieval context."""
+    assert LLMTestCase(input="q", actual_output="a", retrieval_context=["p"]).is_rag_case
+    assert not LLMTestCase(input="q", actual_output="a").is_rag_case
