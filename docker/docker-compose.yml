@@ -1,0 +1,55 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: docker/api.Dockerfile
+    ports:
+      - "8000:8000"
+    env_file: ../.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/worker.Dockerfile
+    env_file: ../.env
+    depends_on:
+      redis:
+        condition: service_started
+
+  dashboard:
+    build:
+      context: ../dashboard
+      dockerfile: ../docker/dashboard.Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: llmjudge
+      POSTGRES_PASSWORD: llmjudge
+      POSTGRES_DB: llmjudge
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U llmjudge"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+volumes:
+  pgdata:
