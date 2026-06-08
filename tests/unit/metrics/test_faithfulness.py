@@ -36,3 +36,10 @@ def test_no_claims_scores_one() -> None:
     """Empty answer is vacuously faithful."""
     metric = FaithfulnessMetric(StubJudge([]))
     assert metric.measure(make_case("", ["anything"])) == 1.0
+
+def test_threshold_out_of_range_rejected() -> None:
+    """Thresholds outside [0, 1] raise a ValueError."""
+    import pytest
+
+    with pytest.raises(ValueError):
+        FaithfulnessMetric(StubJudge([]), threshold=1.5)
