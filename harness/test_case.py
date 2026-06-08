@@ -32,3 +32,12 @@ class LLMTestCase:
     tools_called: list[str] = field(default_factory=list)
     expected_tools: list[str] = field(default_factory=list)
     metadata: dict = field(default_factory=dict)
+
+    @property
+    def is_rag_case(self) -> bool:
+        """Reports whether the case carries retrieval context.
+
+        Returns:
+            is_rag: True when retrieved passages are present.
+        """
+        return bool(self.retrieval_context)
