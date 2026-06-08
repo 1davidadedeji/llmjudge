@@ -34,6 +34,15 @@ class LLMTestCase:
     metadata: dict = field(default_factory=dict)
 
     @property
+    def has_expected_output(self) -> bool:
+        """Reports whether a reference answer is present.
+
+        Returns:
+            has_expected: True when expected_output is set.
+        """
+        return self.expected_output is not None
+
+    @property
     def is_rag_case(self) -> bool:
         """Reports whether the case carries retrieval context.
 
