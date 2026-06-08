@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+"""
+settings.py --- queue settings shared by worker and enqueuers
+
+Contains:
+    QueueConfig: tunable knobs for the eval job queue
+    load_queue_config(): builds a QueueConfig from environment variables
+"""
+
+import os
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class QueueConfig:
+    """Holds tunable knobs for the eval job queue.
+
+    Attributes:
+        redis_url: Connection string for the Redis instance backing arq.
+        job_timeout_s: Maximum wall-clock seconds one eval job may run.
+        max_tries: Maximum attempts for a job before it is dead-lettered.
+    """
+
+    redis_url: str
+    job_timeout_s: int
+    max_tries: int
+
+
+def load_queue_config() -> QueueConfig:
+    """Builds a QueueConfig from environment variables.
+
+    Returns:
+        config: QueueConfig with defaults for any unset variable.
+    """
+    return QueueConfig(
+        redis_url=os.environ.get("REDIS_URL", "redis://localhost:6379"),
+        job_timeout_s=int(os.environ.get("EVAL_JOB_TIMEOUT_S", "600")),
+        max_tries=int(os.environ.get("EVAL_JOB_MAX_TRIES", "3")),
+    )
