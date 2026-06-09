@@ -43,7 +43,12 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e .[dev]
-      - run: pytest tests/unit -q
+      - run: pytest tests/unit -q --junitxml=junit.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unit-test-report
+          path: junit.xml
 
   merge-gate:
     runs-on: ubuntu-latest
