@@ -35,3 +35,9 @@ def test_relevant_answer_scores_high() -> None:
 def test_tokenize_strips_stopwords() -> None:
     """Tokenizer removes stopwords and lowercases."""
     assert tokenize("The Sky is Blue") == ["sky", "blue"]
+
+def test_irrelevant_answer_scores_low() -> None:
+    """Off-topic answer scores poorly."""
+    metric = AnswerRelevancyMetric(StubJudge(["no"]))
+    case = make_case("capital of france", "i like pizza toppings")
+    assert metric.measure(case) < 0.25
