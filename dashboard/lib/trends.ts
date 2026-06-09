@@ -24,3 +24,15 @@ export function movingAverage(points: TrendPoint[], windowSize: number): number[
   }
   return result;
 }
+
+/**
+ * Computes the score delta between the two newest points.
+ *
+ * @param points - Score points oldest-first.
+ * @returns result - See description.
+ */
+export function latestDelta(points: TrendPoint[]): number {
+  const last = points[points.length - 1];
+  const prev = points[points.length - 2];
+  return last.score - prev.score;
+}
