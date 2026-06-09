@@ -90,7 +90,7 @@ def main() -> int:
         payload = await_eval_run(client, args.run_id)
     result = evaluate_gate(payload, DEFAULT_THRESHOLDS)
     if not result.passed:
-        print(f"merge gate BLOCKED: regressions in {', '.join(result.regressions)}")
+        print(format_regression_report(result, args.repo))
         return 1
     print("merge gate passed")
     return 0
