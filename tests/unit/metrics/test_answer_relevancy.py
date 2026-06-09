@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+"""
+test_answer_relevancy.py --- unit tests for the answer relevancy metric
+
+Contains:
+    test_relevant_answer_scores_high: direct answer scores well
+    test_tokenize_strips_stopwords: tokenizer drops stopwords
+"""
+
+from harness.test_case import LLMTestCase
+from metrics.answer_relevancy import AnswerRelevancyMetric, tokenize
+from metrics.judge import StubJudge
+
+
+def make_case(question: str, answer: str) -> LLMTestCase:
+    """Builds a minimal QA test case.
+
+    Args:
+        question: Input question text.
+        answer: Generated answer text.
+
+    Returns:
+        test_case: LLMTestCase wrapping the pair.
+    """
+    return LLMTestCase(input=question, actual_output=answer)
+
+
+def test_relevant_answer_scores_high() -> None:
+    """Direct, overlapping answer scores above 0.9."""
+    metric = AnswerRelevancyMetric(StubJudge(["yes"]))
+    case = make_case("what color is the sky", "the sky is blue")
+    assert metric.measure(case) > 0.9
+
+
+def test_tokenize_strips_stopwords() -> None:
+    """Tokenizer removes stopwords and lowercases."""
+    assert tokenize("The Sky is Blue") == ["sky", "blue"]
