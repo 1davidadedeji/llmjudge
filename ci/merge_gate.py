@@ -18,7 +18,7 @@ from dataclasses import dataclass
 import httpx
 
 DEFAULT_TIMEOUT_S = 900
-POLL_INTERVAL_S = 15
+POLL_INTERVAL_S = 10
 DEFAULT_THRESHOLDS = {"faithfulness": 0.80, "answer_relevancy": 0.75, "hallucination": 0.90}
 
 
