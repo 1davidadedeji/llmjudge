@@ -41,3 +41,7 @@ def test_recall_full_coverage() -> None:
 def test_precision_empty_context() -> None:
     """Empty retrieval scores precision one by convention."""
     assert ContextualPrecisionMetric(StubJudge([])).measure(make_case([])) == 1.0
+
+def test_recall_empty_context() -> None:
+    """Empty retrieval scores recall one by convention."""
+    assert ContextualRecallMetric(StubJudge([])).measure(make_case([], expected="e")) == 1.0
