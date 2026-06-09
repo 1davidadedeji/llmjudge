@@ -27,3 +27,26 @@ body {
   border-bottom: 1px solid #30363d;
   text-align: left;
 }
+
+.trend-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 8rem;
+  padding: 0.5rem;
+  border: 1px solid #30363d;
+  border-radius: 0.4rem;
+}
+
+.bar {
+  flex: 1;
+  min-width: 4px;
+}
+
+.bar-pass {
+  background: #3fb950;
+}
+
+.bar-fail {
+  background: #f85149;
+}
