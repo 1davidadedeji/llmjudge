@@ -98,3 +98,17 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
+def format_regression_report(result: GateResult, repo: str) -> str:
+    """Formats the gate outcome for the CI log and PR status.
+
+    Args:
+        result: Gate outcome to render.
+        repo: Name of the repo under evaluation.
+
+    Returns:
+        report: Multi-line human-readable summary.
+    """
+    if result.passed:
+        return f"[{repo}] merge gate passed"
+    return f"[{repo}] BLOCKED: {', '.join(result.regressions)}"
