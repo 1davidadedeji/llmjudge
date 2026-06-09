@@ -37,3 +37,7 @@ def test_recall_full_coverage() -> None:
     """Fully supported expectation scores a perfect recall."""
     metric = ContextualRecallMetric(StubJudge(["yes", "yes"]))
     assert metric.measure(make_case(["p1", "p2"], expected="exp")) == 1.0
+
+def test_precision_empty_context() -> None:
+    """Empty retrieval scores precision one by convention."""
+    assert ContextualPrecisionMetric(StubJudge([])).measure(make_case([])) == 1.0
