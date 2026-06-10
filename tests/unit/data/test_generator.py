@@ -40,3 +40,10 @@ def test_generate_uses_warm_cache(tmp_path) -> None:
     generator.generate("geography", count=1)
     cases = generator.generate("geography", count=1)
     assert len(cases) == 1
+
+def test_load_gold_set_aggregates_topics(tmp_path) -> None:
+    """Gold set loads every cached topic file."""
+    generator = make_generator(tmp_path, [PAYLOAD, PAYLOAD])
+    generator.generate("geography", count=1)
+    generator.generate("basic science", count=1)
+    assert len(generator.load_gold_set()) == 2
