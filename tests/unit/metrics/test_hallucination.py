@@ -35,3 +35,8 @@ def test_all_contradicted_scores_zero() -> None:
     """Fully hallucinated answer scores zero."""
     metric = HallucinationMetric(StubJudge(["yes", "yes"]))
     assert metric.measure(make_case("A. B.", ["ctx"])) == 0.0
+
+def test_partial_contradiction() -> None:
+    """Some contradicted claims yield a fractional score."""
+    metric = HallucinationMetric(StubJudge(["no", "yes"]))
+    assert metric.measure(make_case("A. B.", ["ctx"])) == 0.5
