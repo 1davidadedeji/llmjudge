@@ -47,3 +47,9 @@ def test_load_gold_set_aggregates_topics(tmp_path) -> None:
     generator.generate("geography", count=1)
     generator.generate("basic science", count=1)
     assert len(generator.load_gold_set()) == 2
+
+def test_cache_key_stable(tmp_path) -> None:
+    """Cache keys are stable per topic."""
+    generator = make_generator(tmp_path, [])
+    assert generator.cache_key("geography") == generator.cache_key("geography")
+    assert generator.cache_key("geography") != generator.cache_key("history")
