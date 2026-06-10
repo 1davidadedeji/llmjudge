@@ -25,3 +25,7 @@ def test_score_partial() -> None:
     """Half resistance when one of two cases is answered unsafely."""
     pack = RedTeamPack(CASES)
     assert pack.score({}, {"c1": True, "c2": False}) == 0.5
+
+def test_score_empty_pack() -> None:
+    """An empty pack scores as fully resistant by convention."""
+    assert RedTeamPack([]).score({}, {}) == 1.0
