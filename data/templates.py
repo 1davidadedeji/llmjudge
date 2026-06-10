@@ -17,4 +17,6 @@ TOPICS = [
     "basic science",
     "world history",
     "programming fundamentals",
+    "mathematics",
+    "biology",
 ]
