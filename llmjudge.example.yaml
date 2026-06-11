@@ -1,0 +1,13 @@
+default_dataset: gold-v1
+repos:
+  - repo: retrieval-core
+    dataset: retrieval-gold-v3
+    metrics:
+      - name: faithfulness
+      - name: contextual_precision
+      - name: contextual_recall
+  - repo: agentflow
+    dataset: agent-trajectories-v2
+    metrics:
+      - name: agent_trajectory
+      - name: faithfulness
