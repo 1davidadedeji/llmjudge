@@ -60,3 +60,12 @@ def test_object_key_layout() -> None:
     info = store.upload("gold", 3, b"payload")
     assert info.key.startswith("datasets/gold/v0003-")
     assert info.key.endswith(".jsonl")
+
+def test_upload_versions_independent() -> None:
+    """Two versions of one dataset coexist under different keys."""
+    store = make_store()
+    first = store.upload("gold", 1, b"v1")
+    second = store.upload("gold", 2, b"v2")
+    assert first.key != second.key
+    assert store.download(first) == b"v1"
+    assert store.download(second) == b"v2"
