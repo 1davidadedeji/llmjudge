@@ -34,3 +34,7 @@ def test_parse_score_extracts_digit() -> None:
 def test_bottom_score_normalizes_to_zero() -> None:
     """A 1 verdict normalizes to 0.0."""
     assert GEvalMetric(StubJudge(["1"])).measure(make_case()) == 0.0
+
+def test_mid_score_normalizes_to_half() -> None:
+    """A 3 verdict normalizes to 0.5."""
+    assert GEvalMetric(StubJudge(["3"])).measure(make_case()) == 0.5
