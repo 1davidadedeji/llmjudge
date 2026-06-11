@@ -27,7 +27,7 @@ class AutoscalePolicy:
     cooldown_s: int
 
 
-DEFAULT_POLICY = AutoscalePolicy(min_workers=1, max_workers=8, scale_up_depth=5, cooldown_s=120)
+DEFAULT_POLICY = AutoscalePolicy(min_workers=1, max_workers=12, scale_up_depth=5, cooldown_s=120)
 
 
 def desired_workers(queue_depth: int, policy: AutoscalePolicy = DEFAULT_POLICY) -> int:
