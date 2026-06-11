@@ -30,3 +30,7 @@ def test_parse_score_extracts_digit() -> None:
     """Verdict parsing finds the score digit in prose."""
     metric = GEvalMetric(StubJudge([]))
     assert metric.parse_score("I would rate this a 3 overall") == 0.5
+
+def test_bottom_score_normalizes_to_zero() -> None:
+    """A 1 verdict normalizes to 0.0."""
+    assert GEvalMetric(StubJudge(["1"])).measure(make_case()) == 0.0
