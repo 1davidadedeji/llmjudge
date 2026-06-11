@@ -38,3 +38,8 @@ def test_bottom_score_normalizes_to_zero() -> None:
 def test_mid_score_normalizes_to_half() -> None:
     """A 3 verdict normalizes to 0.5."""
     assert GEvalMetric(StubJudge(["3"])).measure(make_case()) == 0.5
+
+def test_unparseable_verdict_scores_zero() -> None:
+    """No digit in the verdict scores 0.0."""
+    metric = GEvalMetric(StubJudge([]))
+    assert metric.parse_score("no idea") == 0.0
