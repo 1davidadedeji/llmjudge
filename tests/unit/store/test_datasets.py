@@ -53,3 +53,10 @@ def test_upload_download_roundtrip() -> None:
     store = make_store()
     info = store.upload("gold", 1, b'{"q": 1}\n')
     assert store.download(info) == b'{"q": 1}\n'
+
+def test_object_key_layout() -> None:
+    """Object keys follow the prefix/dataset/version-hash layout."""
+    store = make_store()
+    info = store.upload("gold", 3, b"payload")
+    assert info.key.startswith("datasets/gold/v0003-")
+    assert info.key.endswith(".jsonl")
