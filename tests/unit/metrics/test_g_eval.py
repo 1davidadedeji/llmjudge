@@ -43,3 +43,9 @@ def test_unparseable_verdict_scores_zero() -> None:
     """No digit in the verdict scores 0.0."""
     metric = GEvalMetric(StubJudge([]))
     assert metric.parse_score("no idea") == 0.0
+
+def test_custom_rubric_used_in_prompt() -> None:
+    """The configured rubric is sent to the judge."""
+    judge = StubJudge(["5"])
+    GEvalMetric(judge, rubric="custom-rubric-text").measure(make_case())
+    assert "custom-rubric-text" in judge.calls[0]
