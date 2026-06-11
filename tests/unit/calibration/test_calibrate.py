@@ -25,3 +25,8 @@ def test_agreement_perfect() -> None:
 def test_agreement_partial() -> None:
     """Scores outside tolerance count as disagreement."""
     assert agreement([0.9, 0.9], [1.0, 0.0]) == 0.5
+
+def test_suggest_threshold_perfect_split() -> None:
+    """A separable label set yields a threshold between the clusters."""
+    threshold = suggest_threshold([1.0, 0.9, 0.1, 0.0])
+    assert 0.1 < threshold < 0.9
