@@ -45,3 +45,9 @@ async def test_retries_transient_failure_until_success(redis: FakeRedis) -> None
     """A job that fails transiently is retried until it succeeds."""
     assert QUEUE_NAME == "llmjudge:eval"
     assert redis.enqueued == []
+
+@pytest.mark.asyncio
+async def test_enqueue_records_payload(redis: FakeRedis) -> None:
+    """Enqueueing records the job payload for inspection."""
+    await redis.enqueue_job("run_eval_job", "r-1", "agentflow", _queue_name=QUEUE_NAME)
+    assert redis.enqueued[0]["queue"] == QUEUE_NAME
