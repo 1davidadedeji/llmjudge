@@ -49,3 +49,9 @@ def test_half_claims_entailed() -> None:
     metric = FaithfulnessMetric(StubJudge(["yes", "no"]))
     case = make_case("The sky is blue. The moon is made of cheese.", ["The sky is blue."])
     assert metric.measure(case) == 0.5
+
+def test_two_thirds_entailed() -> None:
+    """Two of three entailed claims score 0.667."""
+    metric = FaithfulnessMetric(StubJudge(["yes", "yes", "no"]))
+    case = make_case("One. Two. Three.", ["ctx"])
+    assert abs(metric.measure(case) - 2 / 3) < 1e-9
