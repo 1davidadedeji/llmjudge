@@ -58,3 +58,9 @@ async def test_enqueue_assigns_unique_ids(redis: FakeRedis) -> None:
     first = await redis.enqueue_job("run_eval_job", "r-1", "agentflow")
     second = await redis.enqueue_job("run_eval_job", "r-2", "agentflow")
     assert first.job_id != second.job_id
+
+@pytest.mark.asyncio
+async def test_dead_letter_push_recorded(redis: FakeRedis) -> None:
+    """Dead-letter pushes are recorded against the fake redis."""
+    await redis.lpush("llmjudge:eval:dead", "agentflow:r-1")
+    assert redis.enqueued[-1]["name"] == "lpush"
