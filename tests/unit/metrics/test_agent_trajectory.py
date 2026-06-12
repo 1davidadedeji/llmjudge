@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+"""
+test_agent_trajectory.py --- unit tests for the agent trajectory metric
+
+Contains:
+    test_perfect_run_scores_one: exact expected calls score perfectly
+    test_missing_tool_lowers_coverage: missing expected tool reduces coverage
+"""
+
+from harness.test_case import LLMTestCase
+from metrics.agent_trajectory import AgentTrajectoryMetric
+
+
+def make_case(called: list[str], expected: list[str]) -> LLMTestCase:
+    """Builds an agent-run test case.
+
+    Args:
+        called: Tools actually invoked, in order.
+        expected: Tools expected to be invoked, in order.
+
+    Returns:
+        test_case: LLMTestCase wrapping the trajectory data.
+    """
+    return LLMTestCase(
+        input="q", actual_output="a", tools_called=called, expected_tools=expected
+    )
+
+
+def test_perfect_run_scores_one() -> None:
+    """Exact expected calls in order score a perfect run."""
+    metric = AgentTrajectoryMetric()
+    assert metric.measure(make_case(["search", "read"], ["search", "read"])) == 1.0
+
+
+def test_missing_tool_lowers_coverage() -> None:
+    """Missing an expected tool reduces coverage."""
+    metric = AgentTrajectoryMetric()
+    assert metric.tool_coverage(["search"], ["search", "read"]) == 0.5
