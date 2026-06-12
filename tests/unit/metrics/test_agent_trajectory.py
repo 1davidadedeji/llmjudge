@@ -44,3 +44,8 @@ def test_no_expected_tools_and_none_called() -> None:
 def test_no_expected_tools_but_called() -> None:
     """Unexpected calls score a middling 0.5."""
     assert AgentTrajectoryMetric().measure(make_case(["search"], [])) == 0.5
+
+def test_order_score_in_order() -> None:
+    """In-order expected calls get full order credit."""
+    metric = AgentTrajectoryMetric()
+    assert metric.order_score(["search", "read"], ["search", "read"]) == 1.0
