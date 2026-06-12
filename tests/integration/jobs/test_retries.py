@@ -64,3 +64,8 @@ async def test_dead_letter_push_recorded(redis: FakeRedis) -> None:
     """Dead-letter pushes are recorded against the fake redis."""
     await redis.lpush("llmjudge:eval:dead", "agentflow:r-1")
     assert redis.enqueued[-1]["name"] == "lpush"
+
+@pytest.mark.asyncio
+async def test_fake_redis_failure_count_configurable(redis: FakeRedis) -> None:
+    """The fake redis can be primed to fail a set number of times."""
+        assert FakeRedis(failures=2).failures == 2
