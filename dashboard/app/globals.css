@@ -53,6 +53,7 @@ body {
 
 .run-compare table {
   width: 100%;
+  margin-top: 1rem;
   border-collapse: collapse;
 }
 
