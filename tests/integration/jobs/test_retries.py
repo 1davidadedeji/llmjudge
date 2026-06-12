@@ -69,3 +69,8 @@ async def test_dead_letter_push_recorded(redis: FakeRedis) -> None:
 async def test_fake_redis_failure_count_configurable(redis: FakeRedis) -> None:
     """The fake redis can be primed to fail a set number of times."""
         assert FakeRedis(failures=2).failures == 2
+
+@pytest.mark.asyncio
+async def test_queue_name_is_namespaced(redis: FakeRedis) -> None:
+    """Queue name carries the llmjudge namespace."""
+    assert QUEUE_NAME.startswith("llmjudge:")
