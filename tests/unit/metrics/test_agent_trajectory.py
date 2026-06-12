@@ -36,3 +36,7 @@ def test_missing_tool_lowers_coverage() -> None:
     """Missing an expected tool reduces coverage."""
     metric = AgentTrajectoryMetric()
     assert metric.tool_coverage(["search"], ["search", "read"]) == 0.5
+
+def test_no_expected_tools_and_none_called() -> None:
+    """No expectations and no calls scores one."""
+    assert AgentTrajectoryMetric().measure(make_case([], [])) == 1.0
