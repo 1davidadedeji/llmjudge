@@ -51,3 +51,10 @@ async def test_enqueue_records_payload(redis: FakeRedis) -> None:
     """Enqueueing records the job payload for inspection."""
     await redis.enqueue_job("run_eval_job", "r-1", "agentflow", _queue_name=QUEUE_NAME)
     assert redis.enqueued[0]["queue"] == QUEUE_NAME
+
+@pytest.mark.asyncio
+async def test_enqueue_assigns_unique_ids(redis: FakeRedis) -> None:
+    """Each enqueued job gets a distinct job id."""
+    first = await redis.enqueue_job("run_eval_job", "r-1", "agentflow")
+    second = await redis.enqueue_job("run_eval_job", "r-2", "agentflow")
+    assert first.job_id != second.job_id
