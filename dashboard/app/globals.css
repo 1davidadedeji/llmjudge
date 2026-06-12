@@ -50,3 +50,16 @@ body {
 .bar-fail {
   background: #f85149;
 }
+
+.run-compare table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.delta-down {
+  color: #f85149;
+}
+
+.delta-up {
+  color: #3fb950;
+}
