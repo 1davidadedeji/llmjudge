@@ -40,3 +40,8 @@ def test_partial_contradiction() -> None:
     """Some contradicted claims yield a fractional score."""
     metric = HallucinationMetric(StubJudge(["no", "yes"]))
     assert metric.measure(make_case("A. B.", ["ctx"])) == 0.5
+
+def test_three_claims_one_contradicted() -> None:
+    """One contradiction in three claims scores 0.667."""
+    metric = HallucinationMetric(StubJudge(["no", "yes", "no"]))
+    assert abs(metric.measure(make_case("A. B. C.", ["ctx"])) - 2 / 3) < 1e-9
