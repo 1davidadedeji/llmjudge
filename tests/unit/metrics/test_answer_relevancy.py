@@ -41,3 +41,8 @@ def test_irrelevant_answer_scores_low() -> None:
     metric = AnswerRelevancyMetric(StubJudge(["no"]))
     case = make_case("capital of france", "i like pizza toppings")
     assert metric.measure(case) < 0.25
+
+def test_full_overlap_no_judge() -> None:
+    """Full overlap with a no verdict still scores a half."""
+    metric = AnswerRelevancyMetric(StubJudge(["no"]))
+    assert metric.measure(make_case("sky color", "sky color")) == 0.5
