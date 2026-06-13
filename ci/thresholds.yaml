@@ -4,3 +4,6 @@ default_threshold: 0.75
 repos:
   retrieval-core:
     threshold: 0.80
+
+  agentflow:
+    threshold: 0.78
