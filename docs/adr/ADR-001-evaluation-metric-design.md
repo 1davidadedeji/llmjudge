@@ -14,3 +14,9 @@ flexible enough that each repo can gate on the metrics it cares about.
 
 Scores must be reproducible run-to-run, attributable to a prompt/model
 version, and cheap enough to run on every PR without a dedicated GPU box.
+
+## Option A: single heuristic metrics
+
+Pure lexical/heuristic metrics are cheap and deterministic, but they miss
+paraphrase and reward superficial overlap. Rejected as the primary signal,
+kept as a fallback when no judge is configured.
