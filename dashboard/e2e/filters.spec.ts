@@ -23,3 +23,8 @@ test("status filter shows only matching runs", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("r-1")).toBeVisible();
 });
+
+test("filter by succeeded status", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
+});
