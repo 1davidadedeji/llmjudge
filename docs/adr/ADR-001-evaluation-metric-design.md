@@ -20,3 +20,8 @@ version, and cheap enough to run on every PR without a dedicated GPU box.
 Pure lexical/heuristic metrics are cheap and deterministic, but they miss
 paraphrase and reward superficial overlap. Rejected as the primary signal,
 kept as a fallback when no judge is configured.
+
+## Option B: single LLM judge
+
+One judge model with per-metric prompts. Simple, but couples every score to
+one model family's quirks. Kept as the initial implementation for velocity.
