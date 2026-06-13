@@ -9,7 +9,7 @@ Contains:
     ResultsStore.get_run(): fetches one run with its scores
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 
 import psycopg
 
@@ -46,7 +46,7 @@ class ResultsStore:
         with self.connect() as conn:
             conn.execute(
                 "INSERT INTO eval_runs (id, repo, status, created_at) VALUES (%s, %s, %s, %s)",
-                (run_id, repo, status, datetime.utcnow()),
+                (run_id, repo, status, datetime.now(timezone.utc)),
             )
 
     def upsert_score(self, run_id: str, metric: str, score: float) -> None:
