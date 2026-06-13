@@ -63,7 +63,7 @@ class ResultsStore:
                 " VALUES (%s, %s, %s, %s)"
                 " ON CONFLICT (run_id, metric) DO UPDATE"
                 " SET score = EXCLUDED.score, updated_at = EXCLUDED.updated_at",
-                (run_id, metric, score, datetime.utcnow()),
+                (run_id, metric, score, datetime.now(timezone.utc)),
             )
 
     def get_run(self, run_id: str) -> dict | None:
