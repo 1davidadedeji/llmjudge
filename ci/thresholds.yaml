@@ -13,3 +13,6 @@ repos:
 
   llmjudge:
     threshold: 0.82
+
+  shipwright:
+    threshold: 0.85
