@@ -10,3 +10,6 @@ repos:
 
   graphmind:
     threshold: 0.76
+
+  llmjudge:
+    threshold: 0.82
