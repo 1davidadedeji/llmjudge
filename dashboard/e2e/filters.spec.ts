@@ -28,3 +28,8 @@ test("filter by succeeded status", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
 });
+
+test("filter by failed status", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("r-2", { exact: false }).first()).toBeVisible();
+});
