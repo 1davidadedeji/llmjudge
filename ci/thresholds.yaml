@@ -1,0 +1,6 @@
+# Per-repo merge-gate thresholds. A repo merges only when its blended eval
+# score (mean of gated metrics) meets or exceeds its threshold.
+default_threshold: 0.75
+repos:
+  retrieval-core:
+    threshold: 0.80
