@@ -74,3 +74,11 @@ def test_insert_then_get_roundtrip() -> None:
     store = make_store(conn)
     store.insert_run("r-1", "agentflow", "queued")
     assert conn.runs["r-1"]["repo"] == "agentflow"
+
+def test_upsert_overwrites_score() -> None:
+    """A second upsert for the same metric overwrites."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    store.upsert_score("r-1", "faithfulness", 0.5)
+    store.upsert_score("r-1", "faithfulness", 0.9)
+    assert conn.scores[("r-1", "faithfulness")] == 0.9
