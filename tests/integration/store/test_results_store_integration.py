@@ -82,3 +82,12 @@ def test_upsert_overwrites_score() -> None:
     store.upsert_score("r-1", "faithfulness", 0.5)
     store.upsert_score("r-1", "faithfulness", 0.9)
     assert conn.scores[("r-1", "faithfulness")] == 0.9
+
+def test_scores_isolated_per_run() -> None:
+    """Scores for one run never leak into another."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    store.upsert_score("r-1", "m", 0.1)
+    store.upsert_score("r-2", "m", 0.9)
+    assert conn.scores[("r-1", "m")] == 0.1
+    assert conn.scores[("r-2", "m")] == 0.9
