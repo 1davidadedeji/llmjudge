@@ -94,6 +94,19 @@ class ResultsStore:
             "scores": {metric: score for metric, score in score_rows},
         }
 
+    def finish_run(self, run_id: str, status: str) -> None:
+        """Marks a run as finished with a terminal status.
+
+        Args:
+            run_id: Run to update.
+            status: Terminal status (succeeded or failed).
+        """
+        with self.connect() as conn:
+            conn.execute(
+                "UPDATE eval_runs SET status = %s, finished_at = %s WHERE id = %s",
+                (status, datetime.utcnow(), run_id),
+            )
+
     def list_runs(self, repo: str | None = None, limit: int = 50) -> list[dict]:
         """Lists recent runs, optionally filtered by repo.
 
