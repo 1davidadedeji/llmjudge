@@ -10,6 +10,7 @@ Contains:
 import re
 
 from harness.test_case import LLMTestCase
+from metrics.base import BaseMetric
 from metrics.judge import JudgeClient
 
 RELEVANCY_PROMPT = (
@@ -33,7 +34,7 @@ def tokenize(text: str) -> list[str]:
     return [tok for tok in re.findall(r"[a-z']+", text.lower()) if tok not in STOPWORDS]
 
 
-class AnswerRelevancyMetric:
+class AnswerRelevancyMetric(BaseMetric):
     """Scores how directly the answer addresses the input question.
 
     Attributes:
