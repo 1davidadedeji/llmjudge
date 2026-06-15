@@ -34,3 +34,13 @@ def test_has_expected_output() -> None:
     assert not LLMTestCase(input="q", actual_output="a").has_expected_output
     case = LLMTestCase(input="q", actual_output="a", expected_output="e")
     assert case.has_expected_output
+
+def test_frozen_immutable() -> None:
+    """Cases are immutable once created."""
+    import dataclasses
+
+    import pytest
+
+    case = LLMTestCase(input="q", actual_output="a")
+    with pytest.raises(dataclasses.FrozenInstanceError):
+        case.input = "other"
