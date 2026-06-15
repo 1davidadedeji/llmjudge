@@ -12,6 +12,7 @@ Contains:
 import re
 
 from harness.test_case import LLMTestCase
+from metrics.base import BaseMetric
 from metrics.judge import JudgeClient
 
 CLAIM_PROMPT = (
@@ -20,7 +21,7 @@ CLAIM_PROMPT = (
 )
 
 
-class FaithfulnessMetric:
+class FaithfulnessMetric(BaseMetric):
     """Scores claim-level entailment of the answer against the context.
 
     Attributes:
