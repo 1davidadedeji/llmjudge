@@ -14,6 +14,9 @@ from typing import Any
 from arq.connections import RedisSettings
 
 QUEUE_NAME = "llmjudge:eval"
+
+RETRY_BACKOFF_BASE_S = 5
+DEAD_LETTER_QUEUE = "llmjudge:eval:dead"
 DEFAULT_JOB_TIMEOUT_S = 600
 DEFAULT_MAX_TRIES = 3
 
