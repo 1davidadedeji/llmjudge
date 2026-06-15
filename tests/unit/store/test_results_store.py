@@ -77,3 +77,11 @@ def test_upsert_score_sql() -> None:
     sql, params = conn.statements[0]
     assert "ON CONFLICT" in sql
     assert params[:3] == ("r-1", "faithfulness", 0.9)
+
+def test_list_runs_filters_by_repo() -> None:
+    """list_runs adds a WHERE clause only when a repo filter is given."""
+    conn = FakeConnection()
+    make_store(conn).list_runs(repo="graphmind")
+    sql, params = conn.statements[0]
+    assert "WHERE repo = %s" in sql
+    assert params[0] == "graphmind"
