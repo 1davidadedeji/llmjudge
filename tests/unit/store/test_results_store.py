@@ -69,3 +69,11 @@ def test_insert_run_sql() -> None:
     sql, params = conn.statements[0]
     assert "INSERT INTO eval_runs" in sql
     assert params[:3] == ("r-1", "agentflow", "queued")
+
+def test_upsert_score_sql() -> None:
+    """upsert_score issues an upsert with the score fields."""
+    conn = FakeConnection()
+    make_store(conn).upsert_score("r-1", "faithfulness", 0.9)
+    sql, params = conn.statements[0]
+    assert "ON CONFLICT" in sql
+    assert params[:3] == ("r-1", "faithfulness", 0.9)
