@@ -6,11 +6,15 @@
  *   HomePage: lists the most recent eval runs
  */
 
-export default function HomePage() {
+import RunTable from "../components/RunTable";
+import { fetchRuns } from "../lib/api";
+
+export default async function HomePage() {
+  const runs = await fetchRuns();
   return (
     <section>
       <h2>Latest eval runs</h2>
-      <p>Connect the API to see runs.</p>
+      <RunTable runs={runs} />
     </section>
   );
 }
