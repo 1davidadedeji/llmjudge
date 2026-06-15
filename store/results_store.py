@@ -93,3 +93,27 @@ class ResultsStore:
             "finished_at": row[4],
             "scores": {metric: score for metric, score in score_rows},
         }
+
+    def list_runs(self, repo: str | None = None, limit: int = 50) -> list[dict]:
+        """Lists recent runs, optionally filtered by repo.
+
+        Args:
+            repo: Repo filter; None lists all repos.
+            limit: Maximum runs to return.
+
+        Returns:
+            runs: Run rows newest-first, without scores.
+        """
+        query = "SELECT id, repo, status, created_at FROM eval_runs"
+        params: list = []
+        if repo is not None:
+            query += " WHERE repo = %s"
+            params.append(repo)
+        query += " ORDER BY created_at DESC LIMIT %s"
+        params.append(limit)
+        with self.connect() as conn:
+            rows = conn.execute(query, tuple(params)).fetchall()
+        return [
+            {"id": row[0], "repo": row[1], "status": row[2], "created_at": row[3]}
+            for row in rows
+        ]
