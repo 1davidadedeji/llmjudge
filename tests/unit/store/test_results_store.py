@@ -85,3 +85,10 @@ def test_list_runs_filters_by_repo() -> None:
     sql, params = conn.statements[0]
     assert "WHERE repo = %s" in sql
     assert params[0] == "graphmind"
+
+def test_list_runs_no_filter() -> None:
+    """list_runs without a repo lists everything."""
+    conn = FakeConnection()
+    make_store(conn).list_runs()
+    sql, _ = conn.statements[0]
+    assert "WHERE" not in sql
