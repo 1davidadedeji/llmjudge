@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+"""
+test_base.py --- unit tests for the shared metric interface
+
+Contains:
+    test_clamp_score_bounds: clamping keeps scores in range
+"""
+
+from metrics.base import clamp_score
+
+
+def test_clamp_score_bounds() -> None:
+    """Clamping bounds scores to [0, 1]."""
+    assert clamp_score(1.4) == 1.0
+    assert clamp_score(-0.2) == 0.0
+    assert clamp_score(0.5) == 0.5
