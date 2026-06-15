@@ -12,3 +12,6 @@ dist/
 sbom.json
 audit.json
 junit.xml
+
+coverage.xml
+htmlcov/
