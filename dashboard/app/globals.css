@@ -64,3 +64,8 @@ body {
 .delta-up {
   color: #3fb950;
 }
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
