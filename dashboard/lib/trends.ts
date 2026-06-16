@@ -73,3 +73,19 @@ export function detectRegression(points: TrendPoint[], threshold: number): boole
 export function failureCount(points: TrendPoint[], threshold: number): number {
   return points.filter((point) => point.score < threshold).length;
 }
+
+/**
+ * Finds the index of the newest point above the threshold.
+ *
+ * @param points - Score points oldest-first.
+ * @param threshold - Pass threshold.
+ * @returns index - Zero-based index, or -1 when none pass.
+ */
+export function lastPassingIndex(points: TrendPoint[], threshold: number): number {
+  for (let index = points.length - 1; index >= 0; index -= 1) {
+    if (points[index].score >= threshold) {
+      return index;
+    }
+  }
+  return -1;
+}
