@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+"""
+test_results_api.py --- unit tests for the results API routes
+
+Contains:
+    test_list_runs: GET /runs returns store rows
+    test_get_run_404: unknown run id returns 404
+"""
+
+from fastapi import FastAPI
+from fastapi.testclient import TestClient
+
+from api.deps import get_store
+from api.main import create_app
+
+
+class FakeStore:
+    """In-memory store stand-in for route tests.
+
+    Attributes:
+        runs: Run payloads keyed by id.
+    """
+
+    def __init__(self) -> None:
+        """Initializes one canned run."""
+        self.runs = {"r-1": {"id": "r-1", "repo": "agentflow", "status": "succeeded", "scores": {}}}
+
+    def list_runs(self, repo: str | None = None) -> list[dict]:
+        """Returns canned runs, honoring the repo filter."""
+        return [run for run in self.runs.values() if repo is None or run["repo"] == repo]
+
+    def get_run(self, run_id: str) -> dict | None:
+        """Returns the canned run or None."""
+        return self.runs.get(run_id)
+
+    def insert_run(self, run_id: str, repo: str) -> None:
+        """Records a created run in memory."""
+        self.runs[run_id] = {"id": run_id, "repo": repo, "status": "queued", "scores": {}}
+
+
+def make_client(store: FakeStore) -> TestClient:
+    """Builds a TestClient with the store dependency overridden.
+
+    Args:
+        store: Fake store to inject.
+
+    Returns:
+        client: TestClient bound to the app.
+    """
+    app = create_app()
+    app.dependency_overrides[get_store] = lambda: store
+    return TestClient(app)
+
+
+def test_list_runs() -> None:
+    """GET /runs returns the store's rows."""
+    client = make_client(FakeStore())
+    response = client.get("/runs")
+    assert response.status_code == 200
+    assert response.json()[0]["id"] == "r-1"
+
+
+def test_get_run_404() -> None:
+    """Unknown run id returns 404."""
+    client = make_client(FakeStore())
+    assert client.get("/runs/nope").status_code == 404
