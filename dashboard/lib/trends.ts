@@ -62,3 +62,14 @@ export function detectRegression(points: TrendPoint[], threshold: number): boole
   const last = points[points.length - 1];
   return last.score < threshold;
 }
+
+/**
+ * Counts points strictly below the threshold.
+ *
+ * @param points - Score points oldest-first.
+ * @param threshold - Pass threshold.
+ * @returns count - Number of failing points.
+ */
+export function failureCount(points: TrendPoint[], threshold: number): number {
+  return points.filter((point) => point.score < threshold).length;
+}
