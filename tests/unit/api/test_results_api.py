@@ -64,3 +64,10 @@ def test_get_run_404() -> None:
     """Unknown run id returns 404."""
     client = make_client(FakeStore())
     assert client.get("/runs/nope").status_code == 404
+
+def test_get_run_found() -> None:
+    """Known run id returns its payload."""
+    client = make_client(FakeStore())
+    response = client.get("/runs/r-1")
+    assert response.status_code == 200
+    assert response.json()["repo"] == "agentflow"
