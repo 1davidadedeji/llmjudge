@@ -1,0 +1,6 @@
+metric: answer_relevancy
+version: 1
+criteria:
+  - "The answer must address the question directly, not a neighboring topic."
+scale_min: 0
+scale_max: 1
