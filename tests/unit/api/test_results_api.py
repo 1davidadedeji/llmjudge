@@ -79,3 +79,11 @@ def test_create_run() -> None:
     response = client.post("/runs", json={"id": "r-2", "repo": "graphmind"})
     assert response.status_code == 201
     assert "r-2" in store.runs
+
+def test_list_runs_repo_filter() -> None:
+    """GET /runs?repo= filters by repo."""
+    client = make_client(FakeStore())
+    response = client.get("/runs", params={"repo": "agentflow"})
+    assert len(response.json()) == 1
+    response = client.get("/runs", params={"repo": "other"})
+    assert response.json() == []
