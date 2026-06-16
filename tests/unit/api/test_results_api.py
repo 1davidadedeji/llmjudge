@@ -71,3 +71,11 @@ def test_get_run_found() -> None:
     response = client.get("/runs/r-1")
     assert response.status_code == 200
     assert response.json()["repo"] == "agentflow"
+
+def test_create_run() -> None:
+    """POST /runs creates the run and returns 201."""
+    store = FakeStore()
+    client = make_client(store)
+    response = client.post("/runs", json={"id": "r-2", "repo": "graphmind"})
+    assert response.status_code == 201
+    assert "r-2" in store.runs
