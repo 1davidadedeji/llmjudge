@@ -36,3 +36,17 @@ export function latestDelta(points: TrendPoint[]): number {
   const prev = points[points.length - 2];
   return last.score - prev.score;
 }
+
+/**
+ * Labels a series as improving, flat, or regressing.
+ *
+ * @param points - Score points oldest-first.
+ * @returns result - See description.
+ */
+export function trendDirection(points: TrendPoint[]): "improving" | "flat" | "regressing" {
+  const delta = latestDelta(points);
+  if (Math.abs(delta) < 0.005) {
+    return "flat";
+  }
+  return delta > 0 ? "improving" : "regressing";
+}
