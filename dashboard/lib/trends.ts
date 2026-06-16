@@ -4,6 +4,7 @@
  *
  * Contains:
  *   movingAverage: smooths a score series over a window
+ *   trendDirection: labels a series improving, flat, or regressing
  */
 
 import type { TrendPoint } from "../components/TrendChart";
