@@ -8,6 +8,8 @@
 
 import TrendChart from "../../components/TrendChart";
 
+const points: { created_at: string; score: number }[] = [];
+
 export default function TrendsPage() {
   return (
     <section>
