@@ -51,3 +51,14 @@ export function trendDirection(points: TrendPoint[]): "improving" | "flat" | "re
   }
   return delta > 0 ? "improving" : "regressing";
 }
+
+/**
+ * Flags when the newest point drops below the threshold.
+ *
+ * @param points - Score points oldest-first.
+ * @returns result - See description.
+ */
+export function detectRegression(points: TrendPoint[], threshold: number): boolean {
+  const last = points[points.length - 1];
+  return last.score < threshold;
+}
