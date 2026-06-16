@@ -55,3 +55,8 @@ def test_two_thirds_entailed() -> None:
     metric = FaithfulnessMetric(StubJudge(["yes", "yes", "no"]))
     case = make_case("One. Two. Three.", ["ctx"])
     assert abs(metric.measure(case) - 2 / 3) < 1e-9
+
+def test_extract_claims_splits_sentences() -> None:
+    """Claim extraction splits on sentence boundaries."""
+    metric = FaithfulnessMetric(StubJudge([]))
+    assert metric.extract_claims("One. Two? Three!") == ["One.", "Two?", "Three!"]
