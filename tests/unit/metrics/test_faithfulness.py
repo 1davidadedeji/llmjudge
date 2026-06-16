@@ -60,3 +60,8 @@ def test_extract_claims_splits_sentences() -> None:
     """Claim extraction splits on sentence boundaries."""
     metric = FaithfulnessMetric(StubJudge([]))
     assert metric.extract_claims("One. Two? Three!") == ["One.", "Two?", "Three!"]
+
+def test_extract_claims_ignores_blank_parts() -> None:
+    """Claim extraction drops whitespace-only fragments."""
+    metric = FaithfulnessMetric(StubJudge([]))
+    assert metric.extract_claims("  ") == []
