@@ -112,3 +112,16 @@ def format_regression_report(result: GateResult, repo: str) -> str:
     if result.passed:
         return f"[{repo}] merge gate passed"
     return f"[{repo}] BLOCKED: {', '.join(result.regressions)}"
+
+def threshold_for(thresholds: dict[str, float], metric: str, default: float = 0.75) -> float:
+    """Resolves the threshold for one metric with a fallback.
+
+    Args:
+        thresholds: Configured thresholds per metric.
+        metric: Metric name to resolve.
+        default: Floor used when the metric has no explicit threshold.
+
+    Returns:
+        floor: Minimum acceptable score for the metric.
+    """
+    return thresholds.get(metric, default)
