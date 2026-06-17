@@ -98,3 +98,19 @@ class DatasetStore:
         """
         response = self.client.get_object(Bucket=self.bucket, Key=version_info.key)
         return response["Body"].read()
+
+    def manifest(self, dataset: str) -> list[DatasetVersion]:
+        """Lists every stored version of a dataset.
+
+        Args:
+            dataset: Dataset identifier.
+
+        Returns:
+            versions: Stored versions in ascending version order.
+        """
+        prefix = f"{self.prefix}/{dataset}/"
+        response = self.client.list_objects_v2(Bucket=self.bucket, Prefix=prefix)
+        versions = []
+        for entry in response.get("Contents", []):
+            versions.append(self._version_from_key(dataset, entry["Key"]))
+        return sorted(versions, key=lambda version: version.version)
