@@ -20,3 +20,8 @@ TOPICS = [
     "mathematics",
     "biology",
 ]
+
+RAG_TEMPLATE = (
+    "Generate a question about {topic}, a ground-truth answer, and three ranked "
+    "context passages where only the first is relevant. Return JSON."
+)
