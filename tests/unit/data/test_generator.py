@@ -53,3 +53,10 @@ def test_cache_key_stable(tmp_path) -> None:
     generator = make_generator(tmp_path, [])
     assert generator.cache_key("geography") == generator.cache_key("geography")
     assert generator.cache_key("geography") != generator.cache_key("history")
+
+def test_topics_returns_copy(tmp_path) -> None:
+    """topics() returns a copy, not the shared list."""
+    generator = make_generator(tmp_path, [])
+    topics = generator.topics()
+    topics.append("extra")
+    assert "extra" not in generator.topics()
