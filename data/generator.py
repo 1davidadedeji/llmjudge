@@ -82,3 +82,17 @@ class SyntheticGenerator:
             topics: Seed topic list.
         """
         return list(TOPICS)
+
+    def generate_rag_cases(self, topic: str, count: int = 5) -> list[dict]:
+        """Generates cases with ranked retrieval contexts.
+
+        Args:
+            topic: Topic to generate cases for.
+            count: Number of cases to generate.
+
+        Returns:
+            cases: Generated RAG case dicts.
+        """
+        from data.templates import RAG_TEMPLATE
+
+        return [json.loads(self.judge.complete(RAG_TEMPLATE.format(topic=topic))) for _ in range(count)]
