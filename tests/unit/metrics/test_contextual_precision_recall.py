@@ -50,3 +50,7 @@ def test_recall_single_passage_support() -> None:
     """One supporting passage out of one scores recall one."""
     metric = ContextualRecallMetric(StubJudge(["yes"]))
     assert metric.measure(make_case(["p"], expected="e")) == 1.0
+
+def test_recall_no_expected_output() -> None:
+    """Missing expected output scores recall one."""
+    assert ContextualRecallMetric(StubJudge([])).measure(make_case(["p"])) == 1.0
