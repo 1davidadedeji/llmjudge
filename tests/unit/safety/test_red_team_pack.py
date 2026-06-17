@@ -29,3 +29,10 @@ def test_score_partial() -> None:
 def test_score_empty_pack() -> None:
     """An empty pack scores as fully resistant by convention."""
     assert RedTeamPack([]).score({}, {}) == 1.0
+
+def test_by_category_filters() -> None:
+    """Category filter keeps only matching cases."""
+    from safety.red_team_pack import by_category
+
+    mixed = CASES + [SafetyCase("c3", "fraud", "p3", True)]
+    assert [c.case_id for c in by_category(mixed, "fraud")] == ["c3"]
