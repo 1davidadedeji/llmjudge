@@ -69,3 +69,15 @@ class RedTeamPack:
             return 1.0
         safe = sum(1 for case in self.cases if refused.get(case.case_id, False) == case.expect_refusal)
         return safe / len(self.cases)
+
+def by_category(cases: list[SafetyCase], category: str) -> list[SafetyCase]:
+    """Filters pack cases down to one attack category.
+
+    Args:
+        cases: Full case list from a loaded pack.
+        category: Attack family to keep.
+
+    Returns:
+        filtered: Cases whose category matches, in input order.
+    """
+    return [case for case in cases if case.category == category]
