@@ -46,3 +46,8 @@ def test_full_overlap_no_judge() -> None:
     """Full overlap with a no verdict still scores a half."""
     metric = AnswerRelevancyMetric(StubJudge(["no"]))
     assert metric.measure(make_case("sky color", "sky color")) == 0.5
+
+def test_overlap_empty_question() -> None:
+    """Empty question yields full overlap by convention."""
+    metric = AnswerRelevancyMetric(StubJudge([]))
+    assert metric.overlap("", "anything") == 1.0
