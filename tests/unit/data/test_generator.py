@@ -66,3 +66,8 @@ def test_generate_rag_cases(tmp_path) -> None:
     generator = make_generator(tmp_path, [PAYLOAD])
     cases = generator.generate_rag_cases("biology", count=1)
     assert cases == [{"question": "q", "answer": "a", "context": "c"}]
+
+def test_topics_nonempty(tmp_path) -> None:
+    """Seed topic list is never empty."""
+    generator = make_generator(tmp_path, [])
+    assert generator.topics()
