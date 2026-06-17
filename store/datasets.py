@@ -99,6 +99,22 @@ class DatasetStore:
         response = self.client.get_object(Bucket=self.bucket, Key=version_info.key)
         return response["Body"].read()
 
+    def _version_from_key(self, dataset: str, key: str) -> DatasetVersion:
+        """Parses a version descriptor back out of an object key.
+
+        Args:
+            dataset: Dataset identifier.
+            key: S3 object key produced by object_key().
+
+        Returns:
+            version_info: Parsed DatasetVersion with a placeholder hash.
+        """
+        stem = key.rsplit("/", 1)[-1].removesuffix(".jsonl")
+        version_part, hash_part = stem.split("-", 1)
+        return DatasetVersion(
+            dataset=dataset, version=int(version_part.lstrip("v")), sha256=hash_part, key=key
+        )
+
     def manifest(self, dataset: str) -> list[DatasetVersion]:
         """Lists every stored version of a dataset.
 
