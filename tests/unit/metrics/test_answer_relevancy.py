@@ -51,3 +51,8 @@ def test_overlap_empty_question() -> None:
     """Empty question yields full overlap by convention."""
     metric = AnswerRelevancyMetric(StubJudge([]))
     assert metric.overlap("", "anything") == 1.0
+
+def test_overlap_partial() -> None:
+    """Partial token overlap yields a fraction."""
+    metric = AnswerRelevancyMetric(StubJudge([]))
+    assert metric.overlap("red green blue", "red") == 1 / 3
