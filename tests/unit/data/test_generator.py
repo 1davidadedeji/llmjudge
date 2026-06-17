@@ -60,3 +60,9 @@ def test_topics_returns_copy(tmp_path) -> None:
     topics = generator.topics()
     topics.append("extra")
     assert "extra" not in generator.topics()
+
+def test_generate_rag_cases(tmp_path) -> None:
+    """RAG case generation uses the RAG template."""
+    generator = make_generator(tmp_path, [PAYLOAD])
+    cases = generator.generate_rag_cases("biology", count=1)
+    assert cases == [{"question": "q", "answer": "a", "context": "c"}]
