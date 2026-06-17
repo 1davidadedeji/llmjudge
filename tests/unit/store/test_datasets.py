@@ -69,3 +69,10 @@ def test_upload_versions_independent() -> None:
     assert first.key != second.key
     assert store.download(first) == b"v1"
     assert store.download(second) == b"v2"
+
+def test_version_from_key_roundtrip() -> None:
+    """Keys produced by object_key parse back to their version."""
+    store = make_store()
+    key = store.object_key("gold", 7, "deadbeefcafe")
+    parsed = store._version_from_key("gold", key)
+    assert parsed.version == 7
