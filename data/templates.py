@@ -19,6 +19,7 @@ TOPICS = [
     "programming fundamentals",
     "mathematics",
     "biology",
+    "physics",
 ]
 
 RAG_TEMPLATE = (
