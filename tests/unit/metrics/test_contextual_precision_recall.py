@@ -54,3 +54,8 @@ def test_recall_single_passage_support() -> None:
 def test_recall_no_expected_output() -> None:
     """Missing expected output scores recall one."""
     assert ContextualRecallMetric(StubJudge([])).measure(make_case(["p"])) == 1.0
+
+def test_precision_none_relevant() -> None:
+    """No relevant passages scores zero."""
+    metric = ContextualPrecisionMetric(StubJudge(["no", "no"]))
+    assert metric.measure(make_case(["p1", "p2"])) == 0.0
