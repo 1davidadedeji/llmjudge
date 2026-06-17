@@ -56,3 +56,9 @@ def test_overlap_partial() -> None:
     """Partial token overlap yields a fraction."""
     metric = AnswerRelevancyMetric(StubJudge([]))
     assert metric.overlap("red green blue", "red") == 1 / 3
+
+def test_judge_score_weight_half() -> None:
+    """Judge verdict contributes half the score."""
+    metric = AnswerRelevancyMetric(StubJudge(["yes"]))
+    case = make_case("", "unrelated words here")
+    assert metric.measure(case) == 0.5
