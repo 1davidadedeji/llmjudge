@@ -63,6 +63,11 @@ body {
   border-bottom: 2px solid #30363d;
 }
 
+.run-compare td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #30363d;
+}
+
 .delta-down {
   color: #f85149;
   font-weight: 600;
