@@ -62,3 +62,8 @@ def test_judge_score_weight_half() -> None:
     metric = AnswerRelevancyMetric(StubJudge(["yes"]))
     case = make_case("", "unrelated words here")
     assert metric.measure(case) == 0.5
+
+def test_overlap_full_when_identical() -> None:
+    """Identical question and answer give full overlap."""
+    metric = AnswerRelevancyMetric(StubJudge([]))
+    assert metric.overlap("same words here", "same words here") == 1.0
