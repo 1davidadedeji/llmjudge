@@ -51,3 +51,7 @@ def test_prompt_contains_claim() -> None:
     judge = StubJudge(["no"])
     HallucinationMetric(judge).measure(make_case("unique-claim-text.", ["ctx"]))
     assert "unique-claim-text." in judge.calls[0]
+
+def test_empty_answer_scores_one() -> None:
+    """Empty answer hallucinates nothing."""
+    assert HallucinationMetric(StubJudge([])).measure(make_case("", ["ctx"])) == 1.0
