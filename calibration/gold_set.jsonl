@@ -4,3 +4,4 @@
 {"example_id": "gold-cal-004", "question": "Who wrote Romeo and Juliet?", "answer": "William Shakespeare.", "label": 1.0}
 {"example_id": "gold-cal-005", "question": "What is the largest ocean?", "answer": "The Atlantic.", "label": 0.0}
 {"example_id": "gold-cal-006", "question": "Chemical symbol for sodium?", "answer": "Na.", "label": 1.0}
+{"example_id": "gold-cal-007", "question": "Year the Berlin Wall fell?", "answer": "1989.", "label": 1.0}
