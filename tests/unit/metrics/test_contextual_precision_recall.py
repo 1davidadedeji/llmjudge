@@ -59,3 +59,8 @@ def test_precision_none_relevant() -> None:
     """No relevant passages scores zero."""
     metric = ContextualPrecisionMetric(StubJudge(["no", "no"]))
     assert metric.measure(make_case(["p1", "p2"])) == 0.0
+
+def test_precision_two_of_two_late() -> None:
+    """Both relevant but ordered still scores one."""
+    metric = ContextualPrecisionMetric(StubJudge(["yes", "yes"]))
+    assert metric.measure(make_case(["p1", "p2"])) == 1.0
