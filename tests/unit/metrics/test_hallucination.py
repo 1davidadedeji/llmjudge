@@ -55,3 +55,11 @@ def test_prompt_contains_claim() -> None:
 def test_empty_answer_scores_one() -> None:
     """Empty answer hallucinates nothing."""
     assert HallucinationMetric(StubJudge([])).measure(make_case("", ["ctx"])) == 1.0
+
+def test_falls_back_to_retrieval_context() -> None:
+    """Retrieval context is used when context is empty."""
+    judge = StubJudge(["yes"])
+    metric = HallucinationMetric(judge)
+    case = LLMTestCase(input="q", actual_output="A.", retrieval_context=["retrieved"])
+    assert metric.measure(case) == 0.0
+    assert "retrieved" in judge.calls[0]
