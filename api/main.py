@@ -9,7 +9,7 @@ Contains:
 
 from fastapi import FastAPI
 
-from api.routes import results
+from api.routes import compare, results
 
 
 def create_app() -> FastAPI:
