@@ -44,3 +44,16 @@ def desired_workers(queue_depth: int, policy: AutoscalePolicy = DEFAULT_POLICY) 
         return policy.min_workers
     wanted = (queue_depth + policy.scale_up_depth - 1) // policy.scale_up_depth
     return max(policy.min_workers, min(policy.max_workers, wanted))
+
+def should_scale_up(queue_depth: int, current: int, policy: AutoscalePolicy = DEFAULT_POLICY) -> bool:
+    """Reports whether the fleet should scale out.
+
+    Args:
+        queue_depth: Number of eval jobs currently waiting in the queue.
+        current: Number of workers currently running.
+        policy: Autoscaling policy to apply.
+
+    Returns:
+        scale_up: True when desired capacity exceeds current capacity.
+    """
+    return desired_workers(queue_depth, policy) > current
