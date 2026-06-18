@@ -65,3 +65,9 @@ def test_extract_claims_ignores_blank_parts() -> None:
     """Claim extraction drops whitespace-only fragments."""
     metric = FaithfulnessMetric(StubJudge([]))
     assert metric.extract_claims("  ") == []
+
+def test_judge_called_per_claim() -> None:
+    """One judge call is made per extracted claim."""
+    judge = StubJudge(["yes"] * 4)
+    FaithfulnessMetric(judge).measure(make_case("A. B. C. D.", ["ctx"]))
+    assert len(judge.calls) == 4
