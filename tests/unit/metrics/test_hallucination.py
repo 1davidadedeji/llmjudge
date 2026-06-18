@@ -45,3 +45,9 @@ def test_three_claims_one_contradicted() -> None:
     """One contradiction in three claims scores 0.667."""
     metric = HallucinationMetric(StubJudge(["no", "yes", "no"]))
     assert abs(metric.measure(make_case("A. B. C.", ["ctx"])) - 2 / 3) < 1e-9
+
+def test_prompt_contains_claim() -> None:
+    """Contradiction prompt embeds the claim being judged."""
+    judge = StubJudge(["no"])
+    HallucinationMetric(judge).measure(make_case("unique-claim-text.", ["ctx"]))
+    assert "unique-claim-text." in judge.calls[0]
