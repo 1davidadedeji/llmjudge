@@ -53,3 +53,8 @@ test("run ids link to run detail", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
 });
+
+test("trend page renders chart container", async ({ page }) => {
+  await page.goto("/trends");
+  await expect(page.getByText("Regression trends", { exact: false }).first()).toBeVisible();
+});
