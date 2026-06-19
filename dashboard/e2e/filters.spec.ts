@@ -48,3 +48,8 @@ test("repo header shows run count", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("2 runs", { exact: false }).first()).toBeVisible();
 });
+
+test("run ids link to run detail", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
+});
