@@ -74,3 +74,8 @@ async def test_fake_redis_failure_count_configurable(redis: FakeRedis) -> None:
 async def test_queue_name_is_namespaced(redis: FakeRedis) -> None:
     """Queue name carries the llmjudge namespace."""
     assert QUEUE_NAME.startswith("llmjudge:")
+
+@pytest.mark.asyncio
+async def test_retry_backoff_sequence_1(redis: FakeRedis) -> None:
+    """Backoff for attempt 1 follows the exponential schedule."""
+    assert retry_backoff_s(1) == RETRY_BACKOFF_BASE_S * 2 ** (1 - 1)
