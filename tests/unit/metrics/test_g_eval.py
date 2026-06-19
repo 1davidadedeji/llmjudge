@@ -53,3 +53,7 @@ def test_custom_rubric_used_in_prompt() -> None:
 def test_default_rubric_when_unset() -> None:
     """Default rubric is used when none is given."""
     assert GEvalMetric(StubJudge([])).rubric.startswith("1: wrong")
+
+def test_threshold_default() -> None:
+    """Default threshold is 0.7."""
+    assert GEvalMetric(StubJudge([])).threshold == 0.7
