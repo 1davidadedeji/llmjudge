@@ -43,3 +43,8 @@ test("empty filter result shows empty state", async ({ page }) => {
   await page.goto("/repos/graphmind");
   await expect(page.getByText("No runs yet", { exact: false }).first()).toBeVisible();
 });
+
+test("repo header shows run count", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("2 runs", { exact: false }).first()).toBeVisible();
+});
