@@ -57,3 +57,7 @@ def test_default_rubric_when_unset() -> None:
 def test_threshold_default() -> None:
     """Default threshold is 0.7."""
     assert GEvalMetric(StubJudge([])).threshold == 0.7
+
+def test_metric_name_stable() -> None:
+    """Metric name is the stable registry key."""
+    assert GEvalMetric.name == "g_eval"
