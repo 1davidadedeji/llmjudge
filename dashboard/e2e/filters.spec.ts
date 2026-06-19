@@ -38,3 +38,8 @@ test("filter bar renders all option", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
 });
+
+test("empty filter result shows empty state", async ({ page }) => {
+  await page.goto("/repos/graphmind");
+  await expect(page.getByText("No runs yet", { exact: false }).first()).toBeVisible();
+});
