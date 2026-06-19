@@ -8,7 +8,7 @@ Contains:
 
 import pytest
 
-from jobs.arq_worker import QUEUE_NAME
+from jobs.arq_worker import QUEUE_NAME, RETRY_BACKOFF_BASE_S, retry_backoff_s
 
 
 class FakeRedis:
