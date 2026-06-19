@@ -49,3 +49,7 @@ def test_custom_rubric_used_in_prompt() -> None:
     judge = StubJudge(["5"])
     GEvalMetric(judge, rubric="custom-rubric-text").measure(make_case())
     assert "custom-rubric-text" in judge.calls[0]
+
+def test_default_rubric_when_unset() -> None:
+    """Default rubric is used when none is given."""
+    assert GEvalMetric(StubJudge([])).rubric.startswith("1: wrong")
