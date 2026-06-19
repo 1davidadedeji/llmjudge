@@ -12,6 +12,7 @@ import re
 from harness.test_case import LLMTestCase
 from metrics.judge import JudgeClient
 
+G_EVAL_PROMPT_VERSION = 1
 G_EVAL_PROMPT = (
     "Rubric:\n{rubric}\n\nQuestion: {question}\nAnswer: {answer}\n"
     "Score the answer against the rubric on a 1-5 scale. Reply with the number only."
