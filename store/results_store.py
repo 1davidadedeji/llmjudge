@@ -89,8 +89,8 @@ class ResultsStore:
             "id": row[0],
             "repo": row[1],
             "status": row[2],
-            "created_at": row[3],
-            "finished_at": row[4],
+            "created_at": ensure_utc(row[3]),
+            "finished_at": ensure_utc(row[4]) if row[4] is not None else None,
             "scores": {metric: score for metric, score in score_rows},
         }
 
