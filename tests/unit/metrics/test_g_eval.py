@@ -73,3 +73,8 @@ def test_score_includes_answer() -> None:
     judge = StubJudge(["5"])
     GEvalMetric(judge).measure(LLMTestCase(input="q", actual_output="unique-answer"))
     assert "unique-answer" in judge.calls[0]
+
+def test_parse_first_digit_wins() -> None:
+    """Parsing uses the first 1-5 digit in the verdict."""
+    metric = GEvalMetric(StubJudge([]))
+    assert metric.parse_score("2 then 4") == 0.25
