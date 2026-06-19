@@ -130,3 +130,16 @@ class ResultsStore:
             {"id": row[0], "repo": row[1], "status": row[2], "created_at": row[3]}
             for row in rows
         ]
+
+def ensure_utc(value: datetime) -> datetime:
+    """Coerces a timestamp to timezone-aware UTC.
+
+    Args:
+        value: Timestamp from the database, possibly naive.
+
+    Returns:
+        aware: Timezone-aware UTC timestamp.
+    """
+    if value.tzinfo is None:
+        return value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc)
