@@ -92,3 +92,12 @@ def test_list_runs_no_filter() -> None:
     make_store(conn).list_runs()
     sql, _ = conn.statements[0]
     assert "WHERE" not in sql
+
+def test_ensure_utc_naive() -> None:
+    """Naive timestamps are coerced to aware UTC."""
+    from datetime import datetime, timezone
+
+    from store.results_store import ensure_utc
+
+    naive = datetime(2026, 6, 19, 12, 0, 0)
+    assert ensure_utc(naive).tzinfo == timezone.utc
