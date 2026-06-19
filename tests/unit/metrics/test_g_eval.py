@@ -61,3 +61,9 @@ def test_threshold_default() -> None:
 def test_metric_name_stable() -> None:
     """Metric name is the stable registry key."""
     assert GEvalMetric.name == "g_eval"
+
+def test_score_includes_question() -> None:
+    """The question is included in the judge prompt."""
+    judge = StubJudge(["5"])
+    GEvalMetric(judge).measure(LLMTestCase(input="unique-question", actual_output="a"))
+    assert "unique-question" in judge.calls[0]
