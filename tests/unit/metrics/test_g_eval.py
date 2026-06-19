@@ -67,3 +67,9 @@ def test_score_includes_question() -> None:
     judge = StubJudge(["5"])
     GEvalMetric(judge).measure(LLMTestCase(input="unique-question", actual_output="a"))
     assert "unique-question" in judge.calls[0]
+
+def test_score_includes_answer() -> None:
+    """The answer is included in the judge prompt."""
+    judge = StubJudge(["5"])
+    GEvalMetric(judge).measure(LLMTestCase(input="q", actual_output="unique-answer"))
+    assert "unique-answer" in judge.calls[0]
