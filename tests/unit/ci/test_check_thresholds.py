@@ -33,3 +33,7 @@ def test_validate_config_flags_out_of_range() -> None:
     """Thresholds outside [0, 1] are rejected."""
     bad = {"default_threshold": 0.75, "repos": {"x": {"threshold": 1.5}}}
     assert validate_config(bad) == ["x: threshold 1.5 out of range [0, 1]"]
+
+def test_validate_config_requires_default() -> None:
+    """Config without a default_threshold is rejected."""
+    assert validate_config({"repos": {}}) == ["missing default_threshold"]
