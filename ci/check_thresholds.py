@@ -73,3 +73,14 @@ def validate_config(config: dict) -> list[str]:
         if not 0.0 <= value <= 1.0:
             problems.append(f"{repo}: threshold {value} out of range [0, 1]")
     return problems
+
+def all_repos(config: dict) -> list[str]:
+    """Lists every repo with an explicit threshold entry.
+
+    Args:
+        config: Parsed thresholds config from load_threshold_config().
+
+    Returns:
+        repos: Sorted repo names from the config.
+    """
+    return sorted(config.get("repos", {}))
