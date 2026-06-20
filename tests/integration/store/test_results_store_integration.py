@@ -91,3 +91,9 @@ def test_scores_isolated_per_run() -> None:
     store.upsert_score("r-2", "m", 0.9)
     assert conn.scores[("r-1", "m")] == 0.1
     assert conn.scores[("r-2", "m")] == 0.9
+
+def test_insert_run_default_status_queued() -> None:
+    """insert_run defaults the status to queued."""
+    conn = RecordingConnection()
+    make_store(conn).insert_run("r-9", "llmjudge")
+    assert conn.runs["r-9"]["status"] == "queued
