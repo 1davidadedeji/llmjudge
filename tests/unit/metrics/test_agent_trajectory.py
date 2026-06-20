@@ -69,3 +69,7 @@ def test_efficiency_extra_steps() -> None:
     """Extra steps reduce efficiency proportionally."""
     metric = AgentTrajectoryMetric()
     assert metric.efficiency_score(["a", "b", "c", "d"], ["a", "b"]) == 0.5
+
+def test_efficiency_no_calls() -> None:
+    """No calls yields zero efficiency."""
+    assert AgentTrajectoryMetric().efficiency_score([], ["a"]) == 0.0
