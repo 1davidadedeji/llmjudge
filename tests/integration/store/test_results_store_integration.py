@@ -105,3 +105,9 @@ def test_multiple_metrics_same_run() -> None:
     for metric in ("faithfulness", "hallucination", "g_eval"):
         store.upsert_score("r-1", metric, 0.7)
     assert len([key for key in conn.scores if key[0] == "r-1"]) == 3
+
+def test_created_at_recorded() -> None:
+    """insert_run records a creation timestamp."""
+    conn = RecordingConnection()
+    make_store(conn).insert_run("r-1", "agentflow")
+    assert conn.runs["r-1"]["created_at"] is not None
