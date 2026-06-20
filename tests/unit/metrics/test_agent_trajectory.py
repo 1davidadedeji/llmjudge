@@ -64,3 +64,8 @@ def test_efficiency_exact() -> None:
     """Exact step count gives full efficiency."""
     metric = AgentTrajectoryMetric()
     assert metric.efficiency_score(["a", "b"], ["a", "b"]) == 1.0
+
+def test_efficiency_extra_steps() -> None:
+    """Extra steps reduce efficiency proportionally."""
+    metric = AgentTrajectoryMetric()
+    assert metric.efficiency_score(["a", "b", "c", "d"], ["a", "b"]) == 0.5
