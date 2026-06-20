@@ -55,3 +55,21 @@ def resolve_threshold(config: dict, repo: str) -> RepoThreshold:
     if repo in repos:
         return RepoThreshold(repo=repo, threshold=float(repos[repo]["threshold"]))
     return RepoThreshold(repo=repo, threshold=float(config["default_threshold"]))
+
+def validate_config(config: dict) -> list[str]:
+    """Validates a parsed thresholds config.
+
+    Args:
+        config: Parsed thresholds config from load_threshold_config().
+
+    Returns:
+        problems: Validation error messages; empty when the config is valid.
+    """
+    problems = []
+    if "default_threshold" not in config:
+        problems.append("missing default_threshold")
+    for repo, entry in config.get("repos", {}).items():
+        value = float(entry.get("threshold", -1))
+        if not 0.0 <= value <= 1.0:
+            problems.append(f"{repo}: threshold {value} out of range [0, 1]")
+    return problems
