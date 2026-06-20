@@ -14,6 +14,7 @@ export default async function RepoPage({ params }: { params: { name: string } })
   return (
     <section>
       <RepoHeader name={params.name} runCount={runs.length} />
+      <DrillDownTable runs={runs} />
     </section>
   );
 }
