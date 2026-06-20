@@ -6,6 +6,7 @@
  *   RepoPage: renders one repo's runs and metric breakdown
  */
 
+import RepoHeader from "../../../components/RepoHeader";
 import { fetchRuns } from "../../../lib/api";
 
 export default async function RepoPage({ params }: { params: { name: string } }) {
