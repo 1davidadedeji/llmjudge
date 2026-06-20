@@ -111,3 +111,10 @@ def test_created_at_recorded() -> None:
     conn = RecordingConnection()
     make_store(conn).insert_run("r-1", "agentflow")
     assert conn.runs["r-1"]["created_at"] is not None
+
+def test_score_types_preserved() -> None:
+    """Scores round-trip as floats."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    store.upsert_score("r-1", "m", 0.333)
+    assert isinstance(conn.scores[("r-1", "m")], float)
