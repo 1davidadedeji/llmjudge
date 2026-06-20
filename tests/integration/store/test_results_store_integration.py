@@ -97,3 +97,11 @@ def test_insert_run_default_status_queued() -> None:
     conn = RecordingConnection()
     make_store(conn).insert_run("r-9", "llmjudge")
     assert conn.runs["r-9"]["status"] == "queued
+
+def test_multiple_metrics_same_run() -> None:
+    """One run accumulates many metric scores."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    for metric in ("faithfulness", "hallucination", "g_eval"):
+        store.upsert_score("r-1", metric, 0.7)
+    assert len([key for key in conn.scores if key[0] == "r-1"]) == 3
