@@ -37,3 +37,7 @@ def test_validate_config_flags_out_of_range() -> None:
 def test_validate_config_requires_default() -> None:
     """Config without a default_threshold is rejected."""
     assert validate_config({"repos": {}}) == ["missing default_threshold"]
+
+def test_all_repos_sorted() -> None:
+    """Repo listing is sorted for deterministic CI logs."""
+    assert all_repos(CONFIG) == ["agentflow"]
