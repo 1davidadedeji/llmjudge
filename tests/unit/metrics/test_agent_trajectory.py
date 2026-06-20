@@ -54,3 +54,8 @@ def test_order_score_out_of_order() -> None:
     """Out-of-order expected calls get no order credit."""
     metric = AgentTrajectoryMetric()
     assert metric.order_score(["read", "search"], ["search", "read"]) == 0.0
+
+def test_order_score_missing_tool() -> None:
+    """A missing expected tool zeroes the order score."""
+    metric = AgentTrajectoryMetric()
+    assert metric.order_score(["read"], ["search", "read"]) == 0.0
