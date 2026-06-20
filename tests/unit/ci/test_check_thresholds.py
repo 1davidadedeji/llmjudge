@@ -28,3 +28,8 @@ def test_resolve_falls_back_to_default() -> None:
 def test_validate_config_accepts_valid() -> None:
     """A well-formed config produces no validation problems."""
     assert validate_config(CONFIG) == []
+
+def test_validate_config_flags_out_of_range() -> None:
+    """Thresholds outside [0, 1] are rejected."""
+    bad = {"default_threshold": 0.75, "repos": {"x": {"threshold": 1.5}}}
+    assert validate_config(bad) == ["x: threshold 1.5 out of range [0, 1]"]
