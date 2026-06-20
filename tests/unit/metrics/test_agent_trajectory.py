@@ -59,3 +59,8 @@ def test_order_score_missing_tool() -> None:
     """A missing expected tool zeroes the order score."""
     metric = AgentTrajectoryMetric()
     assert metric.order_score(["read"], ["search", "read"]) == 0.0
+
+def test_efficiency_exact() -> None:
+    """Exact step count gives full efficiency."""
+    metric = AgentTrajectoryMetric()
+    assert metric.efficiency_score(["a", "b"], ["a", "b"]) == 1.0
