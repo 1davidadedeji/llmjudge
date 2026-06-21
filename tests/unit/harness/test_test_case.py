@@ -50,3 +50,9 @@ def test_metadata_independent_per_case() -> None:
     first = LLMTestCase(input="q", actual_output="a")
     second = LLMTestCase(input="q", actual_output="a")
     assert first.metadata is not second.metadata
+
+def test_lists_independent_per_case() -> None:
+    """Default list fields are not shared."""
+    first = LLMTestCase(input="q", actual_output="a")
+    second = LLMTestCase(input="q", actual_output="a")
+    assert first.retrieval_context is not second.retrieval_context
