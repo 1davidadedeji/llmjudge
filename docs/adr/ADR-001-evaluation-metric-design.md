@@ -25,3 +25,9 @@ kept as a fallback when no judge is configured.
 
 One judge model with per-metric prompts. Simple, but couples every score to
 one model family's quirks. Kept as the initial implementation for velocity.
+
+## Option C: judge ensemble
+
+Several judges from different families with an aggregation rule. More
+expensive per run, but robust to single-judge bias. Deferred to a follow-up
+once the metric layer stabilizes.
