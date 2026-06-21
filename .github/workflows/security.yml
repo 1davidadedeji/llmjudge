@@ -17,3 +17,13 @@ jobs:
           python-version: "3.12"
       - run: pip install pip-audit
       - run: pip-audit --strict
+
+  npm-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci --prefix dashboard
+      - run: npm audit --prefix dashboard --audit-level=high
