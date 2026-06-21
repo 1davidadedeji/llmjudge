@@ -44,3 +44,9 @@ def test_frozen_immutable() -> None:
     case = LLMTestCase(input="q", actual_output="a")
     with pytest.raises(dataclasses.FrozenInstanceError):
         case.input = "other"
+
+def test_metadata_independent_per_case() -> None:
+    """Default metadata dicts are not shared."""
+    first = LLMTestCase(input="q", actual_output="a")
+    second = LLMTestCase(input="q", actual_output="a")
+    assert first.metadata is not second.metadata
