@@ -56,3 +56,18 @@ def test_lists_independent_per_case() -> None:
     first = LLMTestCase(input="q", actual_output="a")
     second = LLMTestCase(input="q", actual_output="a")
     assert first.retrieval_context is not second.retrieval_context
+
+def test_full_case() -> None:
+    """All fields round-trip through the constructor."""
+    case = LLMTestCase(
+        input="q",
+        actual_output="a",
+        expected_output="e",
+        retrieval_context=["p1"],
+        context=["g1"],
+        tools_called=["search"],
+        expected_tools=["search"],
+        metadata={"repo": "agentflow"},
+    )
+    assert case.expected_output == "e"
+    assert case.tools_called == ["search"]
