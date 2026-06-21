@@ -17,6 +17,7 @@ dependencies = [
     "httpx",
     "pyyaml",
     "boto3",
+    "python-dotenv",
 ]
 
 [project.optional-dependencies]
