@@ -89,3 +89,7 @@ a {
   font-size: 0.8rem;
   color: #0d1117;
 }
+
+main section {
+  max-width: 72rem;
+}
