@@ -74,6 +74,7 @@ class WorkerSettings:
     max_jobs = 4
     job_timeout = DEFAULT_JOB_TIMEOUT_S
     max_tries = DEFAULT_MAX_TRIES
+    on_failure = on_job_failure
 
 def retry_backoff_s(attempt: int) -> int:
     """Computes exponential backoff seconds for a retry attempt.
