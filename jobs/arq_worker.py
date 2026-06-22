@@ -85,3 +85,13 @@ def retry_backoff_s(attempt: int) -> int:
         delay_s: Seconds to wait before the next attempt.
     """
     return RETRY_BACKOFF_BASE_S * 2 ** (attempt - 1)
+
+async def on_job_failure(ctx: dict[str, Any], run_id: str, repo: str) -> None:
+    """Moves an exhausted job onto the dead-letter queue.
+
+    Args:
+        ctx: arq job context (redis connection, job id, retry count).
+        run_id: Identifier of the eval run that failed.
+        repo: Name of the repo under evaluation.
+    """
+    await ctx["redis"].lpush(DEAD_LETTER_QUEUE, f"{repo}:{run_id}")
