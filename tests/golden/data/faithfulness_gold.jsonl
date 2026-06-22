@@ -1,3 +1,4 @@
 {"id": "gold-001", "question": "what color is the sky", "answer": "The sky is blue.", "context": ["The sky appears blue due to Rayleigh scattering."], "verdicts": ["yes"], "min_score": 1.0, "max_score": 1.0}
 {"id": "gold-002", "question": "capital of france", "answer": "Paris is the capital. It is also the largest city.", "context": ["Paris is the capital and largest city of France."], "verdicts": ["yes", "yes"], "min_score": 1.0, "max_score": 1.0}
 {"id": "gold-003", "question": "who wrote hamlet", "answer": "Hamlet was written by Shakespeare. It was written in 1599.", "context": ["Hamlet is a tragedy by William Shakespeare."], "verdicts": ["yes", "no"], "min_score": 0.5, "max_score": 0.5}
+{"id": "gold-004", "question": "boiling point of water", "answer": "Water boils at 100 degrees Celsius at sea level.", "context": ["Water boils at 100 C at standard atmospheric pressure."], "verdicts": ["yes"], "min_score": 1.0, "max_score": 1.0}
