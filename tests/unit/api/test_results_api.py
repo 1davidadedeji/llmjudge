@@ -87,3 +87,11 @@ def test_list_runs_repo_filter() -> None:
     assert len(response.json()) == 1
     response = client.get("/runs", params={"repo": "other"})
     assert response.json() == []
+
+def test_add_score_validates_range() -> None:
+    """Scores outside [0, 1] are rejected with 422."""
+    store = FakeStore()
+    store.upsert_score = lambda *args: None
+    client = make_client(store)
+    response = client.post("/runs/r-1/scores", params={"metric": "m", "score": 1.5})
+    assert response.status_code == 422
