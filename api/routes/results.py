@@ -74,3 +74,21 @@ def create_run(body: RunCreate, store: ResultsStore = Depends(get_store)) -> dic
     """
     store.insert_run(body.id, body.repo)
     return {"id": body.id, "repo": body.repo, "status": "queued"}
+
+@router.post("/runs/{run_id}/scores", status_code=201)
+def add_score(run_id: str, metric: str, score: float, store: ResultsStore = Depends(get_store)) -> dict:
+    """Writes one metric score for a run.
+
+    Args:
+        run_id: Run the score belongs to.
+        metric: Metric name.
+        score: Metric score in [0, 1].
+        store: Results store dependency.
+
+    Returns:
+        confirmation: The recorded score fields.
+    """
+    if not 0.0 <= score <= 1.0:
+        raise HTTPException(status_code=422, detail="score must be in [0, 1]")
+    store.upsert_score(run_id, metric, score)
+    return {"run_id": run_id, "metric": metric, "score": score}
