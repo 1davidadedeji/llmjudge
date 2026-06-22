@@ -92,3 +92,12 @@ def add_score(run_id: str, metric: str, score: float, store: ResultsStore = Depe
         raise HTTPException(status_code=422, detail="score must be in [0, 1]")
     store.upsert_score(run_id, metric, score)
     return {"run_id": run_id, "metric": metric, "score": score}
+
+@router.get("/health")
+def health() -> dict:
+    """Reports API liveness.
+
+    Returns:
+        status: Static ok payload.
+    """
+    return {"status": "ok"}
