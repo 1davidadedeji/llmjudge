@@ -29,7 +29,9 @@ export default function RunTable({ runs }: { runs: RunSummary[] }) {
           <tr key={run.id}>
             <td>{run.id}</td>
             <td>{run.repo}</td>
-            <td>{run.status}</td>
+            <td>
+              <StatusBadge status={run.status} />
+            </td>
           </tr>
         ))}
       </tbody>
