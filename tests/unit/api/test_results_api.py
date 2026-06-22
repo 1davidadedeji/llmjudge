@@ -95,3 +95,8 @@ def test_add_score_validates_range() -> None:
     client = make_client(store)
     response = client.post("/runs/r-1/scores", params={"metric": "m", "score": 1.5})
     assert response.status_code == 422
+
+def test_health() -> None:
+    """Health endpoint answers ok."""
+    client = make_client(FakeStore())
+    assert client.get("/health").json() == {"status": "ok"}
