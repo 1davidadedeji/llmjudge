@@ -101,3 +101,12 @@ def test_ensure_utc_naive() -> None:
 
     naive = datetime(2026, 6, 19, 12, 0, 0)
     assert ensure_utc(naive).tzinfo == timezone.utc
+
+def test_finish_run_updates_status() -> None:
+    """finish_run sets status and finished_at."""
+    conn = FakeConnection()
+    make_store(conn).finish_run("r-1", "succeeded")
+    sql, params = conn.statements[0]
+    assert "UPDATE eval_runs" in sql
+    assert params[0] == "succeeded"
+    assert params[2] == "r-1"
