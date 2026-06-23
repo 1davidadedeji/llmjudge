@@ -110,3 +110,20 @@ export function bucketAverage(points: TrendPoint[]): number {
 export function clampScore(score: number): number {
   return Math.max(0, Math.min(1, score));
 }
+
+/**
+ * Splits a series into passing and failing points.
+ *
+ * @param points - Score points oldest-first.
+ * @param threshold - Pass threshold.
+ * @returns groups - Passing and failing sub-lists.
+ */
+export function partitionByThreshold(
+  points: TrendPoint[],
+  threshold: number,
+): { passing: TrendPoint[]; failing: TrendPoint[] } {
+  return {
+    passing: points.filter((point) => point.score >= threshold),
+    failing: points.filter((point) => point.score < threshold),
+  };
+}
