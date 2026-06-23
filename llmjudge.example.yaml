@@ -11,3 +11,9 @@ repos:
     metrics:
       - name: agent_trajectory
       - name: faithfulness
+
+  - repo: graphmind
+    dataset: graphmind-gold-v1
+    metrics:
+      - name: faithfulness
+      - name: hallucination
