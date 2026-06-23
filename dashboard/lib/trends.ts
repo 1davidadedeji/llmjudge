@@ -89,3 +89,14 @@ export function lastPassingIndex(points: TrendPoint[], threshold: number): numbe
   }
   return -1;
 }
+
+/**
+ * Averages all point scores into a single figure.
+ *
+ * @param points - Score points oldest-first.
+ * @returns result - See description.
+ */
+export function bucketAverage(points: TrendPoint[]): number {
+  const total = points.reduce((sum, point) => sum + point.score, 0);
+  return points.length === 0 ? 0 : total / points.length;
+}
