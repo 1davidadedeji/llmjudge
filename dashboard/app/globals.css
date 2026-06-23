@@ -93,3 +93,7 @@ a {
 main section {
   max-width: 72rem;
 }
+
+.trend-chart:hover .bar {
+  opacity: 0.85;
+}
