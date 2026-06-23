@@ -10,6 +10,7 @@ Contains:
 from dataclasses import dataclass
 
 from harness.test_case import LLMTestCase
+from metrics.base import BaseMetric
 
 
 @dataclass(frozen=True)
@@ -27,7 +28,7 @@ class TrajectoryStep:
     observation: str
 
 
-class AgentTrajectoryMetric:
+class AgentTrajectoryMetric(BaseMetric):
     """Scores agent runs on tool usage, order, and efficiency.
 
     Attributes:
