@@ -8,6 +8,7 @@ Contains:
 """
 
 from harness.test_case import LLMTestCase
+from metrics.base import BaseMetric
 from metrics.judge import JudgeClient
 
 VERDICT_PROMPT = (
@@ -20,7 +21,7 @@ COVERAGE_PROMPT = (
 )
 
 
-class ContextualPrecisionMetric:
+class ContextualPrecisionMetric(BaseMetric):
     """Rewards relevant passages appearing early in the ranking.
 
     Attributes:
