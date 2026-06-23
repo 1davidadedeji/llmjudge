@@ -10,6 +10,7 @@ Contains:
 import re
 
 from harness.test_case import LLMTestCase
+from metrics.base import BaseMetric
 from metrics.judge import JudgeClient
 
 CONTRADICTION_PROMPT = (
@@ -18,7 +19,7 @@ CONTRADICTION_PROMPT = (
 )
 
 
-class HallucinationMetric:
+class HallucinationMetric(BaseMetric):
     """Scores answers by the absence of context-contradicted claims.
 
     Attributes:
