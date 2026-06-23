@@ -9,6 +9,7 @@ Contains:
 
 from harness.test_case import LLMTestCase
 from metrics.base import BaseMetric
+from metrics.base import BaseMetric
 from metrics.judge import JudgeClient
 
 VERDICT_PROMPT = (
@@ -73,7 +74,7 @@ class ContextualPrecisionMetric(BaseMetric):
         return verdict.strip().lower().startswith("yes")
 
 
-class ContextualRecallMetric:
+class ContextualRecallMetric(BaseMetric):
     """Rewards retrieved coverage of the expected answer.
 
     Attributes:
