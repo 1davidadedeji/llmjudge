@@ -97,3 +97,7 @@ main section {
 .trend-chart:hover .bar {
   opacity: 0.85;
 }
+
+.trend-chart .bar:last-child {
+  border-right: 2px solid #e6edf3;
+}
