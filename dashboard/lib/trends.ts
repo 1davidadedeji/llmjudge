@@ -100,3 +100,13 @@ export function bucketAverage(points: TrendPoint[]): number {
   const total = points.reduce((sum, point) => sum + point.score, 0);
   return points.length === 0 ? 0 : total / points.length;
 }
+
+/**
+ * Clamps a score into the renderable range.
+ *
+ * @param score - Raw score, possibly out of range.
+ * @returns clamped - Score bounded to [0, 1].
+ */
+export function clampScore(score: number): number {
+  return Math.max(0, Math.min(1, score));
+}
