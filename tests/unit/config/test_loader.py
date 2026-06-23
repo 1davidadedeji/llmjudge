@@ -24,3 +24,8 @@ def test_metric_threshold_bounds() -> None:
 
     with pytest.raises(ValidationError):
         MetricSelection(name="faithfulness", threshold=1.5)
+
+def test_metric_names_helper() -> None:
+    """metric_names lists enabled metrics in order."""
+    config = load_config("llmjudge.example.yaml")
+    assert config.repos[0].metric_names()[0] == "faithfulness"
