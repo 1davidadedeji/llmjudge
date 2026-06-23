@@ -36,6 +36,14 @@ class RepoEvalConfig(BaseModel):
     dataset: str
     metrics: list[MetricSelection]
 
+    def metric_names(self) -> list[str]:
+        """Lists the metric names enabled for the repo.
+
+        Returns:
+            names: Metric registry names in config order.
+        """
+        return [metric.name for metric in self.metrics]
+
 
 class LlmjudgeConfig(BaseModel):
     """Top-level configuration across repos.
