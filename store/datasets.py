@@ -99,6 +99,18 @@ class DatasetStore:
         response = self.client.get_object(Bucket=self.bucket, Key=version_info.key)
         return response["Body"].read()
 
+    def latest(self, dataset: str) -> DatasetVersion | None:
+        """Resolves the newest stored version of a dataset.
+
+        Args:
+            dataset: Dataset identifier.
+
+        Returns:
+            version_info: Newest version, or None when the dataset is empty.
+        """
+        versions = self.manifest(dataset)
+        return versions[-1] if versions else None
+
     def _version_from_key(self, dataset: str, key: str) -> DatasetVersion:
         """Parses a version descriptor back out of an object key.
 
