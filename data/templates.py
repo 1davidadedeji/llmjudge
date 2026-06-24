@@ -26,3 +26,8 @@ RAG_TEMPLATE = (
     "Generate a question about {topic}, a ground-truth answer, and three ranked "
     "context passages where only the first is relevant. Return JSON."
 )
+
+ADVERSARIAL_TEMPLATE = (
+    "Generate a question about {topic} whose common-but-wrong answer is tempting, "
+    "the correct answer, and a context passage. Return JSON."
+)
