@@ -76,3 +76,11 @@ def test_version_from_key_roundtrip() -> None:
     key = store.object_key("gold", 7, "deadbeefcafe")
     parsed = store._version_from_key("gold", key)
     assert parsed.version == 7
+
+def test_next_version() -> None:
+    """next_version increments past the highest existing version."""
+    from store.datasets import DatasetVersion, next_version
+
+    assert next_version([]) == 1
+    versions = [DatasetVersion("gold", 2, "x", "k")]
+    assert next_version(versions) == 3
