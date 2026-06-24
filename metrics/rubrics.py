@@ -59,3 +59,11 @@ def load_rubric(metric: str) -> RubricTemplate:
     with open(rubric_path(metric)) as fh:
         raw = yaml.safe_load(fh)
     return RubricTemplate(**raw)
+
+def list_rubrics() -> list[str]:
+    """Lists every metric with a rubric template on disk.
+
+    Returns:
+        metrics: Sorted metric names with available templates.
+    """
+    return sorted(path.stem for path in TEMPLATE_DIR.glob("*.yaml"))
