@@ -30,3 +30,8 @@ def test_should_scale_up() -> None:
     """Scale-up signal fires only when desired exceeds current."""
     assert should_scale_up(50, 2)
     assert not should_scale_up(1, 8)
+
+def test_should_scale_down() -> None:
+    """Scale-in signal fires only when current exceeds desired."""
+    assert should_scale_down(0, 4)
+    assert not should_scale_down(50, 2)
