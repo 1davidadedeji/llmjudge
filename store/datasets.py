@@ -99,6 +99,20 @@ class DatasetStore:
         response = self.client.get_object(Bucket=self.bucket, Key=version_info.key)
         return response["Body"].read()
 
+    def upload_jsonl(self, dataset: str, records: list[dict]) -> DatasetVersion:
+        """Serializes records as JSONL and uploads them as the next version.
+
+        Args:
+            dataset: Dataset identifier.
+            records: Dataset rows to serialize.
+
+        Returns:
+            version_info: DatasetVersion describing the stored object.
+        """
+        payload = "\n".join(json.dumps(record) for record in records).encode()
+        version = next_version(self.manifest(dataset))
+        return self.upload(dataset, version, payload)
+
     def latest(self, dataset: str) -> DatasetVersion | None:
         """Resolves the newest stored version of a dataset.
 
