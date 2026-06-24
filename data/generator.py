@@ -96,3 +96,11 @@ class SyntheticGenerator:
         from data.templates import RAG_TEMPLATE
 
         return [json.loads(self.judge.complete(RAG_TEMPLATE.format(topic=topic))) for _ in range(count)]
+
+    def cache_size(self) -> int:
+        """Counts cached case files.
+
+        Returns:
+            count: Number of cached JSONL files.
+        """
+        return len(list(self.cache_dir.glob("*.jsonl")))
