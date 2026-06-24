@@ -8,3 +8,4 @@
 {"example_id": "gold-cal-008", "question": "What planet is closest to the Sun?", "answer": "Venus.", "label": 0.0}
 {"example_id": "gold-cal-009", "question": "What is the speed of light?", "answer": "About 300,000 km/s.", "label": 0.8}
 {"example_id": "gold-cal-010", "question": "Largest mammal?", "answer": "Blue whale.", "label": 1.0}
+{"example_id": "gold-cal-011", "question": "What does HTTP stand for?", "answer": "HyperText Transfer Protocol.", "label": 1.0}
