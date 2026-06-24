@@ -130,3 +130,16 @@ class DatasetStore:
         for entry in response.get("Contents", []):
             versions.append(self._version_from_key(dataset, entry["Key"]))
         return sorted(versions, key=lambda version: version.version)
+
+def next_version(versions: list[DatasetVersion]) -> int:
+    """Computes the next version number for a dataset.
+
+    Args:
+        versions: Existing versions from manifest().
+
+    Returns:
+        version: One past the highest existing version; 1 when empty.
+    """
+    if not versions:
+        return 1
+    return max(version.version for version in versions) + 1
