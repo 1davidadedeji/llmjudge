@@ -57,3 +57,16 @@ def should_scale_up(queue_depth: int, current: int, policy: AutoscalePolicy = DE
         scale_up: True when desired capacity exceeds current capacity.
     """
     return desired_workers(queue_depth, policy) > current
+
+def should_scale_down(queue_depth: int, current: int, policy: AutoscalePolicy = DEFAULT_POLICY) -> bool:
+    """Reports whether the fleet should scale in.
+
+    Args:
+        queue_depth: Number of eval jobs currently waiting in the queue.
+        current: Number of workers currently running.
+        policy: Autoscaling policy to apply.
+
+    Returns:
+        scale_down: True when current capacity exceeds desired capacity.
+    """
+    return desired_workers(queue_depth, policy) < current
