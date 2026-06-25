@@ -73,3 +73,16 @@ def compare_runs(
         "deltas": deltas,
         "regressions": find_regressions(deltas),
     }
+
+def summarize(deltas: dict[str, float]) -> str:
+    """Builds a one-line summary of score deltas.
+
+    Args:
+        deltas: Per-metric deltas from score_deltas().
+
+    Returns:
+        summary: Compact delta listing for logs and PR comments.
+    """
+    if not deltas:
+        return "no shared metrics"
+    return ", ".join(f"{metric} {delta:+.3f}" for metric, delta in deltas.items())
