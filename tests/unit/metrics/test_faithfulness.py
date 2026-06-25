@@ -71,3 +71,8 @@ def test_judge_called_per_claim() -> None:
     judge = StubJudge(["yes"] * 4)
     FaithfulnessMetric(judge).measure(make_case("A. B. C. D.", ["ctx"]))
     assert len(judge.calls) == 4
+
+def test_verdict_parsing_accepts_yes_prefix() -> None:
+    """Verdicts starting with yes count as entailment."""
+    metric = FaithfulnessMetric(StubJudge(["yes, the context states this explicitly"]))
+    assert metric.is_entailed("claim", "context")
