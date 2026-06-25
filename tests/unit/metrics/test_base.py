@@ -14,3 +14,8 @@ def test_clamp_score_bounds() -> None:
     assert clamp_score(1.4) == 1.0
     assert clamp_score(-0.2) == 0.0
     assert clamp_score(0.5) == 0.5
+
+def test_clamp_preserves_boundary() -> None:
+    """Clamp leaves exact boundary values alone."""
+    assert clamp_score(0.0) == 0.0
+    assert clamp_score(1.0) == 1.0
