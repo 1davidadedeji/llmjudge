@@ -27,7 +27,7 @@ export default function RunCompare({ payload }: { payload: ComparePayload }) {
       <h2>
         {payload.base} vs {payload.candidate}
       </h2>
-      <table>
+      <table className="compare-table">
         <thead>
           <tr>
             <th>Metric</th>
