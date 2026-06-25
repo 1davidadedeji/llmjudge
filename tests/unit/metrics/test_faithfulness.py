@@ -76,3 +76,8 @@ def test_verdict_parsing_accepts_yes_prefix() -> None:
     """Verdicts starting with yes count as entailment."""
     metric = FaithfulnessMetric(StubJudge(["yes, the context states this explicitly"]))
     assert metric.is_entailed("claim", "context")
+
+def test_verdict_parsing_rejects_no() -> None:
+    """A no verdict counts as not entailed."""
+    metric = FaithfulnessMetric(StubJudge(["no"]))
+    assert not metric.is_entailed("claim", "context")
