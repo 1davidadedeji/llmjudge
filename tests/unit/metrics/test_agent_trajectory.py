@@ -78,3 +78,9 @@ def test_coverage_none_expected_called() -> None:
     """Coverage of zero expected tools is vacuously handled by measure."""
     metric = AgentTrajectoryMetric()
     assert metric.measure(make_case([], [])) == 1.0
+
+def test_partial_order_credit_none() -> None:
+    """Out-of-order calls lose all order credit."""
+    metric = AgentTrajectoryMetric()
+    score = metric.measure(make_case(["b", "a"], ["a", "b"]))
+    assert score < 1.0
