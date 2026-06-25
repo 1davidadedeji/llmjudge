@@ -58,3 +58,8 @@ test("trend page renders chart container", async ({ page }) => {
   await page.goto("/trends");
   await expect(page.getByText("Regression trends", { exact: false }).first()).toBeVisible();
 });
+
+test("home page lists latest runs", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
+});
