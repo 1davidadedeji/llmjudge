@@ -81,3 +81,8 @@ def test_verdict_parsing_rejects_no() -> None:
     """A no verdict counts as not entailed."""
     metric = FaithfulnessMetric(StubJudge(["no"]))
     assert not metric.is_entailed("claim", "context")
+
+def test_verdict_parsing_case_insensitive() -> None:
+    """Verdict parsing ignores casing."""
+    metric = FaithfulnessMetric(StubJudge(["YES"]))
+    assert metric.is_entailed("claim", "context")
