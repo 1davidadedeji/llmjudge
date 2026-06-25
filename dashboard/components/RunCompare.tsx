@@ -37,7 +37,11 @@ export default function RunCompare({ payload }: { payload: ComparePayload }) {
         <tbody>
           {Object.entries(payload.deltas).map(([metric, delta]) => (
             // highlight rows flagged as regressions
-            <tr key={metric} className={delta < 0 ? "delta-down" : "delta-up"}>
+            <tr
+              key={metric}
+              className={delta < 0 ? "delta-down" : "delta-up"}
+              aria-label={payload.regressions.includes(metric) ? "regression" : undefined}
+            >
               <td>{metric}</td>
               <td>{formatScore(Math.abs(delta))}</td>
             </tr>
