@@ -93,3 +93,10 @@ def test_measure_uses_all_context_passages() -> None:
     metric = FaithfulnessMetric(judge)
     metric.measure(make_case("One.", ["passage-a", "passage-b"]))
     assert "passage-a" in judge.calls[0] and "passage-b" in judge.calls[0]
+
+def test_single_claim_answer() -> None:
+    """Single-sentence answers produce exactly one judge call."""
+    judge = StubJudge(["no"])
+    metric = FaithfulnessMetric(judge)
+    assert metric.measure(make_case("Solo claim.", ["ctx"])) == 0.0
+    assert len(judge.calls) == 1
