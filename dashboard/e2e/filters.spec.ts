@@ -63,3 +63,8 @@ test("home page lists latest runs", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
 });
+
+test("status badge color for failed", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("failed", { exact: false }).first()).toBeVisible();
+});
