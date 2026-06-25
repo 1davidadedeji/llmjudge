@@ -86,3 +86,10 @@ def test_verdict_parsing_case_insensitive() -> None:
     """Verdict parsing ignores casing."""
     metric = FaithfulnessMetric(StubJudge(["YES"]))
     assert metric.is_entailed("claim", "context")
+
+def test_measure_uses_all_context_passages() -> None:
+    """Every retrieved passage is included in the prompt context."""
+    judge = StubJudge(["yes"])
+    metric = FaithfulnessMetric(judge)
+    metric.measure(make_case("One.", ["passage-a", "passage-b"]))
+    assert "passage-a" in judge.calls[0] and "passage-b" in judge.calls[0]
