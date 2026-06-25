@@ -73,3 +73,8 @@ def test_efficiency_extra_steps() -> None:
 def test_efficiency_no_calls() -> None:
     """No calls yields zero efficiency."""
     assert AgentTrajectoryMetric().efficiency_score([], ["a"]) == 0.0
+
+def test_coverage_none_expected_called() -> None:
+    """Coverage of zero expected tools is vacuously handled by measure."""
+    metric = AgentTrajectoryMetric()
+    assert metric.measure(make_case([], [])) == 1.0
