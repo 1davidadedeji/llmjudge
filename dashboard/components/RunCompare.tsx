@@ -43,7 +43,10 @@ export default function RunCompare({ payload }: { payload: ComparePayload }) {
               aria-label={payload.regressions.includes(metric) ? "regression" : undefined}
             >
               <td>{metric}</td>
-              <td>{formatScore(Math.abs(delta))}</td>
+              <td>
+                {delta > 0 ? "+" : "-"}
+                {formatScore(Math.abs(delta))}
+              </td>
             </tr>
           ))}
         </tbody>
