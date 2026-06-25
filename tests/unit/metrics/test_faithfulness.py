@@ -100,3 +100,7 @@ def test_single_claim_answer() -> None:
     metric = FaithfulnessMetric(judge)
     assert metric.measure(make_case("Solo claim.", ["ctx"])) == 0.0
     assert len(judge.calls) == 1
+
+def test_threshold_defaults_to_point_eight() -> None:
+    """Default pass threshold is 0.8."""
+    assert FaithfulnessMetric(StubJudge([])).threshold == 0.8
