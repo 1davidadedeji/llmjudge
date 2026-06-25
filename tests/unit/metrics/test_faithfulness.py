@@ -104,3 +104,7 @@ def test_single_claim_answer() -> None:
 def test_threshold_defaults_to_point_eight() -> None:
     """Default pass threshold is 0.8."""
     assert FaithfulnessMetric(StubJudge([])).threshold == 0.8
+
+def test_metric_name_stable() -> None:
+    """Metric name is the stable registry key."""
+    assert FaithfulnessMetric.name == "faithfulness"
