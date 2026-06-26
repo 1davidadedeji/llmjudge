@@ -13,6 +13,8 @@ from dataclasses import dataclass
 import yaml
 
 CONFIG_PATH = "ci/thresholds.yaml"
+MIN_THRESHOLD = 0.0
+MAX_THRESHOLD = 1.0
 
 
 @dataclass(frozen=True)
