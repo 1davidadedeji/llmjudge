@@ -101,3 +101,19 @@ def health() -> dict:
         status: Static ok payload.
     """
     return {"status": "ok"}
+
+def serialize_run(run: dict) -> dict:
+    """Serializes a run payload with ISO-8601 UTC timestamps.
+
+    Args:
+        run: Run payload from the store.
+
+    Returns:
+        payload: Run payload with timestamps as ISO strings.
+    """
+    payload = dict(run)
+    for field_name in ("created_at", "finished_at"):
+        value = payload.get(field_name)
+        if value is not None and hasattr(value, "isoformat"):
+            payload[field_name] = value.isoformat().replace("+00:00", "Z")
+    return payload
