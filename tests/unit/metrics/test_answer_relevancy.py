@@ -75,3 +75,7 @@ def test_tokenize_handles_punctuation() -> None:
 def test_metric_name_stable() -> None:
     """Metric name is the stable registry key."""
     assert AnswerRelevancyMetric.name == "answer_relevancy"
+
+def test_threshold_default() -> None:
+    """Default threshold is 0.75."""
+    assert AnswerRelevancyMetric(StubJudge([])).threshold == 0.75
