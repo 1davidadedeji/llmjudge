@@ -71,3 +71,7 @@ def test_overlap_full_when_identical() -> None:
 def test_tokenize_handles_punctuation() -> None:
     """Tokenizer ignores punctuation."""
     assert tokenize("sky, blue!") == ["sky", "blue"]
+
+def test_metric_name_stable() -> None:
+    """Metric name is the stable registry key."""
+    assert AnswerRelevancyMetric.name == "answer_relevancy"
