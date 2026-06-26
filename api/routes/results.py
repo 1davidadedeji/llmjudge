@@ -58,7 +58,7 @@ def get_run(run_id: str, store: ResultsStore = Depends(get_store)) -> dict:
     run = store.get_run(run_id)
     if run is None:
         raise HTTPException(status_code=404, detail="run not found")
-    return run
+    return serialize_run(run)
 
 
 @router.post("/runs", status_code=201)
