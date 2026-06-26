@@ -127,7 +127,7 @@ class ResultsStore:
         with self.connect() as conn:
             rows = conn.execute(query, tuple(params)).fetchall()
         return [
-            {"id": row[0], "repo": row[1], "status": row[2], "created_at": row[3]}
+            {"id": row[0], "repo": row[1], "status": row[2], "created_at": ensure_utc(row[3])}
             for row in rows
         ]
 
