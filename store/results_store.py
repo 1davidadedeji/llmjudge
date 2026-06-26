@@ -104,7 +104,7 @@ class ResultsStore:
         with self.connect() as conn:
             conn.execute(
                 "UPDATE eval_runs SET status = %s, finished_at = %s WHERE id = %s",
-                (status, datetime.utcnow(), run_id),
+                (status, datetime.now(timezone.utc), run_id),
             )
 
     def list_runs(self, repo: str | None = None, limit: int = 50) -> list[dict]:
