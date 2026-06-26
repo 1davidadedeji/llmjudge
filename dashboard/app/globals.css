@@ -101,3 +101,29 @@ main section {
 .trend-chart .bar:last-child {
   border-right: 2px solid #e6edf3;
 }
+
+.repo-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.filter-bar button {
+  margin-right: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  background: none;
+  border: 1px solid #30363d;
+  border-radius: 0.4rem;
+  color: inherit;
+  cursor: pointer;
+}
+
+.filter-bar button.active {
+  border-color: #4c9aff;
+  color: #4c9aff;
+}
+
+.drill-table {
+  width: 100%;
+  margin-top: 1rem;
+}
