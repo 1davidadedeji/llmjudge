@@ -67,3 +67,7 @@ def test_overlap_full_when_identical() -> None:
     """Identical question and answer give full overlap."""
     metric = AnswerRelevancyMetric(StubJudge([]))
     assert metric.overlap("same words here", "same words here") == 1.0
+
+def test_tokenize_handles_punctuation() -> None:
+    """Tokenizer ignores punctuation."""
+    assert tokenize("sky, blue!") == ["sky", "blue"]
