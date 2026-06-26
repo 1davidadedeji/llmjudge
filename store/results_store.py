@@ -85,6 +85,7 @@ class ResultsStore:
             score_rows = conn.execute(
                 "SELECT metric, score FROM eval_scores WHERE run_id = %s", (run_id,)
             ).fetchall()
+        finished = ensure_utc(row[4]) if row[4] is not None else None
         return {
             "id": row[0],
             "repo": row[1],
