@@ -100,3 +100,12 @@ def test_health() -> None:
     """Health endpoint answers ok."""
     client = make_client(FakeStore())
     assert client.get("/health").json() == {"status": "ok"}
+
+def test_serialize_run_timestamps() -> None:
+    """serialize_run renders aware timestamps with a Z suffix."""
+    from datetime import datetime, timezone
+
+    from api.routes.results import serialize_run
+
+    run = {"id": "r", "created_at": datetime(2026, 6, 26, tzinfo=timezone.utc)}
+    assert serialize_run(run)["created_at"].endswith("Z")
