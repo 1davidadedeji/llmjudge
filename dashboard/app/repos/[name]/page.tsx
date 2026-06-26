@@ -6,6 +6,7 @@
  *   RepoPage: renders one repo's runs and metric breakdown
  */
 
+import DrillDownTable from "../../../components/DrillDownTable";
 import RepoHeader from "../../../components/RepoHeader";
 import { fetchRuns } from "../../../lib/api";
 
