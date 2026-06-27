@@ -1,0 +1,27 @@
+#!/usr/bin/env python3
+"""
+test_audit_filter.py --- unit tests for vulnerability-override filtering
+
+Contains:
+    test_filter_drops_covered_finding: live override hides its finding
+    test_filter_keeps_expired_override: expired override stops applying
+"""
+
+from ci.audit_filter import Override, filter_findings
+
+
+def test_filter_drops_covered_finding() -> None:
+    """A finding covered by a live override is filtered out."""
+    overrides = [Override("CVE-0000-1", "2999-01-01", "false positive in dev-only path")]
+    assert filter_findings(["CVE-0000-1"], overrides, "2026-06-21") == []
+
+
+def test_filter_keeps_expired_override() -> None:
+    """An expired override no longer hides its finding."""
+    overrides = [Override("CVE-0000-1", "2026-01-01", "stale")]
+    assert filter_findings(["CVE-0000-1"], overrides, "2026-06-21") == ["CVE-0000-1"]
+
+
+def test_filter_passes_through_unrelated() -> None:
+    """Findings with no matching override always survive."""
+    assert filter_findings(["CVE-1111-2"], [], "2026-06-21") == ["CVE-1111-2"]
