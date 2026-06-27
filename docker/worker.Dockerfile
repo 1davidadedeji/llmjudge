@@ -14,4 +14,4 @@ COPY ci ./ci
 COPY data ./data
 RUN pip install --no-cache-dir .
 
-CMD ["arq", "jobs.arq_worker.WorkerSettings"]
+CMD ["python", "-m", "arq", "jobs.arq_worker.WorkerSettings"]
