@@ -118,3 +118,11 @@ def test_score_types_preserved() -> None:
     store = make_store(conn)
     store.upsert_score("r-1", "m", 0.333)
     assert isinstance(conn.scores[("r-1", "m")], float)
+
+def test_many_runs_same_repo() -> None:
+    """One repo can hold many runs."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    for i in range(5):
+        store.insert_run(f"r-{i}", "agentflow")
+    assert len(conn.runs) == 5
