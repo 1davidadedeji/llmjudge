@@ -64,3 +64,9 @@ def test_precision_two_of_two_late() -> None:
     """Both relevant but ordered still scores one."""
     metric = ContextualPrecisionMetric(StubJudge(["yes", "yes"]))
     assert metric.measure(make_case(["p1", "p2"])) == 1.0
+
+def test_precision_relevant_late_scores_lower() -> None:
+    """Relevant-late ranking beats none but loses to early."""
+    early = ContextualPrecisionMetric(StubJudge(["yes", "no"]))
+    late = ContextualPrecisionMetric(StubJudge(["no", "yes"]))
+    assert early.measure(make_case(["p1", "p2"])) > late.measure(make_case(["p1", "p2"]))
