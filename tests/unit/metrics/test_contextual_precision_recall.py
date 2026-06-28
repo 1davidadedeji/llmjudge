@@ -70,3 +70,8 @@ def test_precision_relevant_late_scores_lower() -> None:
     early = ContextualPrecisionMetric(StubJudge(["yes", "no"]))
     late = ContextualPrecisionMetric(StubJudge(["no", "yes"]))
     assert early.measure(make_case(["p1", "p2"])) > late.measure(make_case(["p1", "p2"]))
+
+def test_recall_partial_coverage() -> None:
+    """Partial support yields fractional recall."""
+    metric = ContextualRecallMetric(StubJudge(["yes", "no"]))
+    assert metric.measure(make_case(["p1", "p2"], expected="e")) == 0.5
