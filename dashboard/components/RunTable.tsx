@@ -7,6 +7,7 @@
  */
 
 import type { RunSummary } from "../lib/api";
+import StatusBadge from "./StatusBadge";
 
 /**
  * Renders run summaries in a table.
