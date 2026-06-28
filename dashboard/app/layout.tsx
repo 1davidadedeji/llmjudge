@@ -19,6 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <header className="app-header">
           <h1>llmjudge</h1>
+          <nav>
+            <a href="/">runs</a> <a href="/trends">trends</a>
+          </nav>
         </header>
         <main>{children}</main>
       </body>
