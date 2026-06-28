@@ -71,3 +71,10 @@ def test_full_case() -> None:
     )
     assert case.expected_output == "e"
     assert case.tools_called == ["search"]
+
+def test_to_dict_roundtrip() -> None:
+    """Serialization covers every field."""
+    case = LLMTestCase(input="q", actual_output="a", metadata={"k": "v"})
+    payload = case.to_dict()
+    assert payload["metadata"] == {"k": "v"}
+    assert payload["expected_output"] is None
