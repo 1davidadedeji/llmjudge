@@ -33,6 +33,23 @@ class LLMTestCase:
     expected_tools: list[str] = field(default_factory=list)
     metadata: dict = field(default_factory=dict)
 
+    def to_dict(self) -> dict:
+        """Serializes the case for the results API.
+
+        Returns:
+            payload: JSON-safe mapping of all case fields.
+        """
+        return {
+            "input": self.input,
+            "actual_output": self.actual_output,
+            "expected_output": self.expected_output,
+            "retrieval_context": list(self.retrieval_context),
+            "context": list(self.context),
+            "tools_called": list(self.tools_called),
+            "expected_tools": list(self.expected_tools),
+            "metadata": dict(self.metadata),
+        }
+
     @property
     def has_expected_output(self) -> bool:
         """Reports whether a reference answer is present.
