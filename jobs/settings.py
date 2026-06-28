@@ -37,3 +37,14 @@ def load_queue_config() -> QueueConfig:
         job_timeout_s=int(os.environ.get("EVAL_JOB_TIMEOUT_S", "600")),
         max_tries=int(os.environ.get("EVAL_JOB_MAX_TRIES", "3")),
     )
+
+def dead_letter_key(queue_name: str) -> str:
+    """Derives the dead-letter queue key for a queue.
+
+    Args:
+        queue_name: Name of the primary queue.
+
+    Returns:
+        key: Redis key of the associated dead-letter queue.
+    """
+    return f"{queue_name}:dead"
