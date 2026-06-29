@@ -95,6 +95,24 @@ class ResultsStore:
             "scores": {metric: score for metric, score in score_rows},
         }
 
+    def run_count(self, repo: str | None = None) -> int:
+        """Counts stored runs.
+
+        Args:
+            repo: Repo filter; None counts all repos.
+
+        Returns:
+            count: Number of runs matching the filter.
+        """
+        query = "SELECT COUNT(*) FROM eval_runs"
+        params: tuple = ()
+        if repo is not None:
+            query += " WHERE repo = %s"
+            params = (repo,)
+        with self.connect() as conn:
+            row = conn.execute(query, params).fetchone()
+        return int(row[0])
+
     def latest_run(self, repo: str) -> dict | None:
         """Fetches the most recent run for a repo.
 
