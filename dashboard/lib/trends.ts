@@ -137,3 +137,13 @@ export function partitionByThreshold(
 export function minScore(points: TrendPoint[]): number {
   return Math.min(...points.map((point) => point.score));
 }
+
+/**
+ * Finds the highest score in the series.
+ *
+ * @param points - Score points oldest-first.
+ * @returns result - See description.
+ */
+export function maxScore(points: TrendPoint[]): number {
+  return Math.max(...points.map((point) => point.score));
+}
