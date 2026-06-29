@@ -127,3 +127,13 @@ export function partitionByThreshold(
     failing: points.filter((point) => point.score < threshold),
   };
 }
+
+/**
+ * Finds the lowest score in the series.
+ *
+ * @param points - Score points oldest-first.
+ * @returns result - See description.
+ */
+export function minScore(points: TrendPoint[]): number {
+  return Math.min(...points.map((point) => point.score));
+}
