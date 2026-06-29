@@ -65,3 +65,18 @@ class GEvalMetric:
         if not match:
             return 0.0
         return (int(match.group()) - 1) / 4
+
+def rubric_score_label(score: float) -> str:
+    """Maps a normalized score back to a rubric label.
+
+    Args:
+        score: Normalized G-Eval score in [0, 1].
+
+    Returns:
+        label: Human-readable band for the score.
+    """
+    if score >= 0.75:
+        return "excellent"
+    if score >= 0.5:
+        return "adequate"
+    return "poor"
