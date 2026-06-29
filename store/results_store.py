@@ -95,6 +95,20 @@ class ResultsStore:
             "scores": {metric: score for metric, score in score_rows},
         }
 
+    def latest_run(self, repo: str) -> dict | None:
+        """Fetches the most recent run for a repo.
+
+        Args:
+            repo: Repo whose latest run is wanted.
+
+        Returns:
+            run: Newest run payload, or None when the repo has no runs.
+        """
+        runs = self.list_runs(repo=repo, limit=1)
+        if not runs:
+            return None
+        return self.get_run(runs[0]["id"])
+
     def finish_run(self, run_id: str, status: str) -> None:
         """Marks a run as finished with a terminal status.
 
