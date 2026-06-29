@@ -29,3 +29,8 @@ def test_evaluate_gate_blocks_on_regression() -> None:
 def test_threshold_for_falls_back_to_default() -> None:
     """Unknown metrics use the default floor."""
     assert threshold_for(THRESHOLDS, "g_eval") == 0.75
+
+def test_evaluate_gate_treats_missing_score_as_zero() -> None:
+    """A metric absent from the payload counts as a zero score."""
+    payload = {"status": "succeeded", "scores": {}}
+    assert evaluate_gate(payload, THRESHOLDS).regressions == list(THRESHOLDS)
