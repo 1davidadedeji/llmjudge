@@ -84,3 +84,11 @@ def test_prompt_version_pinned() -> None:
     from metrics.g_eval import G_EVAL_PROMPT_VERSION
 
     assert G_EVAL_PROMPT_VERSION == 1
+
+def test_rubric_score_label_bands() -> None:
+    """Score labels follow the three-band mapping."""
+    from metrics.g_eval import rubric_score_label
+
+    assert rubric_score_label(0.9) == "excellent"
+    assert rubric_score_label(0.5) == "adequate"
+    assert rubric_score_label(0.1) == "poor"
