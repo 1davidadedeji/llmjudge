@@ -34,3 +34,9 @@ def test_evaluate_gate_treats_missing_score_as_zero() -> None:
     """A metric absent from the payload counts as a zero score."""
     payload = {"status": "succeeded", "scores": {}}
     assert evaluate_gate(payload, THRESHOLDS).regressions == list(THRESHOLDS)
+
+def test_format_regression_report_pass() -> None:
+    """Passing gate renders a one-line pass report."""
+    from ci.merge_gate import GateResult, format_regression_report
+
+    assert format_regression_report(GateResult(True, []), "agentflow").endswith("passed")
