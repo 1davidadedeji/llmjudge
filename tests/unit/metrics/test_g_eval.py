@@ -78,3 +78,9 @@ def test_parse_first_digit_wins() -> None:
     """Parsing uses the first 1-5 digit in the verdict."""
     metric = GEvalMetric(StubJudge([]))
     assert metric.parse_score("2 then 4") == 0.25
+
+def test_prompt_version_pinned() -> None:
+    """Prompt version is pinned for attributable score changes."""
+    from metrics.g_eval import G_EVAL_PROMPT_VERSION
+
+    assert G_EVAL_PROMPT_VERSION == 1
