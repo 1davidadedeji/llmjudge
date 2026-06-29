@@ -110,3 +110,8 @@ def test_finish_run_updates_status() -> None:
     assert "UPDATE eval_runs" in sql
     assert params[0] == "succeeded"
     assert params[2] == "r-1"
+
+def test_get_run_missing_returns_none() -> None:
+    """get_run returns None for an unknown run id."""
+    conn = FakeConnection()
+    assert make_store(conn).get_run("nope") is None
