@@ -63,3 +63,11 @@ def test_falls_back_to_retrieval_context() -> None:
     case = LLMTestCase(input="q", actual_output="A.", retrieval_context=["retrieved"])
     assert metric.measure(case) == 0.0
     assert "retrieved" in judge.calls[0]
+
+def test_context_preferred_over_retrieval() -> None:
+    """Explicit context wins over retrieval context."""
+    judge = StubJudge(["no"])
+    metric = HallucinationMetric(judge)
+    case = LLMTestCase(input="q", actual_output="A.", context=["explicit"], retrieval_context=["r"])
+    metric.measure(case)
+    assert "explicit" in judge.calls[0]
