@@ -61,7 +61,7 @@ class GEvalMetric:
         Returns:
             score: Normalized score in [0, 1]; 0.0 when unparseable.
         """
-        match = re.search(r"[1-5]", verdict)
+        match = re.search(r"\b([1-5])\b", verdict)
         if not match:
             return 0.0
         return (int(match.group()) - 1) / 4
