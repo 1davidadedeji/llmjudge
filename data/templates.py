@@ -31,3 +31,8 @@ ADVERSARIAL_TEMPLATE = (
     "Generate a question about {topic} whose common-but-wrong answer is tempting, "
     "the correct answer, and a context passage. Return JSON."
 )
+
+SELF_CHECK_TEMPLATE = (
+    "Review this QA pair about {topic} for factual errors. "
+    "Return the same JSON with a corrected answer if needed."
+)
