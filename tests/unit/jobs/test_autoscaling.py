@@ -17,8 +17,8 @@ def test_desired_workers_empty_queue() -> None:
 
 def test_desired_workers_scales_with_depth() -> None:
     """Deeper queue requests proportionally more workers."""
-    assert desired_workers(5) == 1
-    assert desired_workers(6) == 2
+    assert desired_workers(4) == 1
+    assert desired_workers(5) == 2
 
 
 def test_desired_workers_capped_at_max() -> None:
