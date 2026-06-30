@@ -99,3 +99,7 @@ def test_score_bounded() -> None:
     metric = AgentTrajectoryMetric()
     score = metric.measure(make_case(["x", "y", "z"], ["a"]))
     assert 0.0 <= score <= 1.0
+
+def test_order_weight_configurable() -> None:
+    """Order weight is a constructor knob."""
+    assert AgentTrajectoryMetric(order_weight=0.5).order_weight == 0.5
