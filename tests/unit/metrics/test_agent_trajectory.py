@@ -93,3 +93,9 @@ def test_duplicate_calls_use_first_position() -> None:
 def test_metric_name_stable() -> None:
     """Metric name is the stable registry key."""
     assert AgentTrajectoryMetric.name == "agent_trajectory"
+
+def test_score_bounded() -> None:
+    """Score stays within [0, 1]."""
+    metric = AgentTrajectoryMetric()
+    score = metric.measure(make_case(["x", "y", "z"], ["a"]))
+    assert 0.0 <= score <= 1.0
