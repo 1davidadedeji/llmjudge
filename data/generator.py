@@ -104,3 +104,14 @@ class SyntheticGenerator:
             count: Number of cached JSONL files.
         """
         return len(list(self.cache_dir.glob("*.jsonl")))
+
+    def estimate_calls(self, count: int) -> int:
+        """Estimates judge calls needed for a generation batch.
+
+        Args:
+            count: Cases planned for the batch.
+
+        Returns:
+            calls: Judge calls the batch will make.
+        """
+        return max(0, count)
