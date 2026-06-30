@@ -18,7 +18,7 @@ def create_app() -> FastAPI:
     Returns:
         app: Configured FastAPI application.
     """
-    app = FastAPI(title="llmjudge", version="0.1.0")
+    app = FastAPI(title="llmjudge", version="0.2.0")
     app.include_router(results.router)
     app.include_router(compare.router)
     return app
