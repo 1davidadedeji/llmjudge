@@ -84,3 +84,8 @@ def test_partial_order_credit_none() -> None:
     metric = AgentTrajectoryMetric()
     score = metric.measure(make_case(["b", "a"], ["a", "b"]))
     assert score < 1.0
+
+def test_duplicate_calls_use_first_position() -> None:
+    """Order check uses the first occurrence."""
+    metric = AgentTrajectoryMetric()
+    assert metric.order_score(["a", "b", "a"], ["a", "b"]) == 1.0
