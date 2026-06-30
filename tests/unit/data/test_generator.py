@@ -71,3 +71,9 @@ def test_topics_nonempty(tmp_path) -> None:
     """Seed topic list is never empty."""
     generator = make_generator(tmp_path, [])
     assert generator.topics()
+
+def test_estimate_calls(tmp_path) -> None:
+    """Cost estimate is one call per generated case."""
+    generator = make_generator(tmp_path, [])
+    assert generator.estimate_calls(7) == 7
+    assert generator.estimate_calls(-1) == 0
