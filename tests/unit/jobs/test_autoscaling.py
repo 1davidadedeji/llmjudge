@@ -35,3 +35,15 @@ def test_should_scale_down() -> None:
     """Scale-in signal fires only when current exceeds desired."""
     assert should_scale_down(0, 4)
     assert not should_scale_down(50, 2)
+
+def test_policy_frozen() -> None:
+    """AutoscalePolicy is immutable."""
+    import dataclasses
+
+    import pytest
+
+    from jobs.autoscaling import AutoscalePolicy
+
+    policy = AutoscalePolicy(1, 2, 3, 60)
+    with pytest.raises(dataclasses.FrozenInstanceError):
+        policy.max_workers = 9
