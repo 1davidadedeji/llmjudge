@@ -89,3 +89,7 @@ def test_duplicate_calls_use_first_position() -> None:
     """Order check uses the first occurrence."""
     metric = AgentTrajectoryMetric()
     assert metric.order_score(["a", "b", "a"], ["a", "b"]) == 1.0
+
+def test_metric_name_stable() -> None:
+    """Metric name is the stable registry key."""
+    assert AgentTrajectoryMetric.name == "agent_trajectory"
