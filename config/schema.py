@@ -36,6 +36,20 @@ class RepoEvalConfig(BaseModel):
     dataset: str
     metrics: list[MetricSelection]
 
+    def threshold_for(self, metric: str) -> float | None:
+        """Resolves the per-repo threshold override for a metric.
+
+        Args:
+            metric: Metric registry name.
+
+        Returns:
+            threshold: Override value, or None when unset.
+        """
+        for selection in self.metrics:
+            if selection.name == metric:
+                return selection.threshold
+        return None
+
     def metric_names(self) -> list[str]:
         """Lists the metric names enabled for the repo.
 
