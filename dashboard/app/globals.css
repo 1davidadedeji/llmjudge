@@ -132,3 +132,7 @@ main section {
   display: flex;
   gap: 1rem;
 }
+
+.compare-table tr[aria-label="regression"] {
+  background: #f8514915;
+}
