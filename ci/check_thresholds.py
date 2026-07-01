@@ -86,3 +86,16 @@ def all_repos(config: dict) -> list[str]:
         repos: Sorted repo names from the config.
     """
     return sorted(config.get("repos", {}))
+
+def strictest(config: dict) -> RepoThreshold:
+    """Finds the repo with the strictest threshold.
+
+    Args:
+        config: Parsed thresholds config from load_threshold_config().
+
+    Returns:
+        entry: RepoThreshold with the highest configured floor.
+    """
+    repos = config.get("repos", {})
+    name = max(repos, key=lambda repo: float(repos[repo]["threshold"]))
+    return RepoThreshold(repo=name, threshold=float(repos[name]["threshold"]))
