@@ -29,3 +29,8 @@ def test_metric_names_helper() -> None:
     """metric_names lists enabled metrics in order."""
     config = load_config("llmjudge.example.yaml")
     assert config.repos[0].metric_names()[0] == "faithfulness"
+
+def test_threshold_for_unset() -> None:
+    """threshold_for returns None when no override is set."""
+    config = load_config("llmjudge.example.yaml")
+    assert config.repos[0].threshold_for("faithfulness") is None
