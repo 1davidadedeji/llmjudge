@@ -69,3 +69,11 @@ class LlmjudgeConfig(BaseModel):
 
     repos: list[RepoEvalConfig]
     default_dataset: str = "gold-v1"
+
+    def repo_names(self) -> list[str]:
+        """Lists configured repo names.
+
+        Returns:
+            names: Repo names in config order.
+        """
+        return [repo.repo for repo in self.repos]
