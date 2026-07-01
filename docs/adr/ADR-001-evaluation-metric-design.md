@@ -31,3 +31,9 @@ one model family's quirks. Kept as the initial implementation for velocity.
 Several judges from different families with an aggregation rule. More
 expensive per run, but robust to single-judge bias. Deferred to a follow-up
 once the metric layer stabilizes.
+
+## Decision
+
+Adopt Option B now: one judge behind a `JudgeClient` protocol, per-metric
+prompt templates pinned with explicit versions. Option C stays on the roadmap
+and the protocol is designed so swapping to an ensemble is a local change.
