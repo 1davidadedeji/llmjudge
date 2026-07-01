@@ -37,3 +37,9 @@ once the metric layer stabilizes.
 Adopt Option B now: one judge behind a `JudgeClient` protocol, per-metric
 prompt templates pinned with explicit versions. Option C stays on the roadmap
 and the protocol is designed so swapping to an ensemble is a local change.
+
+## Metric interface contract
+
+Every metric exposes a stable `name`, a `threshold`, and `measure(test_case)`
+returning a score in [0, 1]. Metrics never raise on malformed input; they
+return a defined score for empty/degenerate cases (documented per metric).
