@@ -84,3 +84,13 @@ def test_next_version() -> None:
     assert next_version([]) == 1
     versions = [DatasetVersion("gold", 2, "x", "k")]
     assert next_version(versions) == 3
+
+def test_upload_jsonl_uses_next_version() -> None:
+    """upload_jsonl picks the next version automatically."""
+    store = make_store()
+    store.upload("gold", 1, b"old")
+    store.client.list_objects_v2 = lambda Bucket, Prefix: {
+        "Contents": [{"Key": store.object_key("gold", 1, "x")}]
+    }
+    info = store.upload_jsonl("gold", [{"q": 1}])
+    assert info.version == 2
