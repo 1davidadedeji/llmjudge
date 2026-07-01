@@ -94,3 +94,7 @@ def test_upload_jsonl_uses_next_version() -> None:
     }
     info = store.upload_jsonl("gold", [{"q": 1}])
     assert info.version == 2
+
+def test_hash_length() -> None:
+    """Content hash is a full sha256 hex digest."""
+    assert len(content_hash(b"x")) == 64
