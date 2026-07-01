@@ -17,3 +17,9 @@ repos:
     metrics:
       - name: faithfulness
       - name: hallucination
+
+  - repo: llmjudge
+    dataset: self-eval-gold-v1
+    metrics:
+      - name: faithfulness
+      - name: answer_relevancy
