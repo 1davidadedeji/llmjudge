@@ -108,3 +108,9 @@ def test_threshold_defaults_to_point_eight() -> None:
 def test_metric_name_stable() -> None:
     """Metric name is the stable registry key."""
     assert FaithfulnessMetric.name == "faithfulness"
+
+def test_context_joined_with_newlines() -> None:
+    """Context passages join with newlines in the judge prompt."""
+    judge = StubJudge(["yes"])
+    FaithfulnessMetric(judge).measure(make_case("One.", ["pa", "pb"]))
+    assert "pa\npb" in judge.calls[0]
