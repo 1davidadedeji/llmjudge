@@ -16,7 +16,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pip-audit
-      - run: pip-audit --strict
+      - run: pip-audit --strict --output json > audit.json || true
+      - run: python ci/audit_filter.py --check audit.json
 
   npm-audit:
     runs-on: ubuntu-latest
