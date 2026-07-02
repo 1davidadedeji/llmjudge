@@ -68,3 +68,8 @@ test("status badge color for failed", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("failed", { exact: false }).first()).toBeVisible();
 });
+
+test("status badge color for succeeded", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("succeeded", { exact: false }).first()).toBeVisible();
+});
