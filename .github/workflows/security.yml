@@ -28,3 +28,12 @@ jobs:
           node-version: "20"
       - run: npm ci --prefix dashboard
       - run: npm audit --prefix dashboard --audit-level=high
+
+  dependency-review:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
