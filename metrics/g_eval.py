@@ -10,6 +10,7 @@ Contains:
 import re
 
 from harness.test_case import LLMTestCase
+from metrics.base import BaseMetric
 from metrics.judge import JudgeClient
 
 G_EVAL_PROMPT_VERSION = 1
@@ -20,7 +21,7 @@ G_EVAL_PROMPT = (
 DEFAULT_RUBRIC = "1: wrong or off-topic, 3: partially correct, 5: fully correct and complete"
 
 
-class GEvalMetric:
+class GEvalMetric(BaseMetric):
     """Scores a test case against a custom rubric using a single LLM judge.
 
     Attributes:
