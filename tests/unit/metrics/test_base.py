@@ -28,3 +28,12 @@ def test_base_metric_abstract() -> None:
 
     with pytest.raises(TypeError):
         BaseMetric()
+
+def test_faithfulness_is_base_metric() -> None:
+    """Faithfulness implements the shared interface."""
+    from metrics.base import BaseMetric
+    from metrics.faithfulness import FaithfulnessMetric
+    from metrics.judge import StubJudge
+
+    metric = FaithfulnessMetric(StubJudge([]))
+    assert isinstance(metric, BaseMetric)
