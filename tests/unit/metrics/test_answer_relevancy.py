@@ -79,3 +79,12 @@ def test_metric_name_stable() -> None:
 def test_threshold_default() -> None:
     """Default threshold is 0.75."""
     assert AnswerRelevancyMetric(StubJudge([])).threshold == 0.75
+
+def test_stopwords_frozen() -> None:
+    """Stopword set is immutable."""
+    import pytest
+
+    from metrics.answer_relevancy import STOPWORDS
+
+    with pytest.raises(AttributeError):
+        STOPWORDS.add("x")
