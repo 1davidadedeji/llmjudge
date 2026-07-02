@@ -73,3 +73,8 @@ test("status badge color for succeeded", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("succeeded", { exact: false }).first()).toBeVisible();
 });
+
+test("filter persists across navigation", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("r-2", { exact: false }).first()).toBeVisible();
+});
