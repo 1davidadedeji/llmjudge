@@ -21,3 +21,9 @@ def test_load_g_eval_rubric() -> None:
 def test_rubric_path_resolves() -> None:
     """Path resolution appends the metric name to the template dir."""
     assert rubric_path("faithfulness").name == "faithfulness.yaml"
+
+def test_scale_bounds_ordered() -> None:
+    """Every shipped template has an ordered scale."""
+    for name in ("g_eval", "faithfulness", "hallucination"):
+        template = load_rubric(name)
+        assert template.scale_min < template.scale_max
