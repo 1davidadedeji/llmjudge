@@ -27,3 +27,10 @@ def test_scale_bounds_ordered() -> None:
     for name in ("g_eval", "faithfulness", "hallucination"):
         template = load_rubric(name)
         assert template.scale_min < template.scale_max
+
+def test_list_rubrics_covers_core_metrics() -> None:
+    """Template listing includes the core metrics."""
+    from metrics.rubrics import list_rubrics
+
+    rubrics = list_rubrics()
+    assert "faithfulness" in rubrics and "g_eval" in rubrics
