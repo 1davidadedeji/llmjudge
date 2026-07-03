@@ -40,3 +40,10 @@ def test_compare_route() -> None:
     app.dependency_overrides[get_store] = _Store
     payload = TestClient(app).get("/compare/b/c").json()
     assert payload["regressions"] == ["m"]
+
+def test_summarize_formats_deltas() -> None:
+    """Summary shows signed deltas per metric."""
+    from api.routes.compare import summarize
+
+    assert summarize({"m": 0.1}) == "m +0.100"
+    assert summarize({}) == "no shared metrics"
