@@ -47,3 +47,10 @@ def test_summarize_formats_deltas() -> None:
 
     assert summarize({"m": 0.1}) == "m +0.100"
     assert summarize({}) == "no shared metrics"
+
+def test_improvements() -> None:
+    """Improvements mirror the regression logic on the positive side."""
+    from api.routes.compare import improvements
+
+    assert improvements({"a": 0.05}) == ["a"]
+    assert improvements({"a": 0.005}) == []
