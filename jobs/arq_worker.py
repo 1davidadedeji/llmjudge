@@ -69,7 +69,7 @@ class WorkerSettings:
         max_jobs: Maximum concurrent jobs per worker process.
     """
 
-    functions = [run_eval_job]
+    functions = [run_eval_job, healthcheck_job]
     redis_settings = _redis_settings()
     max_jobs = 4
     job_timeout = DEFAULT_JOB_TIMEOUT_S
