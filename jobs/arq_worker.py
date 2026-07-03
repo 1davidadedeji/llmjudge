@@ -96,3 +96,15 @@ async def on_job_failure(ctx: dict[str, Any], run_id: str, repo: str) -> None:
         repo: Name of the repo under evaluation.
     """
     await ctx["redis"].lpush(DEAD_LETTER_QUEUE, f"{repo}:{run_id}")
+
+async def healthcheck_job(ctx: dict[str, Any]) -> bool:
+    """Reports worker liveness by writing a heartbeat key.
+
+    Args:
+        ctx: arq job context (redis connection, job id, retry count).
+
+    Returns:
+        alive: Always True once the heartbeat write succeeds.
+    """
+    await ctx["redis"].set("llmjudge:worker:heartbeat", "1", ex=60)
+    return True
