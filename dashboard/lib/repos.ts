@@ -24,3 +24,17 @@ export function filterByStatus(runs: RunSummary[], status: string | null): RunSu
   }
   return runs.filter((run) => run.status === status);
 }
+
+/**
+ * Counts runs per status for the filter bar badges.
+ *
+ * @param runs - Runs to count.
+ * @returns counts - Mapping of status to run count.
+ */
+export function countByStatus(runs: RunSummary[]): Record<string, number> {
+  const counts: Record<string, number> = {};
+  for (const run of runs) {
+    counts[run.status] = (counts[run.status] ?? 0) + 1;
+  }
+  return counts;
+}
