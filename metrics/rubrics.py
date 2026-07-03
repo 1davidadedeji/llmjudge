@@ -67,3 +67,14 @@ def list_rubrics() -> list[str]:
         metrics: Sorted metric names with available templates.
     """
     return sorted(path.stem for path in TEMPLATE_DIR.glob("*.yaml"))
+
+def template_version(metric: str) -> int:
+    """Reads just the version of a metric's rubric template.
+
+    Args:
+        metric: Metric name whose template version is wanted.
+
+    Returns:
+        version: Template version number.
+    """
+    return load_rubric(metric).version
