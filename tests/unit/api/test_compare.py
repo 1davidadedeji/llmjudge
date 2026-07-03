@@ -54,3 +54,7 @@ def test_improvements() -> None:
 
     assert improvements({"a": 0.05}) == ["a"]
     assert improvements({"a": 0.005}) == []
+
+def test_deltas_empty_when_no_shared() -> None:
+    """No shared metrics yields empty deltas."""
+    assert score_deltas({"a": 1.0}, {"b": 1.0}) == {}
