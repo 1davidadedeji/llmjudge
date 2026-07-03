@@ -34,3 +34,9 @@ def test_list_rubrics_covers_core_metrics() -> None:
 
     rubrics = list_rubrics()
     assert "faithfulness" in rubrics and "g_eval" in rubrics
+
+def test_template_version_reads() -> None:
+    """template_version reads the version field."""
+    from metrics.rubrics import template_version
+
+    assert template_version("g_eval") >= 1
