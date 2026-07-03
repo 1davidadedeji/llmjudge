@@ -38,3 +38,14 @@ export function countByStatus(runs: RunSummary[]): Record<string, number> {
   }
   return counts;
 }
+
+/**
+ * Filters runs to those created on or after a date.
+ *
+ * @param runs - Runs to filter.
+ * @param sinceIso - ISO date lower bound.
+ * @returns filtered - Runs created at or after the bound.
+ */
+export function sinceDate(runs: RunSummary[], sinceIso: string): RunSummary[] {
+  return runs.filter((run) => run.created_at >= sinceIso);
+}
