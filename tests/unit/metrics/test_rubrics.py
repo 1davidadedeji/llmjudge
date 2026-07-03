@@ -40,3 +40,12 @@ def test_template_version_reads() -> None:
     from metrics.rubrics import template_version
 
     assert template_version("g_eval") >= 1
+
+def test_templates_exist_for_judged_metrics() -> None:
+    """Templates exist for every LLM-judged metric."""
+    from pathlib import Path
+
+    from metrics.rubrics import rubric_path
+
+    for name in ("g_eval", "faithfulness", "hallucination"):
+        assert Path(rubric_path(name)).exists()
