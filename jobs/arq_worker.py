@@ -108,3 +108,16 @@ async def healthcheck_job(ctx: dict[str, Any]) -> bool:
     """
     await ctx["redis"].set("llmjudge:worker:heartbeat", "1", ex=60)
     return True
+
+async def enqueue_eval_suite(redis: Any, run_ids: list[str], repo: str) -> list[str]:
+    """Enqueues a batch of eval runs for one repo.
+
+    Args:
+        redis: arq redis connection pool.
+        run_ids: Identifiers of the eval runs to enqueue.
+        repo: Name of the repo under evaluation.
+
+    Returns:
+        job_ids: Identifiers assigned to the enqueued jobs, in input order.
+    """
+    return [await enqueue_eval_run(redis, run_id, repo) for run_id in run_ids]
