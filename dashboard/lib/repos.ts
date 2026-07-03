@@ -60,3 +60,23 @@ export function sinceDate(runs: RunSummary[], sinceIso: string): RunSummary[] {
 export function untilDate(runs: RunSummary[], untilIso: string): RunSummary[] {
   return runs.filter((run) => run.created_at < untilIso);
 }
+
+/**
+ * Chains status and date filters into one pass.
+ *
+ * @param runs - Runs to filter.
+ * @param status - Status to keep; null keeps everything.
+ * @param sinceIso - Optional ISO lower bound.
+ * @returns filtered - Runs matching every active filter.
+ */
+export function applyFilters(
+  runs: RunSummary[],
+  status: string | null,
+  sinceIso?: string,
+): RunSummary[] {
+  let filtered = filterByStatus(runs, status);
+  if (sinceIso) {
+    filtered = sinceDate(filtered, sinceIso);
+  }
+  return filtered;
+}
