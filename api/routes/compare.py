@@ -86,3 +86,15 @@ def summarize(deltas: dict[str, float]) -> str:
     if not deltas:
         return "no shared metrics"
     return ", ".join(f"{metric} {delta:+.3f}" for metric, delta in deltas.items())
+
+def improvements(deltas: dict[str, float], tolerance: float = REGRESSION_TOLERANCE) -> list[str]:
+    """Lists metrics that improved past the tolerance.
+
+    Args:
+        deltas: Per-metric deltas from score_deltas().
+        tolerance: Positive delta magnitude that counts as an improvement.
+
+    Returns:
+        improved: Metric names whose delta exceeds +tolerance.
+    """
+    return [metric for metric, delta in deltas.items() if delta > tolerance]
