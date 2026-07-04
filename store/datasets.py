@@ -30,6 +30,7 @@ class DatasetVersion:
     version: int
     sha256: str
     key: str
+    uploaded_at: "datetime | None" = None
 
 
 def content_hash(payload: bytes) -> str:
