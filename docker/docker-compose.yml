@@ -13,6 +13,7 @@ services:
         condition: service_started
 
   worker:
+    restart: unless-stopped
     build:
       context: ..
       dockerfile: docker/worker.Dockerfile
