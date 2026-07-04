@@ -87,7 +87,13 @@ class DatasetStore:
         sha256 = content_hash(payload)
         key = self.object_key(dataset, version, sha256)
         self.client.put_object(Bucket=self.bucket, Key=key, Body=payload)
-        return DatasetVersion(dataset=dataset, version=version, sha256=sha256, key=key)
+        return DatasetVersion(
+            dataset=dataset,
+            version=version,
+            sha256=sha256,
+            key=key,
+            uploaded_at=datetime.now(timezone.utc),
+        )
 
     def download(self, version_info: DatasetVersion) -> bytes:
         """Downloads a dataset version's payload.
