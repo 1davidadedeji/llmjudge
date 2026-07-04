@@ -124,3 +124,8 @@ def test_multiline_answer() -> None:
     """Newlines inside answers do not break claim extraction."""
     metric = FaithfulnessMetric(StubJudge([]))
     assert metric.extract_claims("One.\nTwo.") == ["One.", "Two."]
+
+def test_unicode_answer() -> None:
+    """Non-ASCII answers are handled without errors."""
+    metric = FaithfulnessMetric(StubJudge(["yes"]))
+    assert metric.measure(make_case("Le ciel est bleu.", ["ctx"])) == 1.0
