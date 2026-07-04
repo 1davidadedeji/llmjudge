@@ -119,3 +119,8 @@ def test_question_marks_split_claims() -> None:
     """Questions inside answers split into separate claims."""
     metric = FaithfulnessMetric(StubJudge([]))
     assert len(metric.extract_claims("Really? Yes.")) == 2
+
+def test_multiline_answer() -> None:
+    """Newlines inside answers do not break claim extraction."""
+    metric = FaithfulnessMetric(StubJudge([]))
+    assert metric.extract_claims("One.\nTwo.") == ["One.", "Two."]
