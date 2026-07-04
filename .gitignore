@@ -15,3 +15,5 @@ junit.xml
 
 coverage.xml
 htmlcov/
+
+.coverage
