@@ -114,3 +114,8 @@ def test_context_joined_with_newlines() -> None:
     judge = StubJudge(["yes"])
     FaithfulnessMetric(judge).measure(make_case("One.", ["pa", "pb"]))
     assert "pa\npb" in judge.calls[0]
+
+def test_question_marks_split_claims() -> None:
+    """Questions inside answers split into separate claims."""
+    metric = FaithfulnessMetric(StubJudge([]))
+    assert len(metric.extract_claims("Really? Yes.")) == 2
