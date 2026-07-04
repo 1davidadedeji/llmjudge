@@ -40,3 +40,10 @@ def test_format_regression_report_pass() -> None:
     from ci.merge_gate import GateResult, format_regression_report
 
     assert format_regression_report(GateResult(True, []), "agentflow").endswith("passed")
+
+def test_format_regression_report_blocked() -> None:
+    """Blocked gate names the regressed metrics in the report."""
+    from ci.merge_gate import GateResult, format_regression_report
+
+    report = format_regression_report(GateResult(False, ["faithfulness"]), "graphmind")
+    assert "BLOCKED" in report and "faithfulness" in report
