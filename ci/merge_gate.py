@@ -125,3 +125,14 @@ def threshold_for(thresholds: dict[str, float], metric: str, default: float = 0.
         floor: Minimum acceptable score for the metric.
     """
     return thresholds.get(metric, default)
+
+def is_terminal(status: str) -> bool:
+    """Reports whether a run status is terminal.
+
+    Args:
+        status: Run status string from the API.
+
+    Returns:
+        terminal: True for succeeded/failed, False otherwise.
+    """
+    return status in ("succeeded", "failed")
