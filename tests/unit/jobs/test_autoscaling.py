@@ -60,3 +60,10 @@ def test_desired_workers_never_below_min() -> None:
     """Desired count never drops below the policy minimum."""
     assert desired_workers(0) >= DEFAULT_POLICY.min_workers
     assert desired_workers(-5) >= DEFAULT_POLICY.min_workers
+
+def test_headroom() -> None:
+    """Headroom is the capacity left before the scale-out point."""
+    from jobs.autoscaling import headroom
+
+    assert headroom(0, 2) == 2 * DEFAULT_POLICY.scale_up_depth
+    assert headroom(100, 1) == 0
