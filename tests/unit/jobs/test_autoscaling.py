@@ -47,3 +47,11 @@ def test_policy_frozen() -> None:
     policy = AutoscalePolicy(1, 2, 3, 60)
     with pytest.raises(dataclasses.FrozenInstanceError):
         policy.max_workers = 9
+
+def test_load_policy_roundtrip(tmp_path) -> None:
+    """Policy YAML round-trips into an AutoscalePolicy."""
+    from jobs.autoscaling import AutoscalePolicy, load_policy
+
+    cfg = tmp_path / "policy.yaml"
+    cfg.write_text("min_workers: 2\nmax_workers: 6\nscale_up_depth: 3\ncooldown_s: 60\n")
+    assert load_policy(str(cfg)) == AutoscalePolicy(2, 6, 3, 60)
