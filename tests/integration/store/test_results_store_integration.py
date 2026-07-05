@@ -126,3 +126,10 @@ def test_many_runs_same_repo() -> None:
     for i in range(5):
         store.insert_run(f"r-{i}", "agentflow")
     assert len(conn.runs) == 5
+
+def test_upsert_requires_matching_run() -> None:
+    """Scores key by run id, not by metric alone."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    store.upsert_score("r-1", "m", 0.5)
+    assert ("r-2", "m") not in conn.scores
