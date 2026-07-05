@@ -88,3 +88,8 @@ def test_stopwords_frozen() -> None:
 
     with pytest.raises(AttributeError):
         STOPWORDS.add("x")
+
+def test_verdict_case_insensitive() -> None:
+    """Judge verdict parsing ignores casing."""
+    metric = AnswerRelevancyMetric(StubJudge(["YES"]))
+    assert metric.measure(make_case("", "")) >= 0.5
