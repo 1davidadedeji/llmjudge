@@ -79,3 +79,5 @@ class AnswerRelevancyMetric(BaseMetric):
             return 1.0
         answer_tokens = set(tokenize(answer))
         return len(question_tokens & answer_tokens) / len(question_tokens)
+
+JUDGE_WEIGHT = 0.5
