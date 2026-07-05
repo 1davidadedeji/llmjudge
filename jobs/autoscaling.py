@@ -70,3 +70,18 @@ def should_scale_down(queue_depth: int, current: int, policy: AutoscalePolicy = 
         scale_down: True when current capacity exceeds desired capacity.
     """
     return desired_workers(queue_depth, policy) < current
+
+def load_policy(path: str = "config/autoscaling.yaml") -> AutoscalePolicy:
+    """Loads an autoscaling policy from a YAML file.
+
+    Args:
+        path: Filesystem path to the autoscaling config.
+
+    Returns:
+        policy: Parsed AutoscalePolicy.
+    """
+    import yaml
+
+    with open(path) as fh:
+        raw = yaml.safe_load(fh)
+    return AutoscalePolicy(**raw)
