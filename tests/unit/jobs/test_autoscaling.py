@@ -55,3 +55,8 @@ def test_load_policy_roundtrip(tmp_path) -> None:
     cfg = tmp_path / "policy.yaml"
     cfg.write_text("min_workers: 2\nmax_workers: 6\nscale_up_depth: 3\ncooldown_s: 60\n")
     assert load_policy(str(cfg)) == AutoscalePolicy(2, 6, 3, 60)
+
+def test_desired_workers_never_below_min() -> None:
+    """Desired count never drops below the policy minimum."""
+    assert desired_workers(0) >= DEFAULT_POLICY.min_workers
+    assert desired_workers(-5) >= DEFAULT_POLICY.min_workers
