@@ -85,3 +85,16 @@ def load_policy(path: str = "config/autoscaling.yaml") -> AutoscalePolicy:
     with open(path) as fh:
         raw = yaml.safe_load(fh)
     return AutoscalePolicy(**raw)
+
+def headroom(queue_depth: int, current: int, policy: AutoscalePolicy = DEFAULT_POLICY) -> int:
+    """Computes spare capacity before the next scale-out threshold.
+
+    Args:
+        queue_depth: Number of eval jobs currently waiting in the queue.
+        current: Number of workers currently running.
+        policy: Autoscaling policy to apply.
+
+    Returns:
+        headroom: Additional jobs the current fleet absorbs before scaling.
+    """
+    return max(0, current * policy.scale_up_depth - queue_depth)
