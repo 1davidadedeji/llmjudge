@@ -98,3 +98,8 @@ def test_overlap_symmetric_inputs_none_shared() -> None:
     """No shared tokens scores zero overlap."""
     metric = AnswerRelevancyMetric(StubJudge([]))
     assert metric.overlap("alpha beta", "gamma delta") == 0.0
+
+def test_measure_returns_float() -> None:
+    """Score is always a plain float."""
+    metric = AnswerRelevancyMetric(StubJudge(["yes"]))
+    assert isinstance(metric.measure(make_case("q words", "q words")), float)
