@@ -26,3 +26,14 @@ export function formatScore(score: number): string {
 export function formatTimestamp(iso: string): string {
   return new Date(iso).toLocaleString();
 }
+
+/**
+ * Truncates long run ids for compact table cells.
+ *
+ * @param runId - Full run identifier.
+ * @param length - Maximum characters to keep.
+ * @returns text - Truncated id with an ellipsis when shortened.
+ */
+export function truncateRunId(runId: string, length = 12): string {
+  return runId.length <= length ? runId : `${runId.slice(0, length)}…`;
+}
