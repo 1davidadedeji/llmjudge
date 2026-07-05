@@ -93,3 +93,8 @@ def test_verdict_case_insensitive() -> None:
     """Judge verdict parsing ignores casing."""
     metric = AnswerRelevancyMetric(StubJudge(["YES"]))
     assert metric.measure(make_case("", "")) >= 0.5
+
+def test_overlap_symmetric_inputs_none_shared() -> None:
+    """No shared tokens scores zero overlap."""
+    metric = AnswerRelevancyMetric(StubJudge([]))
+    assert metric.overlap("alpha beta", "gamma delta") == 0.0
