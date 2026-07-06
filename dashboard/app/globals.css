@@ -141,3 +141,9 @@ main section {
   padding: 0.4rem 0.75rem;
   border-bottom: 1px solid #30363d;
 }
+
+.trend-summary {
+  font-size: 0.85rem;
+  color: #8b949e;
+  margin-top: 0.25rem;
+}
