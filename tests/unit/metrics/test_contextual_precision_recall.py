@@ -75,3 +75,7 @@ def test_recall_partial_coverage() -> None:
     """Partial support yields fractional recall."""
     metric = ContextualRecallMetric(StubJudge(["yes", "no"]))
     assert metric.measure(make_case(["p1", "p2"], expected="e")) == 0.5
+
+def test_precision_metric_name() -> None:
+    """Precision metric name is stable."""
+    assert ContextualPrecisionMetric.name == "contextual_precision"
