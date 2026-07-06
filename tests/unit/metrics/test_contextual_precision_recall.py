@@ -79,3 +79,7 @@ def test_recall_partial_coverage() -> None:
 def test_precision_metric_name() -> None:
     """Precision metric name is stable."""
     assert ContextualPrecisionMetric.name == "contextual_precision"
+
+def test_recall_metric_name() -> None:
+    """Recall metric name is stable."""
+    assert ContextualRecallMetric.name == "contextual_recall"
