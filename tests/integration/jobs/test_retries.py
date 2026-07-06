@@ -99,3 +99,8 @@ async def test_retry_backoff_sequence_4(redis: FakeRedis) -> None:
 async def test_retry_backoff_sequence_5(redis: FakeRedis) -> None:
     """Backoff for attempt 5 follows the exponential schedule."""
     assert retry_backoff_s(5) == RETRY_BACKOFF_BASE_S * 2 ** (5 - 1)
+
+@pytest.mark.asyncio
+async def test_retry_backoff_sequence_6(redis: FakeRedis) -> None:
+    """Backoff for attempt 6 follows the exponential schedule."""
+    assert retry_backoff_s(6) == RETRY_BACKOFF_BASE_S * 2 ** (6 - 1)
