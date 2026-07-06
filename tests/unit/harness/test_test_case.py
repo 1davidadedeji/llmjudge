@@ -78,3 +78,8 @@ def test_to_dict_roundtrip() -> None:
     payload = case.to_dict()
     assert payload["metadata"] == {"k": "v"}
     assert payload["expected_output"] is None
+
+def test_from_dict_roundtrip() -> None:
+    """from_dict inverts to_dict."""
+    case = LLMTestCase(input="q", actual_output="a", tools_called=["t"])
+    assert LLMTestCase.from_dict(case.to_dict()) == case
