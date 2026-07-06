@@ -115,3 +115,21 @@ class SyntheticGenerator:
             calls: Judge calls the batch will make.
         """
         return max(0, count)
+
+    def deduplicate(self, cases: list[dict]) -> list[dict]:
+        """Drops cases whose question already appears in the batch.
+
+        Args:
+            cases: Generated case dicts.
+
+        Returns:
+            deduplicated: Cases with duplicate questions removed.
+        """
+        seen: set[str] = set()
+        unique = []
+        for case in cases:
+            question = case.get("question", "")
+            if question not in seen:
+                seen.add(question)
+                unique.append(case)
+        return unique
