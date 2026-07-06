@@ -34,7 +34,7 @@ export default function TrendChart({
           key={index}
           className={point.score >= threshold ? "bar bar-pass" : "bar bar-fail"}
           style={{ height: `${point.score * 100}%` }}
-          title={formatScore(point.score)}
+          title={`${point.created_at}: ${formatScore(point.score)}`}
         />
       ))}
     </div>
