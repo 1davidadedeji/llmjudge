@@ -33,6 +33,15 @@ class LLMTestCase:
     expected_tools: list[str] = field(default_factory=list)
     metadata: dict = field(default_factory=dict)
 
+    @property
+    def is_agent_run(self) -> bool:
+        """Reports whether the case represents an agent trajectory.
+
+        Returns:
+            is_agent: True when tool expectations or calls are present.
+        """
+        return bool(self.tools_called or self.expected_tools)
+
     @staticmethod
     def from_dict(payload: dict) -> "LLMTestCase":
         """Deserializes a case from its API payload.
