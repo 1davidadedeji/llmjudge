@@ -76,3 +76,7 @@ def test_verdict_case_insensitive() -> None:
     """Verdict parsing ignores casing."""
     metric = HallucinationMetric(StubJudge(["YES"]))
     assert metric.is_contradicted("c", "ctx")
+
+def test_threshold_default() -> None:
+    """Default threshold is 0.9."""
+    assert HallucinationMetric(StubJudge([])).threshold == 0.9
