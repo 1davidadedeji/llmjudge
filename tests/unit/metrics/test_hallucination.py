@@ -71,3 +71,8 @@ def test_context_preferred_over_retrieval() -> None:
     case = LLMTestCase(input="q", actual_output="A.", context=["explicit"], retrieval_context=["r"])
     metric.measure(case)
     assert "explicit" in judge.calls[0]
+
+def test_verdict_case_insensitive() -> None:
+    """Verdict parsing ignores casing."""
+    metric = HallucinationMetric(StubJudge(["YES"]))
+    assert metric.is_contradicted("c", "ctx")
