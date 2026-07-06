@@ -33,6 +33,18 @@ class LLMTestCase:
     expected_tools: list[str] = field(default_factory=list)
     metadata: dict = field(default_factory=dict)
 
+    @staticmethod
+    def from_dict(payload: dict) -> "LLMTestCase":
+        """Deserializes a case from its API payload.
+
+        Args:
+            payload: Mapping produced by to_dict().
+
+        Returns:
+            test_case: Reconstructed LLMTestCase.
+        """
+        return LLMTestCase(**payload)
+
     def to_dict(self) -> dict:
         """Serializes the case for the results API.
 
