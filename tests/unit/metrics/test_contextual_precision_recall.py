@@ -83,3 +83,8 @@ def test_precision_metric_name() -> None:
 def test_recall_metric_name() -> None:
     """Recall metric name is stable."""
     assert ContextualRecallMetric.name == "contextual_recall"
+
+def test_precision_single_relevant_first() -> None:
+    """Single relevant passage at rank one scores one."""
+    metric = ContextualPrecisionMetric(StubJudge(["yes", "no", "no"]))
+    assert metric.measure(make_case(["p1", "p2", "p3"])) == 1.0
