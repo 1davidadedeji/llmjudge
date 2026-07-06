@@ -88,3 +88,8 @@ def test_precision_single_relevant_first() -> None:
     """Single relevant passage at rank one scores one."""
     metric = ContextualPrecisionMetric(StubJudge(["yes", "no", "no"]))
     assert metric.measure(make_case(["p1", "p2", "p3"])) == 1.0
+
+def test_verdict_parsing_no() -> None:
+    """A no verdict counts as not relevant."""
+    metric = ContextualPrecisionMetric(StubJudge(["no"]))
+    assert not metric.is_relevant("p", "q")
