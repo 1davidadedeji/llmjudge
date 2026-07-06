@@ -147,3 +147,13 @@ export function minScore(points: TrendPoint[]): number {
 export function maxScore(points: TrendPoint[]): number {
   return Math.max(...points.map((point) => point.score));
 }
+
+/**
+ * Measures score spread as max minus min.
+ *
+ * @param points - Score points oldest-first.
+ * @returns result - See description.
+ */
+export function volatility(points: TrendPoint[]): number {
+  return maxScore(points) - minScore(points);
+}
