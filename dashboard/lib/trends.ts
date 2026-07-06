@@ -157,3 +157,14 @@ export function maxScore(points: TrendPoint[]): number {
 export function volatility(points: TrendPoint[]): number {
   return maxScore(points) - minScore(points);
 }
+
+/**
+ * Counts points at or above the threshold.
+ *
+ * @param points - Score points oldest-first.
+ * @param threshold - Pass threshold.
+ * @returns count - Number of passing points.
+ */
+export function passCount(points: TrendPoint[], threshold: number): number {
+  return points.filter((point) => point.score >= threshold).length;
+}
