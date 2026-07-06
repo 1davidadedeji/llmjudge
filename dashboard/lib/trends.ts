@@ -168,3 +168,19 @@ export function volatility(points: TrendPoint[]): number {
 export function passCount(points: TrendPoint[], threshold: number): number {
   return points.filter((point) => point.score >= threshold).length;
 }
+
+/**
+ * Computes the standard deviation of the series.
+ *
+ * @param points - Score points oldest-first.
+ * @returns sd - Population standard deviation; 0 for an empty series.
+ */
+export function scoreStdDev(points: TrendPoint[]): number {
+  if (points.length === 0) {
+    return 0;
+  }
+  const mean = bucketAverage(points);
+  const variance =
+    points.reduce((sum, point) => sum + (point.score - mean) ** 2, 0) / points.length;
+  return Math.sqrt(variance);
+}
