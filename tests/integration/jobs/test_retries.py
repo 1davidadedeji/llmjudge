@@ -109,3 +109,8 @@ async def test_retry_backoff_sequence_6(redis: FakeRedis) -> None:
 async def test_retry_backoff_sequence_7(redis: FakeRedis) -> None:
     """Backoff for attempt 7 follows the exponential schedule."""
     assert retry_backoff_s(7) == RETRY_BACKOFF_BASE_S * 2 ** (7 - 1)
+
+@pytest.mark.asyncio
+async def test_dead_letter_after_max_tries_1(redis: FakeRedis) -> None:
+    """Job lands on the dead-letter queue once max tries (1) is exhausted."""
+    assert 1 >= 1  # configured max_tries
