@@ -45,3 +45,9 @@ def test_all_repos_sorted() -> None:
 def test_strictest_picks_highest_floor() -> None:
     """Strictest repo is the one with the highest threshold."""
     assert strictest(CONFIG).repo == "agentflow"
+
+def test_blended_score_mean() -> None:
+    """Blended score is the plain mean of metric scores."""
+    from ci.check_thresholds import blended_score
+
+    assert blended_score({"a": 0.8, "b": 1.0}) == 0.9
