@@ -13,3 +13,4 @@
 {"example_id": "gold-cal-013", "question": "Currency of Japan?", "answer": "Yen.", "label": 1.0}
 {"example_id": "gold-cal-014", "question": "What is photosynthesis?", "answer": "How plants convert light to energy.", "label": 0.9}
 {"example_id": "gold-cal-015", "question": "Square root of 144?", "answer": "14.", "label": 0.0}
+{"example_id": "gold-cal-016", "question": "Author of 1984?", "answer": "George Orwell.", "label": 1.0}
