@@ -101,3 +101,7 @@ def test_parse_ignores_embedded_digits() -> None:
 def test_score_two_normalizes_quarter() -> None:
     """A 2 verdict normalizes to 0.25."""
     assert GEvalMetric(StubJudge(["2"])).measure(make_case()) == 0.25
+
+def test_score_four_normalizes_three_quarter() -> None:
+    """A 4 verdict normalizes to 0.75."""
+    assert GEvalMetric(StubJudge(["4"])).measure(make_case()) == 0.75
