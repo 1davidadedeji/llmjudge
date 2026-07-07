@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS eval_runs (
     finished_at TIMESTAMP
 );
 
+CREATE INDEX IF NOT EXISTS idx_eval_runs_repo_created ON eval_runs (repo, created_at DESC);
+
 CREATE TABLE IF NOT EXISTS eval_scores (
     run_id TEXT NOT NULL REFERENCES eval_runs (id),
     metric TEXT NOT NULL,
