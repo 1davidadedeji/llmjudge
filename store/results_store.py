@@ -95,6 +95,16 @@ class ResultsStore:
             "scores": {metric: score for metric, score in score_rows},
         }
 
+    def repos_with_runs(self) -> list[str]:
+        """Lists repos that have at least one stored run.
+
+        Returns:
+            repos: Sorted distinct repo names.
+        """
+        with self.connect() as conn:
+            rows = conn.execute("SELECT DISTINCT repo FROM eval_runs ORDER BY repo").fetchall()
+        return [row[0] for row in rows]
+
     def delete_run(self, run_id: str) -> bool:
         """Deletes a run and its scores.
 
