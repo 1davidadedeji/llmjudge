@@ -99,3 +99,16 @@ def strictest(config: dict) -> RepoThreshold:
     repos = config.get("repos", {})
     name = max(repos, key=lambda repo: float(repos[repo]["threshold"]))
     return RepoThreshold(repo=name, threshold=float(repos[name]["threshold"]))
+
+def blended_score(scores: dict[str, float]) -> float:
+    """Computes the blended gate score from per-metric scores.
+
+    Args:
+        scores: Mapping of metric names to scores.
+
+    Returns:
+        blended: Mean score across metrics; 0.0 for an empty mapping.
+    """
+    if not scores:
+        return 0.0
+    return sum(scores.values()) / len(scores)
