@@ -81,3 +81,15 @@ def rubric_score_label(score: float) -> str:
     if score >= 0.5:
         return "adequate"
     return "poor"
+
+def is_acceptable(score: float, threshold: float = 0.7) -> bool:
+    """Reports whether a G-Eval score passes.
+
+    Args:
+        score: Normalized G-Eval score.
+        threshold: Minimum passing score.
+
+    Returns:
+        passing: True when the score meets the threshold.
+    """
+    return score >= threshold
