@@ -41,3 +41,7 @@ def test_validate_config_requires_default() -> None:
 def test_all_repos_sorted() -> None:
     """Repo listing is sorted for deterministic CI logs."""
     assert all_repos(CONFIG) == ["agentflow"]
+
+def test_strictest_picks_highest_floor() -> None:
+    """Strictest repo is the one with the highest threshold."""
+    assert strictest(CONFIG).repo == "agentflow"
