@@ -7,7 +7,7 @@ Contains:
     test_resolve_falls_back_to_default: unknown repo gets the default floor
 """
 
-from ci.check_thresholds import resolve_threshold, validate_config
+from ci.check_thresholds import all_repos, resolve_threshold, strictest, validate_config
 
 CONFIG = {
     "default_threshold": 0.75,
