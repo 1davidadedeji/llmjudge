@@ -97,3 +97,7 @@ def test_parse_ignores_embedded_digits() -> None:
     """Digits inside longer numbers are not treated as scores."""
     metric = GEvalMetric(StubJudge([]))
     assert metric.parse_score("rated 45 out of 50") == 0.0
+
+def test_score_two_normalizes_quarter() -> None:
+    """A 2 verdict normalizes to 0.25."""
+    assert GEvalMetric(StubJudge(["2"])).measure(make_case()) == 0.25
