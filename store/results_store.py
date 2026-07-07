@@ -95,6 +95,20 @@ class ResultsStore:
             "scores": {metric: score for metric, score in score_rows},
         }
 
+    def delete_run(self, run_id: str) -> bool:
+        """Deletes a run and its scores.
+
+        Args:
+            run_id: Run to delete.
+
+        Returns:
+            deleted: True when a run row was removed.
+        """
+        with self.connect() as conn:
+            conn.execute("DELETE FROM eval_scores WHERE run_id = %s", (run_id,))
+            cursor = conn.execute("DELETE FROM eval_runs WHERE id = %s", (run_id,))
+        return cursor.rowcount > 0
+
     def run_count(self, repo: str | None = None) -> int:
         """Counts stored runs.
 
