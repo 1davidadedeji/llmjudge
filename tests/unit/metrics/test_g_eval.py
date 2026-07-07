@@ -105,3 +105,7 @@ def test_score_two_normalizes_quarter() -> None:
 def test_score_four_normalizes_three_quarter() -> None:
     """A 4 verdict normalizes to 0.75."""
     assert GEvalMetric(StubJudge(["4"])).measure(make_case()) == 0.75
+
+def test_threshold_custom() -> None:
+    """Custom threshold is stored."""
+    assert GEvalMetric(StubJudge([]), threshold=0.9).threshold == 0.9
