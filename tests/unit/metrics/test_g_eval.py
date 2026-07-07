@@ -92,3 +92,8 @@ def test_rubric_score_label_bands() -> None:
     assert rubric_score_label(0.9) == "excellent"
     assert rubric_score_label(0.5) == "adequate"
     assert rubric_score_label(0.1) == "poor"
+
+def test_parse_ignores_embedded_digits() -> None:
+    """Digits inside longer numbers are not treated as scores."""
+    metric = GEvalMetric(StubJudge([]))
+    assert metric.parse_score("rated 45 out of 50") == 0.0
