@@ -115,3 +115,11 @@ def test_get_run_missing_returns_none() -> None:
     """get_run returns None for an unknown run id."""
     conn = FakeConnection()
     assert make_store(conn).get_run("nope") is None
+
+def test_get_run_assembles_scores() -> None:
+    """get_run merges the scores rows into a mapping."""
+    conn = FakeConnection()
+    conn.one = ("r-1", "agentflow", "succeeded", None, None)
+    conn.rows = [("faithfulness", 0.9), ("hallucination", 1.0)]
+    run = make_store(conn).get_run("r-1")
+    assert run["scores"] == {"faithfulness": 0.9, "hallucination": 1.0}
