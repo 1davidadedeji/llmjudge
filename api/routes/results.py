@@ -117,3 +117,19 @@ def serialize_run(run: dict) -> dict:
         if value is not None and hasattr(value, "isoformat"):
             payload[field_name] = value.isoformat().replace("+00:00", "Z")
     return payload
+
+@router.get("/runs/{run_id}/scores")
+def get_scores(run_id: str, store: ResultsStore = Depends(get_store)) -> dict:
+    """Fetches just the scores mapping for a run.
+
+    Args:
+        run_id: Run identifier.
+        store: Results store dependency.
+
+    Returns:
+        scores: Metric-score mapping for the run.
+    """
+    run = store.get_run(run_id)
+    if run is None:
+        raise HTTPException(status_code=404, detail="run not found")
+    return run["scores"]
