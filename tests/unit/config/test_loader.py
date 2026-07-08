@@ -34,3 +34,8 @@ def test_threshold_for_unset() -> None:
     """threshold_for returns None when no override is set."""
     config = load_config("llmjudge.example.yaml")
     assert config.repos[0].threshold_for("faithfulness") is None
+
+def test_repo_names() -> None:
+    """repo_names lists every configured repo."""
+    config = load_config("llmjudge.example.yaml")
+    assert "retrieval-core" in config.repo_names()
