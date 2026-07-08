@@ -115,3 +115,8 @@ def test_step_count_delta() -> None:
     from metrics.agent_trajectory import step_count_delta
 
     assert step_count_delta(["a", "b", "c"], ["a"]) == 2
+
+def test_coverage_full() -> None:
+    """Full coverage when all expected tools are called."""
+    metric = AgentTrajectoryMetric()
+    assert metric.tool_coverage(["a", "b", "c"], ["b", "a"]) == 1.0
