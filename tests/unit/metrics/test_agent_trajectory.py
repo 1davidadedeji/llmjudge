@@ -120,3 +120,8 @@ def test_coverage_full() -> None:
     """Full coverage when all expected tools are called."""
     metric = AgentTrajectoryMetric()
     assert metric.tool_coverage(["a", "b", "c"], ["b", "a"]) == 1.0
+
+def test_coverage_zero() -> None:
+    """Zero coverage when no expected tool is called."""
+    metric = AgentTrajectoryMetric()
+    assert metric.tool_coverage(["x"], ["a"]) == 0.0
