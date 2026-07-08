@@ -133,3 +133,14 @@ def get_scores(run_id: str, store: ResultsStore = Depends(get_store)) -> dict:
     if run is None:
         raise HTTPException(status_code=404, detail="run not found")
     return run["scores"]
+
+@router.delete("/runs/{run_id}", status_code=204)
+def delete_run(run_id: str, store: ResultsStore = Depends(get_store)) -> None:
+    """Deletes a run and its scores.
+
+    Args:
+        run_id: Run identifier.
+        store: Results store dependency.
+    """
+    if not store.delete_run(run_id):
+        raise HTTPException(status_code=404, detail="run not found")
