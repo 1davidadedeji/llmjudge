@@ -32,3 +32,8 @@ def test_override_requires_reason() -> None:
 
     with pytest.raises(TypeError):
         Override("CVE-0000-1", "2999-01-01")
+
+def test_override_fields() -> None:
+    """Override stores id, expiry, and reason."""
+    override = Override("CVE-1", "2999-01-01", "justified")
+    assert override.vuln_id == "CVE-1"
