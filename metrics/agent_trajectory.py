@@ -104,3 +104,20 @@ class AgentTrajectoryMetric(BaseMetric):
         if not called:
             return 0.0
         return min(1.0, len(expected) / len(called))
+
+def redundant_calls(called: list[str]) -> list[str]:
+    """Lists tools called more than once.
+
+    Args:
+        called: Tools the agent invoked, in order.
+
+    Returns:
+        repeated: Tools appearing more than once, deduplicated.
+    """
+    seen: set[str] = set()
+    repeated: list[str] = []
+    for tool in called:
+        if tool in seen and tool not in repeated:
+            repeated.append(tool)
+        seen.add(tool)
+    return repeated
