@@ -25,3 +25,10 @@ def test_filter_keeps_expired_override() -> None:
 def test_filter_passes_through_unrelated() -> None:
     """Findings with no matching override always survive."""
     assert filter_findings(["CVE-1111-2"], [], "2026-06-21") == ["CVE-1111-2"]
+
+def test_override_requires_reason() -> None:
+    """Overrides without a justification are rejected at construction time."""
+    import pytest
+
+    with pytest.raises(TypeError):
+        Override("CVE-0000-1", "2999-01-01")
