@@ -43,3 +43,8 @@ def test_filter_multiple_findings() -> None:
     overrides = [Override("CVE-1", "2999-01-01", "ok")]
     remaining = filter_findings(["CVE-1", "CVE-2"], overrides, "2026-07-01")
     assert remaining == ["CVE-2"]
+
+def test_filter_preserves_order() -> None:
+    """Remaining findings keep their reported order."""
+    findings = ["CVE-3", "CVE-1", "CVE-2"]
+    assert filter_findings(findings, [], "2026-07-01") == findings
