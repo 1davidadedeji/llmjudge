@@ -109,3 +109,9 @@ def test_redundant_calls_detected() -> None:
     from metrics.agent_trajectory import redundant_calls
 
     assert redundant_calls(["a", "b", "a", "a"]) == ["a"]
+
+def test_step_count_delta() -> None:
+    """Delta counts extra steps over the expectation."""
+    from metrics.agent_trajectory import step_count_delta
+
+    assert step_count_delta(["a", "b", "c"], ["a"]) == 2
