@@ -8,7 +8,7 @@ Contains:
 
 import yaml
 
-from config.schema import LlmjudgeConfig
+from config.schema import LlmjudgeConfig, RepoEvalConfig
 
 DEFAULT_CONFIG_PATH = "llmjudge.yaml"
 
