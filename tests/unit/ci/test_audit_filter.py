@@ -37,3 +37,9 @@ def test_override_fields() -> None:
     """Override stores id, expiry, and reason."""
     override = Override("CVE-1", "2999-01-01", "justified")
     assert override.vuln_id == "CVE-1"
+
+def test_filter_multiple_findings() -> None:
+    """Filtering handles mixed covered/uncovered lists."""
+    overrides = [Override("CVE-1", "2999-01-01", "ok")]
+    remaining = filter_findings(["CVE-1", "CVE-2"], overrides, "2026-07-01")
+    assert remaining == ["CVE-2"]
