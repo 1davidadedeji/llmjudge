@@ -25,3 +25,18 @@ def load_config(path: str = DEFAULT_CONFIG_PATH) -> LlmjudgeConfig:
     with open(path) as fh:
         raw = yaml.safe_load(fh)
     return LlmjudgeConfig(**raw)
+
+def find_repo(config: LlmjudgeConfig, repo: str) -> "RepoEvalConfig | None":
+    """Finds one repo's config by name.
+
+    Args:
+        config: Loaded top-level config.
+        repo: Repo name to find.
+
+    Returns:
+        repo_config: The repo's config, or None when unconfigured.
+    """
+    for repo_config in config.repos:
+        if repo_config.repo == repo:
+            return repo_config
+    return None
