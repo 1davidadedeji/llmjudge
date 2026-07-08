@@ -121,3 +121,15 @@ def redundant_calls(called: list[str]) -> list[str]:
             repeated.append(tool)
         seen.add(tool)
     return repeated
+
+def step_count_delta(called: list[str], expected: list[str]) -> int:
+    """Computes how many extra steps the run took over the expectation.
+
+    Args:
+        called: Tools the agent invoked, in order.
+        expected: Tools the run was expected to invoke.
+
+    Returns:
+        delta: Extra step count; negative when the run was shorter.
+    """
+    return len(called) - len(expected)
