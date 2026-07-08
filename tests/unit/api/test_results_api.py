@@ -109,3 +109,8 @@ def test_serialize_run_timestamps() -> None:
 
     run = {"id": "r", "created_at": datetime(2026, 6, 26, tzinfo=timezone.utc)}
     assert serialize_run(run)["created_at"].endswith("Z")
+
+def test_get_scores() -> None:
+    """GET /runs/{id}/scores returns the scores mapping."""
+    client = make_client(FakeStore())
+    assert client.get("/runs/r-1/scores").json() == {}
