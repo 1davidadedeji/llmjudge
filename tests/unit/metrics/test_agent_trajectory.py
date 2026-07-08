@@ -103,3 +103,9 @@ def test_score_bounded() -> None:
 def test_order_weight_configurable() -> None:
     """Order weight is a constructor knob."""
     assert AgentTrajectoryMetric(order_weight=0.5).order_weight == 0.5
+
+def test_redundant_calls_detected() -> None:
+    """Repeated tools are reported once each."""
+    from metrics.agent_trajectory import redundant_calls
+
+    assert redundant_calls(["a", "b", "a", "a"]) == ["a"]
