@@ -57,3 +57,31 @@ def filter_findings(findings: list[str], overrides: list[Override], today: str) 
     """
     active = {override.vuln_id for override in overrides if override.expires >= today}
     return [finding for finding in findings if finding not in active]
+
+def main() -> int:
+    """CLI entrypoint: fails when unoverridden findings remain.
+
+    Returns:
+        exit_code: 0 when no live findings remain, 1 otherwise.
+    """
+    import argparse
+    import datetime
+    import json
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--check", required=True)
+    args = parser.parse_args()
+    with open(args.check) as fh:
+        report = json.load(fh)
+    findings = [dep["name"] for dep in report.get("dependencies", []) if dep.get("vulns")]
+    today = datetime.date.today().isoformat()
+    remaining = filter_findings(findings, load_overrides(), today)
+    if remaining:
+        print(f"unaccepted vulnerabilities: {', '.join(remaining)}")
+        return 1
+    print("vulnerability scan clean")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
