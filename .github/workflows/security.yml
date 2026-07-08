@@ -37,3 +37,9 @@ jobs:
       - uses: actions/dependency-review-action@v4
         with:
           fail-on-severity: high
+
+  yaml-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python -c "import yaml,glob; [yaml.safe_load(open(p)) for p in glob.glob('ci/*.yaml')]"
