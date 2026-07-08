@@ -39,3 +39,11 @@ def test_repo_names() -> None:
     """repo_names lists every configured repo."""
     config = load_config("llmjudge.example.yaml")
     assert "retrieval-core" in config.repo_names()
+
+def test_find_repo() -> None:
+    """find_repo locates a configured repo and misses unknown ones."""
+    from config.loader import find_repo
+
+    config = load_config("llmjudge.example.yaml")
+    assert find_repo(config, "agentflow") is not None
+    assert find_repo(config, "nope") is None
