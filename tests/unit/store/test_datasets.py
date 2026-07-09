@@ -98,3 +98,10 @@ def test_upload_jsonl_uses_next_version() -> None:
 def test_hash_length() -> None:
     """Content hash is a full sha256 hex digest."""
     assert len(content_hash(b"x")) == 64
+
+def test_read_jsonl_roundtrip() -> None:
+    """read_jsonl parses back what upload_jsonl wrote."""
+    store = make_store()
+    store.client.list_objects_v2 = lambda Bucket, Prefix: {"Contents": []}
+    info = store.upload_jsonl("gold", [{"q": 1}, {"q": 2}])
+    assert store.read_jsonl(info) == [{"q": 1}, {"q": 2}]
