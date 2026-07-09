@@ -80,3 +80,8 @@ def test_verdict_case_insensitive() -> None:
 def test_threshold_default() -> None:
     """Default threshold is 0.9."""
     assert HallucinationMetric(StubJudge([])).threshold == 0.9
+
+def test_measure_returns_float() -> None:
+    """Hallucination score is a plain float."""
+    metric = HallucinationMetric(StubJudge(["no"]))
+    assert isinstance(metric.measure(make_case("A.", ["ctx"])), float)
