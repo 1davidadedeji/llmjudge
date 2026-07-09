@@ -125,3 +125,8 @@ def test_coverage_zero() -> None:
     """Zero coverage when no expected tool is called."""
     metric = AgentTrajectoryMetric()
     assert metric.tool_coverage(["x"], ["a"]) == 0.0
+
+def test_efficiency_capped_at_one() -> None:
+    """Efficiency never exceeds one even for short runs."""
+    metric = AgentTrajectoryMetric()
+    assert metric.efficiency_score(["a"], ["a", "b"]) == 1.0
