@@ -43,3 +43,9 @@ and the protocol is designed so swapping to an ensemble is a local change.
 Every metric exposes a stable `name`, a `threshold`, and `measure(test_case)`
 returning a score in [0, 1]. Metrics never raise on malformed input; they
 return a defined score for empty/degenerate cases (documented per metric).
+
+## Score normalization
+
+All metrics normalize to [0, 1] regardless of the underlying scale (1-5
+rubric, fractions, weighted precision). Thresholds and the merge gate only
+ever see normalized scores.
