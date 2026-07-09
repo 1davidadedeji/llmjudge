@@ -105,3 +105,9 @@ def test_read_jsonl_roundtrip() -> None:
     store.client.list_objects_v2 = lambda Bucket, Prefix: {"Contents": []}
     info = store.upload_jsonl("gold", [{"q": 1}, {"q": 2}])
     assert store.read_jsonl(info) == [{"q": 1}, {"q": 2}]
+
+def test_upload_returns_version_descriptor() -> None:
+    """upload returns the version it stored."""
+    store = make_store()
+    info = store.upload("gold", 4, b"data")
+    assert info.version == 4 and info.dataset == "gold"
