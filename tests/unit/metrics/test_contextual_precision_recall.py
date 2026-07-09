@@ -93,3 +93,9 @@ def test_verdict_parsing_no() -> None:
     """A no verdict counts as not relevant."""
     metric = ContextualPrecisionMetric(StubJudge(["no"]))
     assert not metric.is_relevant("p", "q")
+
+def test_average_precision_empty() -> None:
+    """Average precision of an empty ranking is zero."""
+    from metrics.contextual_precision_recall import average_precision
+
+    assert average_precision([]) == 0.0
