@@ -49,3 +49,9 @@ return a defined score for empty/degenerate cases (documented per metric).
 All metrics normalize to [0, 1] regardless of the underlying scale (1-5
 rubric, fractions, weighted precision). Thresholds and the merge gate only
 ever see normalized scores.
+
+## Prompt versioning
+
+Every judge prompt template carries a `*_PROMPT_VERSION` constant. Changing a
+prompt without bumping the version is treated as a breaking change, because it
+invalidates score comparisons across runs.
