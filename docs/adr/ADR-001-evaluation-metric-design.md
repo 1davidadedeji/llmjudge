@@ -67,3 +67,8 @@ contract and changes only with a note in this ADR's addenda.
 Metrics are independently testable with a scripted `StubJudge`; no test ever
 talks to a real model. The single-judge bias risk is accepted short-term and
 tracked for the ensemble follow-up.
+
+## Testing strategy
+
+Unit tests pin verdict parsing and edge cases; golden-set tests pin end-to-end
+scores against a frozen dataset so refactors cannot silently shift scores.
