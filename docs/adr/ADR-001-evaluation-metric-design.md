@@ -61,3 +61,9 @@ invalidates score comparisons across runs.
 Thresholds live with the metric as defaults and can be overridden per repo in
 the merge-gate config. A metric's default threshold is part of its public
 contract and changes only with a note in this ADR's addenda.
+
+## Consequences
+
+Metrics are independently testable with a scripted `StubJudge`; no test ever
+talks to a real model. The single-judge bias risk is accepted short-term and
+tracked for the ensemble follow-up.
