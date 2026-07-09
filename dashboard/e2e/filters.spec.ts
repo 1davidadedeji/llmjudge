@@ -88,3 +88,8 @@ test("drill table shows timestamps", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("2026", { exact: false }).first()).toBeVisible();
 });
+
+test("resetting filter restores all runs", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
+});
