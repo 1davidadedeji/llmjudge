@@ -107,6 +107,18 @@ class DatasetStore:
         response = self.client.get_object(Bucket=self.bucket, Key=version_info.key)
         return response["Body"].read()
 
+    def read_jsonl(self, version_info: DatasetVersion) -> list[dict]:
+        """Downloads a version and parses it as JSONL records.
+
+        Args:
+            version_info: Version descriptor from upload() or manifest().
+
+        Returns:
+            records: Parsed dataset rows.
+        """
+        payload = self.download(version_info).decode()
+        return [json.loads(line) for line in payload.splitlines() if line.strip()]
+
     def upload_jsonl(self, dataset: str, records: list[dict]) -> DatasetVersion:
         """Serializes records as JSONL and uploads them as the next version.
 
