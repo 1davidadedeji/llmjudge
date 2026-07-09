@@ -55,3 +55,9 @@ ever see normalized scores.
 Every judge prompt template carries a `*_PROMPT_VERSION` constant. Changing a
 prompt without bumping the version is treated as a breaking change, because it
 invalidates score comparisons across runs.
+
+## Threshold policy
+
+Thresholds live with the metric as defaults and can be overridden per repo in
+the merge-gate config. A metric's default threshold is part of its public
+contract and changes only with a note in this ADR's addenda.
