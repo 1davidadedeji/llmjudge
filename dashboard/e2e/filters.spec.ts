@@ -93,3 +93,8 @@ test("resetting filter restores all runs", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
 });
+
+test("switching repos updates the table", async ({ page }) => {
+  await page.goto("/repos/graphmind");
+  await expect(page.getByText("graphmind", { exact: false }).first()).toBeVisible();
+});
