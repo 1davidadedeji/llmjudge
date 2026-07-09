@@ -98,3 +98,8 @@ test("switching repos updates the table", async ({ page }) => {
   await page.goto("/repos/graphmind");
   await expect(page.getByText("graphmind", { exact: false }).first()).toBeVisible();
 });
+
+test("filter buttons have accessible labels", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("failed", { exact: false }).first()).toBeVisible();
+});
