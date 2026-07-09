@@ -129,3 +129,8 @@ def test_unicode_answer() -> None:
     """Non-ASCII answers are handled without errors."""
     metric = FaithfulnessMetric(StubJudge(["yes"]))
     assert metric.measure(make_case("Le ciel est bleu.", ["ctx"])) == 1.0
+
+def test_threshold_equality_passes() -> None:
+    """is_passing treats the exact threshold as passing."""
+    metric = FaithfulnessMetric(StubJudge([]), threshold=0.5)
+    assert metric.is_passing(0.5)
