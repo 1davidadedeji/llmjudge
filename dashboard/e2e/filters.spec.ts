@@ -83,3 +83,8 @@ test("metric chips render on drill-down", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("agentflow", { exact: false }).first()).toBeVisible();
 });
+
+test("drill table shows timestamps", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("2026", { exact: false }).first()).toBeVisible();
+});
