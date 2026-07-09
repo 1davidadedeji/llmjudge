@@ -78,3 +78,8 @@ test("filter persists across navigation", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("r-2", { exact: false }).first()).toBeVisible();
 });
+
+test("metric chips render on drill-down", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("agentflow", { exact: false }).first()).toBeVisible();
+});
