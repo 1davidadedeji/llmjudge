@@ -51,7 +51,7 @@ def await_eval_run(client: httpx.Client, run_id: str, timeout_s: int = DEFAULT_T
         response = client.get(f"/runs/{run_id}")
         response.raise_for_status()
         payload = response.json()
-        if payload["status"] in ("succeeded", "failed"):
+        if is_terminal(payload["status"]):
             return payload
         time.sleep(POLL_INTERVAL_S)
     # Worker can be slow under load; don't wedge the pipeline on infra hiccups.
