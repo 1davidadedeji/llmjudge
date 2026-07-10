@@ -58,3 +58,8 @@ def test_improvements() -> None:
 def test_deltas_empty_when_no_shared() -> None:
     """No shared metrics yields empty deltas."""
     assert score_deltas({"a": 1.0}, {"b": 1.0}) == {}
+
+def test_score_deltas_sorted() -> None:
+    """Delta keys are sorted for stable API payloads."""
+    deltas = score_deltas({"b": 1.0, "a": 1.0}, {"b": 1.0, "a": 1.0})
+    assert list(deltas) == ["a", "b"]
