@@ -67,3 +67,9 @@ def test_score_deltas_sorted() -> None:
 def test_regressions_empty_deltas() -> None:
     """Empty deltas regress nothing."""
     assert find_regressions({}) == []
+
+def test_deltas_symmetry() -> None:
+    """Swapping runs negates the deltas."""
+    forward = score_deltas({"m": 0.5}, {"m": 0.8})
+    backward = score_deltas({"m": 0.8}, {"m": 0.5})
+    assert forward["m"] == -backward["m"]
