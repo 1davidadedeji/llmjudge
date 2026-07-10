@@ -105,3 +105,13 @@ export function runsPerDay(runs: RunSummary[]): Record<string, number> {
   }
   return counts;
 }
+
+/**
+ * Picks the display name for a repo slug.
+ *
+ * @param slug - Repo slug from the URL.
+ * @returns name - Display name.
+ */
+export function displayName(slug: string): string {
+  return slug.replace(/-/g, " ");
+}
