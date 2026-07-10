@@ -115,3 +115,13 @@ export function runsPerDay(runs: RunSummary[]): Record<string, number> {
 export function displayName(slug: string): string {
   return slug.replace(/-/g, " ");
 }
+
+/**
+ * Validates that a slug is a known repo.
+ *
+ * @param slug - Repo slug from the URL.
+ * @returns known - True when the slug is tracked.
+ */
+export function isKnownRepo(slug: string): boolean {
+  return REPOS.includes(slug);
+}
