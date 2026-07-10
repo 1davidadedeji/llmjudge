@@ -47,3 +47,10 @@ def test_format_regression_report_blocked() -> None:
 
     report = format_regression_report(GateResult(False, ["faithfulness"]), "graphmind")
     assert "BLOCKED" in report and "faithfulness" in report
+
+def test_is_terminal() -> None:
+    """Only succeeded and failed count as terminal statuses."""
+    from ci.merge_gate import is_terminal
+
+    assert is_terminal("succeeded") and is_terminal("failed")
+    assert not is_terminal("running") and not is_terminal("unknown")
