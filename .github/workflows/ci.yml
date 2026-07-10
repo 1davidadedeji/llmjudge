@@ -35,7 +35,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e .[dev]
-      - run: mypy --strict harness metrics safety jobs api config calibration ci scripts
+      - run: mypy --strict harness metrics safety jobs api config calibration ci scripts store data
 
   integration-test:
     runs-on: ubuntu-latest
