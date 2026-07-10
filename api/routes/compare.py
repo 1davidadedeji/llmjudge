@@ -72,6 +72,7 @@ def compare_runs(
         "candidate": candidate_run,
         "deltas": deltas,
         "regressions": find_regressions(deltas),
+        "improvements": improvements(deltas),
     }
 
 def summarize(deltas: dict[str, float]) -> str:
