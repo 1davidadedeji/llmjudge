@@ -63,3 +63,7 @@ def test_score_deltas_sorted() -> None:
     """Delta keys are sorted for stable API payloads."""
     deltas = score_deltas({"b": 1.0, "a": 1.0}, {"b": 1.0, "a": 1.0})
     assert list(deltas) == ["a", "b"]
+
+def test_regressions_empty_deltas() -> None:
+    """Empty deltas regress nothing."""
+    assert find_regressions({}) == []
