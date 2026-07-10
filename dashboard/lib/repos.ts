@@ -80,3 +80,13 @@ export function applyFilters(
   }
   return filtered;
 }
+
+/**
+ * Lists the distinct statuses present in a run list.
+ *
+ * @param runs - Runs to inspect.
+ * @returns statuses - Sorted distinct status strings.
+ */
+export function statusesOf(runs: RunSummary[]): string[] {
+  return [...new Set(runs.map((run) => run.status))].sort();
+}
