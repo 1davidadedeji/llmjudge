@@ -147,3 +147,7 @@ main section {
   color: #8b949e;
   margin-top: 0.25rem;
 }
+
+.repo-header span {
+  color: #8b949e;
+}
