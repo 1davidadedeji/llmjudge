@@ -90,3 +90,18 @@ export function applyFilters(
 export function statusesOf(runs: RunSummary[]): string[] {
   return [...new Set(runs.map((run) => run.status))].sort();
 }
+
+/**
+ * Counts runs created per calendar day.
+ *
+ * @param runs - Runs to bucket.
+ * @returns counts - Mapping of ISO date to run count.
+ */
+export function runsPerDay(runs: RunSummary[]): Record<string, number> {
+  const counts: Record<string, number> = {};
+  for (const run of runs) {
+    const day = run.created_at.slice(0, 10);
+    counts[day] = (counts[day] ?? 0) + 1;
+  }
+  return counts;
+}
