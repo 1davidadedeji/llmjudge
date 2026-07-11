@@ -111,3 +111,12 @@ def test_upload_returns_version_descriptor() -> None:
     store = make_store()
     info = store.upload("gold", 4, b"data")
     assert info.version == 4 and info.dataset == "gold"
+
+def test_upload_records_aware_timestamp() -> None:
+    """Uploaded versions carry a timezone-aware upload time."""
+    from datetime import timezone
+
+    store = make_store()
+    info = store.upload("gold", 1, b"data")
+    assert info.uploaded_at is not None
+    assert info.uploaded_at.tzinfo == timezone.utc
