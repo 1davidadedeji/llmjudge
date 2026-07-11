@@ -45,3 +45,10 @@ def test_is_passing_uses_threshold() -> None:
 
     metric = FaithfulnessMetric(StubJudge([]), threshold=0.8)
     assert metric.is_passing(0.8) and not metric.is_passing(0.7)
+
+def test_registry_covers_core_metrics() -> None:
+    """Registry contains the core metric names."""
+    from metrics.registry import METRIC_REGISTRY
+
+    assert "faithfulness" in METRIC_REGISTRY
+    assert "hallucination" in METRIC_REGISTRY
