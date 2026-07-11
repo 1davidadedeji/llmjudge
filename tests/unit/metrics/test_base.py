@@ -37,3 +37,11 @@ def test_faithfulness_is_base_metric() -> None:
 
     metric = FaithfulnessMetric(StubJudge([]))
     assert isinstance(metric, BaseMetric)
+
+def test_is_passing_uses_threshold() -> None:
+    """is_passing compares the score against the metric threshold."""
+    from metrics.faithfulness import FaithfulnessMetric
+    from metrics.judge import StubJudge
+
+    metric = FaithfulnessMetric(StubJudge([]), threshold=0.8)
+    assert metric.is_passing(0.8) and not metric.is_passing(0.7)
