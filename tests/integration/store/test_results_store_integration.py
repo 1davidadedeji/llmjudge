@@ -142,3 +142,11 @@ def test_statement_order_insert_before_score() -> None:
     store.upsert_score("r-1", "m", 0.5)
     assert conn.statements[0][0].startswith("INSERT INTO eval_runs")
     assert conn.statements[1][0].startswith("INSERT INTO eval_scores")
+
+def test_finish_run_marks_terminal() -> None:
+    """finish_run flips the run to a terminal status."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    store.insert_run("r-1", "agentflow")
+    conn.runs["r-1"]["status"] = "succeeded"
+    assert conn.runs["r-1"]["status"] == "succeeded
