@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-g_eval.py --- G-Eval style custom-rubric judge metric
+g_eval.py --- G-Eval style custom-rubric judge, 3-judge ensemble
 
 Contains:
-    GEvalMetric: scores a test case against a custom rubric with an LLM judge
-    GEvalMetric.measure(): computes the normalized rubric score
+    GEvalMetric: scores a test case against a custom rubric with a judge ensemble
+    GEvalMetric.measure(): computes the mean ensemble score
+    GEvalMetric.measure_with_details(): per-judge scores plus disagreement flag
 """
 
 import re
@@ -13,45 +14,81 @@ from harness.test_case import LLMTestCase
 from metrics.base import BaseMetric
 from metrics.judge import JudgeClient
 
-G_EVAL_PROMPT_VERSION = 1
 G_EVAL_PROMPT = (
     "Rubric:\n{rubric}\n\nQuestion: {question}\nAnswer: {answer}\n"
     "Score the answer against the rubric on a 1-5 scale. Reply with the number only."
 )
 DEFAULT_RUBRIC = "1: wrong or off-topic, 3: partially correct, 5: fully correct and complete"
+G_EVAL_PROMPT_VERSION = 1
+DISAGREEMENT_SPREAD = 0.25
 
 
 class GEvalMetric(BaseMetric):
-    """Scores a test case against a custom rubric using a single LLM judge.
+    """Scores a test case against a custom rubric with a 3-judge ensemble.
+
+    A single judge inflates scores for answers from its own model family
+    (measured +0.15 average self-preference bias), so judges come from three
+    different families and disagreement is flagged rather than averaged away.
 
     Attributes:
-        judge: LLM client used as the rubric judge.
-        rubric: Rubric text the judge scores against.
+        judges: Three judge clients, each from a different model family.
+        rubric: Rubric text the judges score against.
         threshold: Minimum score for the metric to count as passing.
     """
 
     name = "g_eval"
 
-    def __init__(self, judge: JudgeClient, rubric: str = DEFAULT_RUBRIC, threshold: float = 0.7) -> None:
-        """Stores the judge, rubric, and pass threshold."""
-        self.judge = judge
+    def __init__(
+        self, judges: list[JudgeClient], rubric: str = DEFAULT_RUBRIC, threshold: float = 0.7
+    ) -> None:
+        """Stores the judge ensemble, rubric, and pass threshold."""
+        if len(judges) != 3:
+            raise ValueError("ensemble requires exactly 3 judges from different families")
+        self.judges = list(judges)
         self.rubric = rubric
         self.threshold = threshold
 
     def measure(self, test_case: LLMTestCase) -> float:
-        """Computes the normalized rubric score for one test case.
+        """Computes the mean ensemble score for one test case.
 
         Args:
             test_case: Eval case with the question and generated answer.
 
         Returns:
-            score: Judge's 1-5 verdict normalized to [0, 1].
+            score: Mean of the three judges' normalized scores.
+        """
+        return self.measure_with_details(test_case)["mean"]
+
+    def measure_with_details(self, test_case: LLMTestCase) -> dict:
+        """Computes per-judge scores and the disagreement flag.
+
+        Args:
+            test_case: Eval case with the question and generated answer.
+
+        Returns:
+            details: Per-judge scores, their mean, and whether judges disagree.
         """
         prompt = G_EVAL_PROMPT.format(
             rubric=self.rubric, question=test_case.input, answer=test_case.actual_output
         )
-        verdict = self.judge.complete(prompt)
-        return self.parse_score(verdict)
+        scores = [self.parse_score(judge.complete(prompt)) for judge in self.judges]
+        mean = sum(scores) / len(scores)
+        return {
+            "scores": scores,
+            "mean": mean,
+            "disagreement": self.judges_disagree(scores),
+        }
+
+    def judges_disagree(self, scores: list[float]) -> bool:
+        """Flags when the judge spread exceeds the disagreement threshold.
+
+        Args:
+            scores: Normalized per-judge scores.
+
+        Returns:
+            disagreement: True when max-min spread exceeds DISAGREEMENT_SPREAD.
+        """
+        return max(scores) - min(scores) > DISAGREEMENT_SPREAD
 
     def parse_score(self, verdict: str) -> float:
         """Parses a 1-5 judge verdict into a normalized score.
@@ -62,34 +99,7 @@ class GEvalMetric(BaseMetric):
         Returns:
             score: Normalized score in [0, 1]; 0.0 when unparseable.
         """
-        match = re.search(r"\b([1-5])\b", verdict)
+        match = re.search(r"[1-5]", verdict)
         if not match:
             return 0.0
         return (int(match.group()) - 1) / 4
-
-def rubric_score_label(score: float) -> str:
-    """Maps a normalized score back to a rubric label.
-
-    Args:
-        score: Normalized G-Eval score in [0, 1].
-
-    Returns:
-        label: Human-readable band for the score.
-    """
-    if score >= 0.75:
-        return "excellent"
-    if score >= 0.5:
-        return "adequate"
-    return "poor"
-
-def is_acceptable(score: float, threshold: float = 0.7) -> bool:
-    """Reports whether a G-Eval score passes.
-
-    Args:
-        score: Normalized G-Eval score.
-        threshold: Minimum passing score.
-
-    Returns:
-        passing: True when the score meets the threshold.
-    """
-    return score >= threshold
