@@ -133,3 +133,12 @@ def test_upsert_requires_matching_run() -> None:
     store = make_store(conn)
     store.upsert_score("r-1", "m", 0.5)
     assert ("r-2", "m") not in conn.scores
+
+def test_statement_order_insert_before_score() -> None:
+    """Run row is written before its scores."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    store.insert_run("r-1", "agentflow")
+    store.upsert_score("r-1", "m", 0.5)
+    assert conn.statements[0][0].startswith("INSERT INTO eval_runs")
+    assert conn.statements[1][0].startswith("INSERT INTO eval_scores")
