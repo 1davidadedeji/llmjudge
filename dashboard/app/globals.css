@@ -151,3 +151,12 @@ main section {
 .repo-header span {
   color: #8b949e;
 }
+
+.score-chip {
+  display: inline-block;
+  margin: 0.15rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid #30363d;
+  border-radius: 0.4rem;
+  font-variant-numeric: tabular-nums;
+}
