@@ -37,3 +37,14 @@ export function formatTimestamp(iso: string): string {
 export function truncateRunId(runId: string, length = 12): string {
   return runId.length <= length ? runId : `${runId.slice(0, length)}…`;
 }
+
+/**
+ * Renders a delta with an explicit sign.
+ *
+ * @param delta - Score delta between two runs.
+ * @returns text - Signed percentage string.
+ */
+export function formatDelta(delta: number): string {
+  const sign = delta > 0 ? "+" : "-";
+  return `${sign}${Math.abs(delta * 100).toFixed(1)}%`;
+}
