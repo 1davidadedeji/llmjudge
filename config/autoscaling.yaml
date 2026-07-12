@@ -1,4 +1,5 @@
 min_workers: 1
 max_workers: 12
 scale_up_depth: 4
+# depth per worker that triggers scaling out
 cooldown_s: 120
