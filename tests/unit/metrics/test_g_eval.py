@@ -57,7 +57,7 @@ def test_requires_exactly_three_judges() -> None:
     with pytest.raises(ValueError):
         GEvalMetric([StubJudge([])])
 
-def test_self_preference_bias_gaurd() -> None:
+def test_self_preference_bias_guard() -> None:
     """Ensemble mean dampens a single judge inflating its own family's answers."""
     biased = make_metric(["5", "3", "3"]).measure(make_case())
     single_judge_view = 1.0
