@@ -184,3 +184,13 @@ export function scoreStdDev(points: TrendPoint[]): number {
     points.reduce((sum, point) => sum + (point.score - mean) ** 2, 0) / points.length;
   return Math.sqrt(variance);
 }
+
+/**
+ * Normalizes scores into 0-100 bar heights for rendering.
+ *
+ * @param points - Score points oldest-first.
+ * @returns result - See description.
+ */
+export function sparklinePoints(points: TrendPoint[]): number[] {
+  return points.map((point) => Math.round(point.score * 100));
+}
