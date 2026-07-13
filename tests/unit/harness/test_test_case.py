@@ -93,3 +93,9 @@ def test_redacted_masks_metadata() -> None:
     """Redaction masks metadata values but keeps keys."""
     case = LLMTestCase(input="q", actual_output="a", metadata={"token": "secret"})
     assert case.redacted().metadata == {"token": "***"}
+
+def test_input_and_output_preserved() -> None:
+    """Input and output survive construction verbatim."""
+    case = LLMTestCase(input="  spaced  ", actual_output="x" * 500)
+    assert case.input == "  spaced  "
+    assert len(case.actual_output) == 500
