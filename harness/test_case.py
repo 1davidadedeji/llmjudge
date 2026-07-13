@@ -33,6 +33,24 @@ class LLMTestCase:
     expected_tools: list[str] = field(default_factory=list)
     metadata: dict = field(default_factory=dict)
 
+    def redacted(self) -> "LLMTestCase":
+        """Returns a copy with metadata values masked for logging.
+
+        Returns:
+            redacted: Case whose metadata values are replaced with "***".
+        """
+        masked = {key: "***" for key in self.metadata}
+        return LLMTestCase(
+            input=self.input,
+            actual_output=self.actual_output,
+            expected_output=self.expected_output,
+            retrieval_context=list(self.retrieval_context),
+            context=list(self.context),
+            tools_called=list(self.tools_called),
+            expected_tools=list(self.expected_tools),
+            metadata=masked,
+        )
+
     @property
     def is_agent_run(self) -> bool:
         """Reports whether the case represents an agent trajectory.
