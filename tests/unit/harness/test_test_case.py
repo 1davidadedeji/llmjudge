@@ -88,3 +88,8 @@ def test_is_agent_run() -> None:
     """Agent flag reflects tool usage."""
     assert LLMTestCase(input="q", actual_output="a", tools_called=["t"]).is_agent_run
     assert not LLMTestCase(input="q", actual_output="a").is_agent_run
+
+def test_redacted_masks_metadata() -> None:
+    """Redaction masks metadata values but keeps keys."""
+    case = LLMTestCase(input="q", actual_output="a", metadata={"token": "secret"})
+    assert case.redacted().metadata == {"token": "***"}
