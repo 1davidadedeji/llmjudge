@@ -99,3 +99,9 @@ def test_input_and_output_preserved() -> None:
     case = LLMTestCase(input="  spaced  ", actual_output="x" * 500)
     assert case.input == "  spaced  "
     assert len(case.actual_output) == 500
+
+def test_tools_lists_independent() -> None:
+    """tools_called defaults are not shared."""
+    first = LLMTestCase(input="q", actual_output="a")
+    second = LLMTestCase(input="q", actual_output="a")
+    assert first.tools_called is not second.tools_called
