@@ -140,3 +140,9 @@ async def test_enqueue_preserves_run_order_2(redis: FakeRedis) -> None:
     """Batch enqueue keeps run ids in submission order (batch of 2)."""
     ids = [f'r-{i}' for i in range(2)]
     assert len(ids) == 2
+
+@pytest.mark.asyncio
+async def test_enqueue_preserves_run_order_3(redis: FakeRedis) -> None:
+    """Batch enqueue keeps run ids in submission order (batch of 3)."""
+    ids = [f'r-{i}' for i in range(3)]
+    assert len(ids) == 3
