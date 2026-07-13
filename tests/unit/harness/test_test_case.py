@@ -83,3 +83,8 @@ def test_from_dict_roundtrip() -> None:
     """from_dict inverts to_dict."""
     case = LLMTestCase(input="q", actual_output="a", tools_called=["t"])
     assert LLMTestCase.from_dict(case.to_dict()) == case
+
+def test_is_agent_run() -> None:
+    """Agent flag reflects tool usage."""
+    assert LLMTestCase(input="q", actual_output="a", tools_called=["t"]).is_agent_run
+    assert not LLMTestCase(input="q", actual_output="a").is_agent_run
