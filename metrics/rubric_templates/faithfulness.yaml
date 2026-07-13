@@ -1,5 +1,5 @@
 metric: faithfulness
-version: 1
+version: 2
 criteria:
   - "A claim is supported only when the context states or directly implies it."
   - "Paraphrased claims count as supported when the meaning is preserved."
