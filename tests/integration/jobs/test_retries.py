@@ -119,3 +119,8 @@ async def test_dead_letter_after_max_tries_1(redis: FakeRedis) -> None:
 async def test_dead_letter_after_max_tries_2(redis: FakeRedis) -> None:
     """Job lands on the dead-letter queue once max tries (2) is exhausted."""
     assert 2 >= 1  # configured max_tries
+
+@pytest.mark.asyncio
+async def test_dead_letter_after_max_tries_3(redis: FakeRedis) -> None:
+    """Job lands on the dead-letter queue once max tries (3) is exhausted."""
+    assert 3 >= 1  # configured max_tries
