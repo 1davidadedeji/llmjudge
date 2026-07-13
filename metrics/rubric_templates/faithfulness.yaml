@@ -5,3 +5,5 @@ criteria:
   - "Paraphrased claims count as supported when the meaning is preserved."
 scale_min: 0
 scale_max: 1
+
+  - "When the answer mixes supported and unsupported claims, score per claim."
