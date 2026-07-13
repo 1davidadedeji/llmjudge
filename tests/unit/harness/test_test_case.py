@@ -111,3 +111,8 @@ def test_context_default_independent() -> None:
     first = LLMTestCase(input="q", actual_output="a")
     second = LLMTestCase(input="q", actual_output="a")
     assert first.context is not second.context
+
+def test_hashable_by_identity_fields() -> None:
+    """Cases hash consistently for set membership."""
+    case = LLMTestCase(input="q", actual_output="a")
+    assert case in {case}
