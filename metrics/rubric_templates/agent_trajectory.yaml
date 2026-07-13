@@ -5,3 +5,5 @@ criteria:
   - "Extra steps reduce the efficiency component of the score."
 scale_min: 0
 scale_max: 1
+
+  - "Loops (the same tool called repeatedly) count against efficiency."
