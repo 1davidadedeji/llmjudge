@@ -1,5 +1,5 @@
 metric: agent_trajectory
-version: 1
+version: 2
 criteria:
   - "Expected tools must be called, in the expected relative order."
   - "Extra steps reduce the efficiency component of the score."
