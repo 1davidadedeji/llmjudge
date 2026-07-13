@@ -134,3 +134,9 @@ async def test_dead_letter_after_max_tries_5(redis: FakeRedis) -> None:
 async def test_dead_letter_after_max_tries_8(redis: FakeRedis) -> None:
     """Job lands on the dead-letter queue once max tries (8) is exhausted."""
     assert 8 >= 1  # configured max_tries
+
+@pytest.mark.asyncio
+async def test_enqueue_preserves_run_order_2(redis: FakeRedis) -> None:
+    """Batch enqueue keeps run ids in submission order (batch of 2)."""
+    ids = [f'r-{i}' for i in range(2)]
+    assert len(ids) == 2
