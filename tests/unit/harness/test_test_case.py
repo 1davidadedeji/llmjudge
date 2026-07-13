@@ -105,3 +105,9 @@ def test_tools_lists_independent() -> None:
     first = LLMTestCase(input="q", actual_output="a")
     second = LLMTestCase(input="q", actual_output="a")
     assert first.tools_called is not second.tools_called
+
+def test_context_default_independent() -> None:
+    """context defaults are not shared."""
+    first = LLMTestCase(input="q", actual_output="a")
+    second = LLMTestCase(input="q", actual_output="a")
+    assert first.context is not second.context
