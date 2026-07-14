@@ -77,3 +77,14 @@ class FaithfulnessMetric(BaseMetric):
         """
         verdict = self.judge.complete(CLAIM_PROMPT.format(context=context, claim=claim))
         return verdict.strip().lower().startswith("yes")
+
+def claims_from_bullets(answer: str) -> list[str]:
+    """Extracts claims from bullet-listed answers.
+
+    Args:
+        answer: Generated answer text possibly containing bullet lines.
+
+    Returns:
+        claims: One claim per bullet line, markers stripped.
+    """
+    return [line.lstrip("-* ").strip() for line in answer.splitlines() if line.strip()]
