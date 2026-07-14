@@ -123,3 +123,11 @@ def test_get_run_assembles_scores() -> None:
     conn.rows = [("faithfulness", 0.9), ("hallucination", 1.0)]
     run = make_store(conn).get_run("r-1")
     assert run["scores"] == {"faithfulness": 0.9, "hallucination": 1.0}
+
+def test_metric_history_joins_runs() -> None:
+    """metric_history joins scores to runs and filters by repo+metric."""
+    conn = FakeConnection()
+    make_store(conn).metric_history("agentflow", "faithfulness")
+    sql, params = conn.statements[0]
+    assert "JOIN eval_runs" in sql
+    assert params[:2] == ("agentflow", "faithfulness")
