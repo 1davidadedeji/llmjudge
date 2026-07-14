@@ -57,3 +57,10 @@ def test_blended_score_empty() -> None:
     from ci.check_thresholds import blended_score
 
     assert blended_score({}) == 0.0
+
+def test_thresholds_yaml_loads() -> None:
+    """Shipped thresholds file parses."""
+    from ci.check_thresholds import load_threshold_config
+
+    config = load_threshold_config()
+    assert "default_threshold" in config
