@@ -88,3 +88,16 @@ def claims_from_bullets(answer: str) -> list[str]:
         claims: One claim per bullet line, markers stripped.
     """
     return [line.lstrip("-* ").strip() for line in answer.splitlines() if line.strip()]
+
+def format_verdict_reason(claim: str, entailed: bool) -> str:
+    """Builds a per-claim explanation for the metric reason field.
+
+    Args:
+        claim: Claim that was judged.
+        entailed: Verdict returned by the judge.
+
+    Returns:
+        reason: One-line explanation of the verdict.
+    """
+    verdict = "supported" if entailed else "unsupported"
+    return f"claim {claim!r} is {verdict} by the context"
