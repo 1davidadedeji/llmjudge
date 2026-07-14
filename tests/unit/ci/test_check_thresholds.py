@@ -51,3 +51,9 @@ def test_blended_score_mean() -> None:
     from ci.check_thresholds import blended_score
 
     assert blended_score({"a": 0.8, "b": 1.0}) == 0.9
+
+def test_blended_score_empty() -> None:
+    """Empty score mapping blends to zero, never a pass."""
+    from ci.check_thresholds import blended_score
+
+    assert blended_score({}) == 0.0
