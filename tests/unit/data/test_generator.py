@@ -77,3 +77,9 @@ def test_estimate_calls(tmp_path) -> None:
     generator = make_generator(tmp_path, [])
     assert generator.estimate_calls(7) == 7
     assert generator.estimate_calls(-1) == 0
+
+def test_deduplicate(tmp_path) -> None:
+    """Duplicate questions collapse to the first occurrence."""
+    generator = make_generator(tmp_path, [])
+    cases = [{"question": "q"}, {"question": "q"}, {"question": "r"}]
+    assert len(generator.deduplicate(cases)) == 2
