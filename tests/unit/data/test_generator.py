@@ -83,3 +83,9 @@ def test_deduplicate(tmp_path) -> None:
     generator = make_generator(tmp_path, [])
     cases = [{"question": "q"}, {"question": "q"}, {"question": "r"}]
     assert len(generator.deduplicate(cases)) == 2
+
+def test_validate_case(tmp_path) -> None:
+    """Validation flags cases missing required fields."""
+    generator = make_generator(tmp_path, [])
+    assert generator.validate_case({"question": "q"}) == ["missing answer", "missing context"]
+    assert generator.validate_case({"question": "q", "answer": "a", "context": "c"}) == []
