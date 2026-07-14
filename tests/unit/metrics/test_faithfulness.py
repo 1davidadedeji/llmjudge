@@ -134,3 +134,9 @@ def test_threshold_equality_passes() -> None:
     """is_passing treats the exact threshold as passing."""
     metric = FaithfulnessMetric(StubJudge([]), threshold=0.5)
     assert metric.is_passing(0.5)
+
+def test_score_never_exceeds_one() -> None:
+    """Score stays in the [0, 1] range."""
+    metric = FaithfulnessMetric(StubJudge(["yes"] * 5))
+    score = metric.measure(make_case("A. B. C. D. E.", ["ctx"]))
+    assert 0.0 <= score <= 1.0
