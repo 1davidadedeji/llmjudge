@@ -140,3 +140,9 @@ def test_score_never_exceeds_one() -> None:
     metric = FaithfulnessMetric(StubJudge(["yes"] * 5))
     score = metric.measure(make_case("A. B. C. D. E.", ["ctx"]))
     assert 0.0 <= score <= 1.0
+
+def test_claims_from_bullets() -> None:
+    """Bullet answers yield one claim per line."""
+    from metrics.faithfulness import claims_from_bullets
+
+    assert claims_from_bullets("- one\n* two") == ["one", "two"]
