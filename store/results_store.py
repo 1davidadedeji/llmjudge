@@ -95,6 +95,27 @@ class ResultsStore:
             "scores": {metric: score for metric, score in score_rows},
         }
 
+    def metric_history(self, repo: str, metric: str, limit: int = 30) -> list[dict]:
+        """Fetches the recent score history of one metric for a repo.
+
+        Args:
+            repo: Repo whose history is wanted.
+            metric: Metric name.
+            limit: Maximum points to return.
+
+        Returns:
+            history: (created_at, score) points oldest-first for charting.
+        """
+        query = (
+            "SELECT r.created_at, s.score FROM eval_scores s"
+            " JOIN eval_runs r ON r.id = s.run_id"
+            " WHERE r.repo = %s AND s.metric = %s"
+            " ORDER BY r.created_at DESC LIMIT %s"
+        )
+        with self.connect() as conn:
+            rows = conn.execute(query, (repo, metric, limit)).fetchall()
+        return [{"created_at": row[0], "score": row[1]} for row in reversed(rows)]
+
     def repos_with_runs(self) -> list[str]:
         """Lists repos that have at least one stored run.
 
