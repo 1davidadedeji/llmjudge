@@ -133,3 +133,14 @@ class SyntheticGenerator:
                 seen.add(question)
                 unique.append(case)
         return unique
+
+    def validate_case(self, case: dict) -> list[str]:
+        """Validates one generated case.
+
+        Args:
+            case: Generated case dict.
+
+        Returns:
+            problems: Missing-field messages; empty when valid.
+        """
+        return [f"missing {field}" for field in ("question", "answer", "context") if field not in case]
