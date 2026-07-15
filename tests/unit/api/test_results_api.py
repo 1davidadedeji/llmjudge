@@ -140,3 +140,8 @@ def test_openapi_lists_runs() -> None:
     client = make_client(FakeStore())
     schema = client.get("/openapi.json").json()
     assert "/runs" in schema["paths"]
+
+def test_app_title_llmjudge() -> None:
+    """API title is llmjudge."""
+    client = make_client(FakeStore())
+    assert client.get("/openapi.json").json()["info"]["title"] == "llmjudge"
