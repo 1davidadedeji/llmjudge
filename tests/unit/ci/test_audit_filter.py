@@ -48,3 +48,11 @@ def test_filter_preserves_order() -> None:
     """Remaining findings keep their reported order."""
     findings = ["CVE-3", "CVE-1", "CVE-2"]
     assert filter_findings(findings, [], "2026-07-01") == findings
+
+def test_load_overrides_empty(tmp_path) -> None:
+    """An empty overrides file parses to an empty list."""
+    from ci.audit_filter import load_overrides
+
+    cfg = tmp_path / "overrides.yaml"
+    cfg.write_text("overrides: []\n")
+    assert load_overrides(str(cfg)) == []
