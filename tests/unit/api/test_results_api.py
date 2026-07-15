@@ -134,3 +134,9 @@ def test_create_run_missing_field_422() -> None:
     """POST /runs without a repo returns 422."""
     client = make_client(FakeStore())
     assert client.post("/runs", json={"id": "r-9"}).status_code == 422
+
+def test_openapi_lists_runs() -> None:
+    """OpenAPI schema includes the runs paths."""
+    client = make_client(FakeStore())
+    schema = client.get("/openapi.json").json()
+    assert "/runs" in schema["paths"]
