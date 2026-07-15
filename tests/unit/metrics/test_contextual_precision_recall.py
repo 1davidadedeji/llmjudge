@@ -111,3 +111,7 @@ def test_precision_delegates_to_average_precision() -> None:
     metric = ContextualPrecisionMetric(StubJudge(["yes", "no", "yes"]))
     score = metric.measure(make_case(["p1", "p2", "p3"]))
     assert 0.0 < score < 1.0
+
+def test_precision_threshold_stored() -> None:
+    """Threshold is stored on the metric."""
+    assert ContextualPrecisionMetric(StubJudge([]), threshold=0.6).threshold == 0.6
