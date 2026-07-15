@@ -129,3 +129,8 @@ def test_list_runs_limit_param() -> None:
     store.list_runs = lambda repo=None, limit=50: []
     client = make_client(store)
     assert client.get("/runs", params={"limit": 5}).status_code == 200
+
+def test_create_run_missing_field_422() -> None:
+    """POST /runs without a repo returns 422."""
+    client = make_client(FakeStore())
+    assert client.post("/runs", json={"id": "r-9"}).status_code == 422
