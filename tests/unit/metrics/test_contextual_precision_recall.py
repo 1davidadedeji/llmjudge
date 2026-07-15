@@ -99,3 +99,9 @@ def test_average_precision_empty() -> None:
     from metrics.contextual_precision_recall import average_precision
 
     assert average_precision([]) == 0.0
+
+def test_average_precision_matches_metric() -> None:
+    """Standalone average precision matches the metric's ranking math."""
+    from metrics.contextual_precision_recall import average_precision
+
+    assert average_precision([True, False, True]) > average_precision([False, True, True])
