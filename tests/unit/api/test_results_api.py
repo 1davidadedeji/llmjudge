@@ -122,3 +122,10 @@ def test_delete_run() -> None:
     client = make_client(store)
     assert client.delete("/runs/r-1").status_code == 204
     assert client.delete("/runs/nope").status_code == 404
+
+def test_list_runs_limit_param() -> None:
+    """GET /runs accepts a limit parameter."""
+    store = FakeStore()
+    store.list_runs = lambda repo=None, limit=50: []
+    client = make_client(store)
+    assert client.get("/runs", params={"limit": 5}).status_code == 200
