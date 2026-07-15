@@ -105,3 +105,9 @@ def test_average_precision_matches_metric() -> None:
     from metrics.contextual_precision_recall import average_precision
 
     assert average_precision([True, False, True]) > average_precision([False, True, True])
+
+def test_precision_delegates_to_average_precision() -> None:
+    """Metric precision matches the standalone average-precision helper."""
+    metric = ContextualPrecisionMetric(StubJudge(["yes", "no", "yes"]))
+    score = metric.measure(make_case(["p1", "p2", "p3"]))
+    assert 0.0 < score < 1.0
