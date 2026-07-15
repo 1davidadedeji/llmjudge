@@ -115,3 +115,7 @@ def test_precision_delegates_to_average_precision() -> None:
 def test_precision_threshold_stored() -> None:
     """Threshold is stored on the metric."""
     assert ContextualPrecisionMetric(StubJudge([]), threshold=0.6).threshold == 0.6
+
+def test_recall_threshold_stored() -> None:
+    """Recall threshold is stored."""
+    assert ContextualRecallMetric(StubJudge([]), threshold=0.65).threshold == 0.65
