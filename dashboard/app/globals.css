@@ -160,3 +160,8 @@ main section {
   border-radius: 0.4rem;
   font-variant-numeric: tabular-nums;
 }
+
+.run-compare h2 {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
