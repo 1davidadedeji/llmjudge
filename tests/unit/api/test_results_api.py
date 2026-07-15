@@ -114,3 +114,11 @@ def test_get_scores() -> None:
     """GET /runs/{id}/scores returns the scores mapping."""
     client = make_client(FakeStore())
     assert client.get("/runs/r-1/scores").json() == {}
+
+def test_delete_run() -> None:
+    """DELETE /runs/{id} removes the run."""
+    store = FakeStore()
+    store.delete_run = lambda run_id: run_id in store.runs
+    client = make_client(store)
+    assert client.delete("/runs/r-1").status_code == 204
+    assert client.delete("/runs/nope").status_code == 404
