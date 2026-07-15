@@ -116,3 +116,20 @@ class ContextualRecallMetric(BaseMetric):
         """
         verdict = self.judge.complete(COVERAGE_PROMPT.format(passage=passage, expected=expected))
         return verdict.strip().lower().startswith("yes")
+
+def average_precision(verdicts: list[bool]) -> float:
+    """Computes average precision from ranked relevance verdicts.
+
+    Args:
+        verdicts: Relevance flags in ranking order.
+
+    Returns:
+        score: Average precision across relevant ranks.
+    """
+    relevant = 0
+    weighted = 0.0
+    for rank, flag in enumerate(verdicts, start=1):
+        if flag:
+            relevant += 1
+            weighted += relevant / rank
+    return weighted / relevant if relevant else 0.0
