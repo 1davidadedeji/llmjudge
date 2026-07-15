@@ -165,3 +165,7 @@ main section {
   font-size: 1.1rem;
   font-weight: 500;
 }
+
+.compare-table {
+  font-variant-numeric: tabular-nums;
+}
