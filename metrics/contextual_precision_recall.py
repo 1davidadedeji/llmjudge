@@ -50,15 +50,7 @@ class ContextualPrecisionMetric(BaseMetric):
         if not passages:
             return 1.0
         verdicts = [self.is_relevant(p, test_case.input) for p in passages]
-        relevant_so_far = 0
-        weighted = 0.0
-        for rank, relevant in enumerate(verdicts, start=1):
-            if relevant:
-                relevant_so_far += 1
-                weighted += relevant_so_far / rank
-        if relevant_so_far == 0:
-            return 0.0
-        return weighted / relevant_so_far
+        return average_precision(verdicts)
 
     def is_relevant(self, passage: str, question: str) -> bool:
         """Asks the judge whether a passage is relevant to the question.
