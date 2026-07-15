@@ -56,3 +56,7 @@ def test_load_overrides_empty(tmp_path) -> None:
     cfg = tmp_path / "overrides.yaml"
     cfg.write_text("overrides: []\n")
     assert load_overrides(str(cfg)) == []
+
+def test_filter_empty_findings() -> None:
+    """No findings means nothing to filter."""
+    assert filter_findings([], [], "2026-07-01") == []
