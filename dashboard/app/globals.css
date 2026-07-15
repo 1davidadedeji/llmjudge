@@ -134,7 +134,8 @@ main section {
 }
 
 .compare-table tr[aria-label="regression"] {
-  background: #f8514915;
+  background: #f8514922;
+  border-left: 3px solid #f85149;
 }
 
 .drill-table td {
