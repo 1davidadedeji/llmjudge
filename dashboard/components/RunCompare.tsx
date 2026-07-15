@@ -6,7 +6,7 @@
  *   RunCompare: renders two runs' scores side by side with deltas
  */
 
-import { formatScore } from "../lib/format";
+import { formatScore, formatTimestamp } from "../lib/format";
 
 export interface ComparePayload {
   base: string;
