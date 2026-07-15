@@ -62,7 +62,9 @@ class AnswerRelevancyMetric(BaseMetric):
             RELEVANCY_PROMPT.format(question=test_case.input, answer=test_case.actual_output)
         )
         judge_score = 1.0 if verdict.strip().lower().startswith("yes") else 0.0
-        return 0.5 * judge_score + 0.5 * self.overlap(test_case.input, test_case.actual_output)
+        return JUDGE_WEIGHT * judge_score + (1 - JUDGE_WEIGHT) * self.overlap(
+            test_case.input, test_case.actual_output
+        )
 
     def overlap(self, question: str, answer: str) -> float:
         """Computes content-word overlap between question and answer.
