@@ -31,7 +31,9 @@ class RunCreate(BaseModel):
 
 
 @router.get("/runs")
-def list_runs(repo: str | None = None, store: ResultsStore = Depends(get_store)) -> list[dict]:
+def list_runs(
+    repo: str | None = None, limit: int = 50, store: ResultsStore = Depends(get_store)
+) -> list[dict]:
     """Lists recent runs, optionally filtered by repo.
 
     Args:
