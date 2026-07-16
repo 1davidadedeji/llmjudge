@@ -121,3 +121,15 @@ async def enqueue_eval_suite(redis: Any, run_ids: list[str], repo: str) -> list[
         job_ids: Identifiers assigned to the enqueued jobs, in input order.
     """
     return [await enqueue_eval_run(redis, run_id, repo) for run_id in run_ids]
+
+def describe_job(run_id: str, repo: str) -> str:
+    """Builds a human-readable label for an eval job.
+
+    Args:
+        run_id: Identifier of the eval run.
+        repo: Name of the repo under evaluation.
+
+    Returns:
+        label: Label used in logs and the dashboard queue view.
+    """
+    return f"eval:{repo}:{run_id}"
