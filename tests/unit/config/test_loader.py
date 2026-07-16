@@ -63,3 +63,9 @@ def test_metrics_nonempty_per_repo() -> None:
     config = load_config("llmjudge.example.yaml")
     for repo in config.repos:
         assert repo.metrics
+
+def test_repo_config_preserves_order() -> None:
+    """Repo order in the file is preserved."""
+    config = load_config("llmjudge.example.yaml")
+    names = config.repo_names()
+    assert names[0] == "retrieval-core"
