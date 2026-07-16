@@ -23,3 +23,11 @@ repos:
     metrics:
       - name: faithfulness
       - name: answer_relevancy
+
+  - repo: shipwright
+    dataset: shipwright-gold-v2
+    metrics:
+      - name: faithfulness
+      - name: hallucination
+      - name: g_eval
+        threshold: 0.8
