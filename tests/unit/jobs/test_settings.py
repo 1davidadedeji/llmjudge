@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+"""
+test_settings.py --- unit tests for queue settings loading
+
+Contains:
+    test_load_queue_config_defaults: verifies defaults when env is unset
+    test_load_queue_config_from_env: verifies env overrides are honored
+"""
+
+import os
+
+from jobs.settings import load_queue_config
+
+
+def test_load_queue_config_defaults(monkeypatch) -> None:
+    """Falls back to defaults when no queue env vars are set."""
+    for var in ("REDIS_URL", "EVAL_JOB_TIMEOUT_S", "EVAL_JOB_MAX_TRIES"):
+        monkeypatch.delenv(var, raising=False)
+    config = load_queue_config()
+    assert config.redis_url == "redis://localhost:6379"
+    assert config.job_timeout_s == 900
+    assert config.max_tries == 3
+
+
+def test_load_queue_config_from_env(monkeypatch) -> None:
+    """Honors explicit env overrides for every queue knob."""
+    monkeypatch.setenv("REDIS_URL", "redis://example:6380")
+    monkeypatch.setenv("EVAL_JOB_TIMEOUT_S", "120")
+    monkeypatch.setenv("EVAL_JOB_MAX_TRIES", "7")
+    config = load_queue_config()
+    assert config.redis_url == "redis://example:6380"
+    assert config.job_timeout_s == 120
+    assert config.max_tries == 7
