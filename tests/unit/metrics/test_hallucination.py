@@ -89,3 +89,8 @@ def test_measure_returns_float() -> None:
 def test_metric_name_stable() -> None:
     """Metric name is the stable registry key."""
     assert HallucinationMetric.name == "hallucination"
+
+def test_extract_claims_basic() -> None:
+    """Claim extraction splits sentences."""
+    metric = HallucinationMetric(StubJudge([]))
+    assert metric.extract_claims("A. B? C!") == ["A.", "B?", "C!"]
