@@ -12,6 +12,7 @@ import { fetchRuns } from "../../../lib/api";
 
 export default async function RepoPage({ params }: { params: { name: string } }) {
   const runs = await fetchRuns(params.name);
+  const sorted = sortNewestFirst(runs);
   return (
     <section>
       <RepoHeader name={params.name} runCount={runs.length} />
