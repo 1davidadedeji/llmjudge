@@ -36,6 +36,17 @@ class RepoEvalConfig(BaseModel):
     dataset: str
     metrics: list[MetricSelection]
 
+    def uses_metric(self, metric: str) -> bool:
+        """Reports whether the repo enables a metric.
+
+        Args:
+            metric: Metric registry name.
+
+        Returns:
+            enabled: True when the metric is selected for the repo.
+        """
+        return metric in self.metric_names()
+
     def threshold_for(self, metric: str) -> float | None:
         """Resolves the per-repo threshold override for a metric.
 
