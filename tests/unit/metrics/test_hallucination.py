@@ -94,3 +94,9 @@ def test_extract_claims_basic() -> None:
     """Claim extraction splits sentences."""
     metric = HallucinationMetric(StubJudge([]))
     assert metric.extract_claims("A. B? C!") == ["A.", "B?", "C!"]
+
+def test_score_bounded() -> None:
+    """Score stays within [0, 1]."""
+    metric = HallucinationMetric(StubJudge(["yes"] * 4))
+    score = metric.measure(make_case("A. B. C. D.", ["ctx"]))
+    assert 0.0 <= score <= 1.0
