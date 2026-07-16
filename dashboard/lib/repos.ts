@@ -125,3 +125,13 @@ export function displayName(slug: string): string {
 export function isKnownRepo(slug: string): boolean {
   return REPOS.includes(slug);
 }
+
+/**
+ * Sorts runs newest-first by creation timestamp.
+ *
+ * @param runs - Runs to sort.
+ * @returns sorted - Newly sorted array; input is not mutated.
+ */
+export function sortNewestFirst(runs: RunSummary[]): RunSummary[] {
+  return [...runs].sort((a, b) => b.created_at.localeCompare(a.created_at));
+}
