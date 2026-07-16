@@ -47,3 +47,8 @@ def test_find_repo() -> None:
     config = load_config("llmjudge.example.yaml")
     assert find_repo(config, "agentflow") is not None
     assert find_repo(config, "nope") is None
+
+def test_example_has_all_five_repos() -> None:
+    """Example config covers all five repos."""
+    config = load_config("llmjudge.example.yaml")
+    assert len(config.repo_names()) == 5
