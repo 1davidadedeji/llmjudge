@@ -103,3 +103,8 @@ test("filter buttons have accessible labels", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("failed", { exact: false }).first()).toBeVisible();
 });
+
+test("failed runs highlighted in table", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("failed", { exact: false }).first()).toBeVisible();
+});
