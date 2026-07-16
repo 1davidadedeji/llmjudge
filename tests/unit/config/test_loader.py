@@ -57,3 +57,9 @@ def test_default_dataset_applies() -> None:
     """default_dataset parses from the example."""
     config = load_config("llmjudge.example.yaml")
     assert config.default_dataset
+
+def test_metrics_nonempty_per_repo() -> None:
+    """Every configured repo enables at least one metric."""
+    config = load_config("llmjudge.example.yaml")
+    for repo in config.repos:
+        assert repo.metrics
