@@ -85,3 +85,7 @@ def test_measure_returns_float() -> None:
     """Hallucination score is a plain float."""
     metric = HallucinationMetric(StubJudge(["no"]))
     assert isinstance(metric.measure(make_case("A.", ["ctx"])), float)
+
+def test_metric_name_stable() -> None:
+    """Metric name is the stable registry key."""
+    assert HallucinationMetric.name == "hallucination"
