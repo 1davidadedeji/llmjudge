@@ -134,3 +134,17 @@ def describe_job(run_id: str, repo: str) -> str:
         label: Label used in logs and the dashboard queue view.
     """
     return f"eval:{repo}:{run_id}"
+
+async def drain_dead_letter(ctx: dict[str, Any]) -> int:
+    """Requeues every job sitting on the dead-letter queue.
+
+    Args:
+        ctx: arq job context (redis connection, job id, retry count).
+
+    Returns:
+        requeued: Number of jobs moved back onto the primary queue.
+    """
+    requeued = 0
+    while await ctx["redis"].rpop(DEAD_LETTER_QUEUE) is not None:
+        requeued += 1
+    return requeued
