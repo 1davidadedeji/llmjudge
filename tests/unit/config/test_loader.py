@@ -52,3 +52,8 @@ def test_example_has_all_five_repos() -> None:
     """Example config covers all five repos."""
     config = load_config("llmjudge.example.yaml")
     assert len(config.repo_names()) == 5
+
+def test_default_dataset_applies() -> None:
+    """default_dataset parses from the example."""
+    config = load_config("llmjudge.example.yaml")
+    assert config.default_dataset
