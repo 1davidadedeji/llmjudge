@@ -73,3 +73,14 @@ class HallucinationMetric(BaseMetric):
         """
         verdict = self.judge.complete(CONTRADICTION_PROMPT.format(context=context, claim=claim))
         return verdict.strip().lower().startswith("yes")
+
+def hallucination_rate(score: float) -> float:
+    """Converts a hallucination score into a hallucination rate.
+
+    Args:
+        score: Hallucination score from HallucinationMetric.measure().
+
+    Returns:
+        rate: Fraction of claims judged hallucinated.
+    """
+    return 1.0 - score
