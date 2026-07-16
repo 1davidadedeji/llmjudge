@@ -31,3 +31,7 @@ def test_load_queue_config_from_env(monkeypatch) -> None:
     assert config.redis_url == "redis://example:6380"
     assert config.job_timeout_s == 120
     assert config.max_tries == 7
+
+def test_dead_letter_key_appends_suffix() -> None:
+    """Dead-letter key is the queue name with a dead suffix."""
+    assert dead_letter_key("llmjudge:eval") == "llmjudge:eval:dead"
