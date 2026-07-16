@@ -41,7 +41,8 @@ async def run_eval_job(ctx: dict[str, Any], run_id: str, repo: str) -> dict[str,
     Returns:
         result: Mapping of metric names to scores for the run.
     """
-    scores = {"run_id": run_id, "repo": repo, "status": "succeeded"}
+    label = describe_job(run_id, repo)
+    scores = {"run_id": run_id, "repo": repo, "status": "succeeded", "label": label}
     ctx.setdefault("results", []).append(scores)
     return scores
 
