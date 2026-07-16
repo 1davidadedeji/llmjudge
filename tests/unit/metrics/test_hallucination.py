@@ -105,3 +105,9 @@ def test_single_claim_contradicted() -> None:
     """One contradicted claim on a one-claim answer scores zero."""
     metric = HallucinationMetric(StubJudge(["yes"]))
     assert metric.measure(make_case("Solo.", ["ctx"])) == 0.0
+
+def test_hallucination_rate_inverse() -> None:
+    """Rate is the complement of the score."""
+    from metrics.hallucination import hallucination_rate
+
+    assert hallucination_rate(0.75) == 0.25
