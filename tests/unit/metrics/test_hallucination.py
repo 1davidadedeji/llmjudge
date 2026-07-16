@@ -100,3 +100,8 @@ def test_score_bounded() -> None:
     metric = HallucinationMetric(StubJudge(["yes"] * 4))
     score = metric.measure(make_case("A. B. C. D.", ["ctx"]))
     assert 0.0 <= score <= 1.0
+
+def test_single_claim_contradicted() -> None:
+    """One contradicted claim on a one-claim answer scores zero."""
+    metric = HallucinationMetric(StubJudge(["yes"]))
+    assert metric.measure(make_case("Solo.", ["ctx"])) == 0.0
