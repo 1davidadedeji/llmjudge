@@ -135,3 +135,14 @@ export function isKnownRepo(slug: string): boolean {
 export function sortNewestFirst(runs: RunSummary[]): RunSummary[] {
   return [...runs].sort((a, b) => b.created_at.localeCompare(a.created_at));
 }
+
+/**
+ * Finds runs whose id contains a search fragment.
+ *
+ * @param runs - Runs to search.
+ * @param fragment - Substring to match against run ids.
+ * @returns matches - Runs whose id contains the fragment.
+ */
+export function searchRuns(runs: RunSummary[], fragment: string): RunSummary[] {
+  return runs.filter((run) => run.id.includes(fragment));
+}
