@@ -67,3 +67,9 @@ def test_default_thresholds_cover_core_metrics() -> None:
     from ci.merge_gate import DEFAULT_THRESHOLDS
 
     assert "faithfulness" in DEFAULT_THRESHOLDS
+
+def test_poll_interval_positive() -> None:
+    """Poll interval is a positive number of seconds."""
+    from ci.merge_gate import POLL_INTERVAL_S
+
+    assert POLL_INTERVAL_S > 0
