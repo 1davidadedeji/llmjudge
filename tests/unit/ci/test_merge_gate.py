@@ -83,3 +83,8 @@ def test_timeout_generous() -> None:
 def test_threshold_for_known_metric() -> None:
     """Known metrics resolve their configured floor."""
     assert threshold_for({"m": 0.9}, "m") == 0.9
+
+def test_evaluate_gate_passes_exact_floor() -> None:
+    """A score exactly at the floor passes."""
+    payload = {"status": "succeeded", "scores": {"faithfulness": 0.8}}
+    assert evaluate_gate(payload, {"faithfulness": 0.8}).passed
