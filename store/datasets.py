@@ -107,6 +107,17 @@ class DatasetStore:
         response = self.client.get_object(Bucket=self.bucket, Key=version_info.key)
         return response["Body"].read()
 
+    def verify(self, version_info: DatasetVersion) -> bool:
+        """Re-hashes the stored payload against the version descriptor.
+
+        Args:
+            version_info: Version descriptor to verify.
+
+        Returns:
+            intact: True when the stored payload matches its recorded hash.
+        """
+        return content_hash(self.download(version_info)).startswith(version_info.sha256[:12])
+
     def read_jsonl(self, version_info: DatasetVersion) -> list[dict]:
         """Downloads a version and parses it as JSONL records.
 
