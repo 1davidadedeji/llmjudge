@@ -61,3 +61,9 @@ def test_gate_result_fields() -> None:
 
     result = GateResult(False, ["m"])
     assert not result.passed and result.regressions == ["m"]
+
+def test_default_thresholds_cover_core_metrics() -> None:
+    """Default thresholds gate the core metrics."""
+    from ci.merge_gate import DEFAULT_THRESHOLDS
+
+    assert "faithfulness" in DEFAULT_THRESHOLDS
