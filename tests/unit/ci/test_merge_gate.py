@@ -79,3 +79,7 @@ def test_timeout_generous() -> None:
     from ci.merge_gate import DEFAULT_TIMEOUT_S
 
     assert DEFAULT_TIMEOUT_S >= 600
+
+def test_threshold_for_known_metric() -> None:
+    """Known metrics resolve their configured floor."""
+    assert threshold_for({"m": 0.9}, "m") == 0.9
