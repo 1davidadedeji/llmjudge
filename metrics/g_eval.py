@@ -20,7 +20,7 @@ G_EVAL_PROMPT = (
 )
 DEFAULT_RUBRIC = "1: wrong or off-topic, 3: partially correct, 5: fully correct and complete"
 G_EVAL_PROMPT_VERSION = 1
-DISAGREEMENT_SPREAD = 0.25
+DISAGREEMENT_SPREAD = 0.25  # max-min spread that flags judge disagreement
 
 
 class GEvalMetric(BaseMetric):
