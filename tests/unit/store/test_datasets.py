@@ -120,3 +120,9 @@ def test_upload_records_aware_timestamp() -> None:
     info = store.upload("gold", 1, b"data")
     assert info.uploaded_at is not None
     assert info.uploaded_at.tzinfo == timezone.utc
+
+def test_verify_intact() -> None:
+    """verify accepts an untampered payload."""
+    store = make_store()
+    info = store.upload("gold", 1, b"data")
+    assert store.verify(info)
