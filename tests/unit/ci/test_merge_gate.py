@@ -54,3 +54,10 @@ def test_is_terminal() -> None:
 
     assert is_terminal("succeeded") and is_terminal("failed")
     assert not is_terminal("running") and not is_terminal("unknown")
+
+def test_gate_result_fields() -> None:
+    """GateResult exposes passed and regressions."""
+    from ci.merge_gate import GateResult
+
+    result = GateResult(False, ["m"])
+    assert not result.passed and result.regressions == ["m"]
