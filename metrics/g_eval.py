@@ -103,3 +103,15 @@ class GEvalMetric(BaseMetric):
         if not match:
             return 0.0
         return (int(match.group()) - 1) / 4
+
+def per_judge_breakdown(scores: list[float]) -> dict[str, float]:
+    """Labels ensemble scores by judge position for reporting.
+
+    Args:
+        scores: Normalized per-judge scores in ensemble order.
+
+    Returns:
+        breakdown: Mapping of judge_a/b/c labels to scores.
+    """
+    labels = ["judge_a", "judge_b", "judge_c"]
+    return dict(zip(labels, scores))
