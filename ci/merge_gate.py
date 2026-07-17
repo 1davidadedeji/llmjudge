@@ -136,3 +136,14 @@ def is_terminal(status: str) -> bool:
         terminal: True for succeeded/failed, False otherwise.
     """
     return status in ("succeeded", "failed")
+
+def summarize_scores(scores: dict[str, float]) -> str:
+    """Renders per-metric scores as a compact one-liner.
+
+    Args:
+        scores: Mapping of metric names to scores.
+
+    Returns:
+        summary: Comma-separated metric=score pairs, sorted by metric name.
+    """
+    return ", ".join(f"{name}={scores[name]:.3f}" for name in sorted(scores))
