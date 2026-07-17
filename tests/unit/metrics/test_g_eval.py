@@ -62,3 +62,7 @@ def test_self_preference_bias_guard() -> None:
     biased = make_metric(["5", "3", "3"]).measure(make_case())
     single_judge_view = 1.0
     assert biased < single_judge_view
+
+def test_parse_score_still_handles_prose() -> None:
+    """Ensemble judge verdict parsing still finds digits in prose."""
+    assert make_metric(["4"]).parse_score("a solid 4") == 0.75
