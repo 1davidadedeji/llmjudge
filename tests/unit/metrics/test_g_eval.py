@@ -72,3 +72,9 @@ def test_each_judge_called_once() -> None:
     judges = [StubJudge(["4"]), StubJudge(["4"]), StubJudge(["4"])]
     GEvalMetric(judges).measure(make_case())
     assert all(len(judge.calls) == 1 for judge in judges)
+
+def test_per_judge_breakdown_labels() -> None:
+    """Breakdown labels judges by position."""
+    from metrics.g_eval import per_judge_breakdown
+
+    assert per_judge_breakdown([0.1, 0.2, 0.3])["judge_b"] == 0.2
