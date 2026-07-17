@@ -92,7 +92,7 @@ def main() -> int:
     if not result.passed:
         print(format_regression_report(result, args.repo))
         return 1
-    print("merge gate passed")
+    print(f"merge gate passed: {summarize_scores(payload.get('scores', {}))}")
     return 0
 
 
