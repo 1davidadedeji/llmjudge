@@ -66,3 +66,9 @@ def test_self_preference_bias_guard() -> None:
 def test_parse_score_still_handles_prose() -> None:
     """Ensemble judge verdict parsing still finds digits in prose."""
     assert make_metric(["4"]).parse_score("a solid 4") == 0.75
+
+def test_each_judge_called_once() -> None:
+    """Every judge in the ensemble is consulted exactly once."""
+    judges = [StubJudge(["4"]), StubJudge(["4"]), StubJudge(["4"])]
+    GEvalMetric(judges).measure(make_case())
+    assert all(len(judge.calls) == 1 for judge in judges)
