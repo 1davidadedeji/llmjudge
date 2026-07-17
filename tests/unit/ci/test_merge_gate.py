@@ -73,3 +73,9 @@ def test_poll_interval_positive() -> None:
     from ci.merge_gate import POLL_INTERVAL_S
 
     assert POLL_INTERVAL_S > 0
+
+def test_timeout_generous() -> None:
+    """Gate timeout leaves room for a full eval suite."""
+    from ci.merge_gate import DEFAULT_TIMEOUT_S
+
+    assert DEFAULT_TIMEOUT_S >= 600
