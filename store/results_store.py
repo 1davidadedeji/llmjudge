@@ -221,3 +221,6 @@ def ensure_utc(value: datetime) -> datetime:
     if value.tzinfo is None:
         return value.replace(tzinfo=timezone.utc)
     return value.astimezone(timezone.utc)
+
+class OptimisticLockError(Exception):
+    """Raised when a score write loses an optimistic-lock race."""

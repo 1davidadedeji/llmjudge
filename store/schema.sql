@@ -13,5 +13,6 @@ CREATE TABLE IF NOT EXISTS eval_scores (
     metric TEXT NOT NULL,
     score DOUBLE PRECISION NOT NULL,
     updated_at TIMESTAMPTZ NOT NULL,
+    version INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (run_id, metric)
 );
