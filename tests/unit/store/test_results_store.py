@@ -131,3 +131,13 @@ def test_metric_history_joins_runs() -> None:
     sql, params = conn.statements[0]
     assert "JOIN eval_runs" in sql
     assert params[:2] == ("agentflow", "faithfulness")
+
+def test_optimistic_lock_error_raised_on_stale_version() -> None:
+    """save_score refuses to write over a newer version."""
+    import pytest
+
+    from store.results_store import OptimisticLockError, ResultsStore
+
+    store = ResultsStore("postgresql://unused")
+    with pytest.raises(OptimisticLockError):
+        store.save_score("r-1", "faithfulness", 0.9, expected_version=3)

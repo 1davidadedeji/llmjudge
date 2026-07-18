@@ -62,7 +62,8 @@ class ResultsStore:
                 "INSERT INTO eval_scores (run_id, metric, score, updated_at)"
                 " VALUES (%s, %s, %s, %s)"
                 " ON CONFLICT (run_id, metric) DO UPDATE"
-                " SET score = EXCLUDED.score, updated_at = EXCLUDED.updated_at",
+                " SET score = EXCLUDED.score, updated_at = EXCLUDED.updated_at,"
+                " version = eval_scores.version + 1",
                 (run_id, metric, score, datetime.now(timezone.utc)),
             )
 
