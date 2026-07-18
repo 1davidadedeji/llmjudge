@@ -170,3 +170,9 @@ main section {
 .compare-table {
   font-variant-numeric: tabular-nums;
 }
+
+.empty-state {
+  padding: 3rem;
+  text-align: center;
+  color: #8b949e;
+}
