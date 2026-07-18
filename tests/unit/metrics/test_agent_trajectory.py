@@ -130,3 +130,8 @@ def test_efficiency_capped_at_one() -> None:
     """Efficiency never exceeds one even for short runs."""
     metric = AgentTrajectoryMetric()
     assert metric.efficiency_score(["a"], ["a", "b"]) == 1.0
+
+def test_measure_missing_all_expected() -> None:
+    """Calling nothing expected scores low."""
+    metric = AgentTrajectoryMetric()
+    assert metric.measure(make_case(["x"], ["a"])) < 0.5
