@@ -38,7 +38,7 @@ class AgentTrajectoryMetric(BaseMetric):
 
     name = "agent_trajectory"
 
-    def __init__(self, threshold: float = 0.7, order_weight: float = 0.25) -> None:
+    def __init__(self, threshold: float = 0.7, order_weight: float = 0.3) -> None:
         """Stores the pass threshold and order weight."""
         self.threshold = threshold
         self.order_weight = order_weight
