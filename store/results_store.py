@@ -224,3 +224,28 @@ def ensure_utc(value: datetime) -> datetime:
 
 class OptimisticLockError(Exception):
     """Raised when a score write loses an optimistic-lock race."""
+
+    def save_score(self, run_id: str, metric: str, score: float, expected_version: int) -> int:
+        """Writes a score only if the row's version matches expectations.
+
+        Args:
+            run_id: Run the score belongs to.
+            metric: Metric name.
+            score: New metric score.
+            expected_version: Version the caller read earlier.
+
+        Returns:
+            version: The new row version after the write.
+
+        Raises:
+            OptimisticLockError: When another writer bumped the version first.
+        """
+        with self.connect() as conn:
+            cursor = conn.execute(
+                "UPDATE eval_scores SET score = %s, updated_at = %s, version = version + 1"
+                " WHERE run_id = %s AND metric = %s AND version = %s",
+                (score, datetime.now(timezone.utc), run_id, metric, expected_version),
+            )
+        if cursor.rowcount == 0:
+            raise OptimisticLockError(f"{run_id}/{metric}: version {expected_version} is stale")
+        return expected_version + 1
