@@ -78,3 +78,9 @@ scores against a frozen dataset so refactors cannot silently shift scores.
 When no judge client is configured, metrics fall back to heuristic signals
 (lexical overlap, claim matching) and mark the run as degraded in the results
 store so degraded scores are never mixed with judged ones in trend charts.
+
+## Failure modes considered
+
+Judge refusals, unparseable verdicts (score 0 for that verdict), empty
+answers (vacuous pass, documented), and context truncation (bounded prompt
+assembly with explicit limits).
