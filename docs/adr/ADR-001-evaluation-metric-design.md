@@ -84,3 +84,9 @@ store so degraded scores are never mixed with judged ones in trend charts.
 Judge refusals, unparseable verdicts (score 0 for that verdict), empty
 answers (vacuous pass, documented), and context truncation (bounded prompt
 assembly with explicit limits).
+
+## Cost model
+
+One judge call per claim for faithfulness/hallucination, one per passage for
+contextual metrics, one per case for G-Eval. Budget target: full regression
+suite under 2k judge calls per repo per PR.
