@@ -90,3 +90,9 @@ assembly with explicit limits).
 One judge call per claim for faithfulness/hallucination, one per passage for
 contextual metrics, one per case for G-Eval. Budget target: full regression
 suite under 2k judge calls per repo per PR.
+
+## Alternatives rejected
+
+Embedding-only similarity (misses contradiction), human spot checks (does
+not scale to every PR), and per-repo bespoke metrics (breaks cross-repo
+comparability, which is the point of the platform).
