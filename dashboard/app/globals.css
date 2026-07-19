@@ -176,3 +176,7 @@ main section {
   text-align: center;
   color: #8b949e;
 }
+
+.bar-fail {
+  outline: 1px solid #f8514955;
+}
