@@ -72,3 +72,9 @@ tracked for the ensemble follow-up.
 
 Unit tests pin verdict parsing and edge cases; golden-set tests pin end-to-end
 scores against a frozen dataset so refactors cannot silently shift scores.
+
+## Fallback behavior
+
+When no judge client is configured, metrics fall back to heuristic signals
+(lexical overlap, claim matching) and mark the run as degraded in the results
+store so degraded scores are never mixed with judged ones in trend charts.
