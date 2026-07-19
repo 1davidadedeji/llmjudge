@@ -78,3 +78,8 @@ def test_per_judge_breakdown_labels() -> None:
     from metrics.g_eval import per_judge_breakdown
 
     assert per_judge_breakdown([0.1, 0.2, 0.3])["judge_b"] == 0.2
+
+def test_ensemble_details_keys() -> None:
+    """measure_with_details exposes scores, mean, and disagreement."""
+    details = make_metric(["4", "4", "4"]).measure_with_details(make_case())
+    assert set(details) == {"scores", "mean", "disagreement"}
