@@ -59,7 +59,9 @@ class SyntheticGenerator:
         cases = []
         for _ in range(count):
             raw = self.judge.complete(QA_TEMPLATE.format(topic=topic))
-            cases.append(json.loads(raw))
+            case = json.loads(raw)
+            if not self.validate_case(case):
+                cases.append(case)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         cache_path.write_text("\n".join(json.dumps(case) for case in cases))
         return cases
