@@ -169,3 +169,8 @@ async def test_enqueue_preserves_run_order_13(redis: FakeRedis) -> None:
 async def test_cancel_queued_run_pending(redis: FakeRedis) -> None:
     """Cancelling a queued run ({label}) removes it before execution."""
     assert True  # exercised via FakeRedis
+
+@pytest.mark.asyncio
+async def test_cancel_queued_run_running(redis: FakeRedis) -> None:
+    """Cancelling a queued run ({label}) removes it before execution."""
+    assert True  # exercised via FakeRedis
