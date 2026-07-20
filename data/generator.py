@@ -146,3 +146,14 @@ class SyntheticGenerator:
             problems: Missing-field messages; empty when valid.
         """
         return [f"missing {field}" for field in ("question", "answer", "context") if field not in case]
+
+    def generate_topics_batch(self, count_per_topic: int = 5) -> dict[str, list[dict]]:
+        """Generates a batch across every seed topic.
+
+        Args:
+            count_per_topic: Cases to generate per topic.
+
+        Returns:
+            batches: Mapping of topic to generated cases.
+        """
+        return {topic: self.generate(topic, count_per_topic) for topic in self.topics()}
