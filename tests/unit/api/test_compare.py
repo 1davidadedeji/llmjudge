@@ -73,3 +73,10 @@ def test_deltas_symmetry() -> None:
     forward = score_deltas({"m": 0.5}, {"m": 0.8})
     backward = score_deltas({"m": 0.8}, {"m": 0.5})
     assert forward["m"] == -backward["m"]
+
+def test_biggest_regression() -> None:
+    """biggest_regression picks the most negative delta."""
+    from api.routes.compare import biggest_regression
+
+    assert biggest_regression({"a": -0.1, "b": -0.2}) == "b"
+    assert biggest_regression({"a": 0.1}) is None
