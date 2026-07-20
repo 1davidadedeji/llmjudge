@@ -52,3 +52,12 @@ def test_registry_covers_core_metrics() -> None:
 
     assert "faithfulness" in METRIC_REGISTRY
     assert "hallucination" in METRIC_REGISTRY
+
+def test_build_metric_unknown_raises() -> None:
+    """Building an unregistered metric raises KeyError."""
+    import pytest
+
+    from metrics.registry import build_metric
+
+    with pytest.raises(KeyError):
+        build_metric("not-a-metric")
