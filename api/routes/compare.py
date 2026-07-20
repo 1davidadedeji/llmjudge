@@ -99,3 +99,17 @@ def improvements(deltas: dict[str, float], tolerance: float = REGRESSION_TOLERAN
         improved: Metric names whose delta exceeds +tolerance.
     """
     return [metric for metric, delta in deltas.items() if delta > tolerance]
+
+def biggest_regression(deltas: dict[str, float]) -> str | None:
+    """Finds the metric with the largest negative delta.
+
+    Args:
+        deltas: Per-metric deltas from score_deltas().
+
+    Returns:
+        metric: Worst-regressing metric name, or None when none regressed.
+    """
+    regressions = find_regressions(deltas)
+    if not regressions:
+        return None
+    return min(regressions, key=lambda metric: deltas[metric])
