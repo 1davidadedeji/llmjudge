@@ -80,3 +80,8 @@ def test_biggest_regression() -> None:
 
     assert biggest_regression({"a": -0.1, "b": -0.2}) == "b"
     assert biggest_regression({"a": 0.1}) is None
+
+def test_find_regressions_sorted_input() -> None:
+    """Regression list follows delta key order."""
+    result = find_regressions({"b": -0.5, "a": -0.5})
+    assert result == ["a", "b"]
