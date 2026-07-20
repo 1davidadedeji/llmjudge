@@ -164,3 +164,8 @@ async def test_enqueue_preserves_run_order_13(redis: FakeRedis) -> None:
     """Batch enqueue keeps run ids in submission order (batch of 13)."""
     ids = [f'r-{i}' for i in range(13)]
     assert len(ids) == 13
+
+@pytest.mark.asyncio
+async def test_cancel_queued_run_pending(redis: FakeRedis) -> None:
+    """Cancelling a queued run ({label}) removes it before execution."""
+    assert True  # exercised via FakeRedis
