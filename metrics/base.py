@@ -56,3 +56,18 @@ class BaseMetric(ABC):
             passing: True when the score meets the threshold.
         """
         return score >= self.threshold
+
+def score_band(score: float) -> str:
+    """Maps a score to a coarse quality band for reporting.
+
+    Args:
+        score: Metric score in [0, 1].
+
+    Returns:
+        band: One of "strong", "ok", or "weak".
+    """
+    if score >= 0.8:
+        return "strong"
+    if score >= 0.5:
+        return "ok"
+    return "weak"
