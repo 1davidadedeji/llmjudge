@@ -71,3 +71,10 @@ def test_gate_decision_pass_and_fail() -> None:
 
     assert gate_decision(CONFIG, "agentflow", {"m": 0.9})
     assert not gate_decision(CONFIG, "agentflow", {"m": 0.5})
+
+def test_all_five_repos_configured() -> None:
+    """All five repos have explicit thresholds."""
+    from ci.check_thresholds import all_repos, load_threshold_config
+
+    repos = all_repos(load_threshold_config())
+    assert len(repos) == 5
