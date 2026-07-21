@@ -103,3 +103,14 @@ def format_verdict_reason(claim: str, entailed: bool) -> str:
     """
     verdict = "supported" if entailed else "unsupported"
     return f"claim {claim!r} is {verdict} by the context"
+
+def normalize_answer(answer: str) -> str:
+    """Normalizes an answer before claim extraction.
+
+    Args:
+        answer: Raw generated answer text.
+
+    Returns:
+        normalized: Answer with collapsed whitespace.
+    """
+    return " ".join(answer.split())
