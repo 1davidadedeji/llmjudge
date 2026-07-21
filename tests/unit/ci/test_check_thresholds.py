@@ -78,3 +78,9 @@ def test_all_five_repos_configured() -> None:
 
     repos = all_repos(load_threshold_config())
     assert len(repos) == 5
+
+def test_thresholds_within_range() -> None:
+    """Every configured threshold lies in [0, 1]."""
+    from ci.check_thresholds import load_threshold_config, validate_config
+
+    assert validate_config(load_threshold_config()) == []
