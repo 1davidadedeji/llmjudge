@@ -17,3 +17,4 @@
 {"example_id": "gold-cal-017", "question": "Longest river?", "answer": "The Nile, commonly cited.", "label": 0.7}
 {"example_id": "gold-cal-018", "question": "DNA shape?", "answer": "Double helix.", "label": 1.0}
 {"example_id": "gold-cal-019", "question": "Who painted the Mona Lisa?", "answer": "Leonardo da Vinci.", "label": 1.0}
+{"example_id": "gold-cal-020", "question": "What is H2O?", "answer": "Hydrogen peroxide.", "label": 0.0}
