@@ -115,7 +115,7 @@ class ResultsStore:
         )
         with self.connect() as conn:
             rows = conn.execute(query, (repo, metric, limit)).fetchall()
-        return [{"created_at": row[0], "score": row[1]} for row in reversed(rows)]
+        return [{"created_at": ensure_utc(row[0]), "score": row[1]} for row in reversed(rows)]
 
     def repos_with_runs(self) -> list[str]:
         """Lists repos that have at least one stored run.
