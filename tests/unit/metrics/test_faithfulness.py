@@ -146,3 +146,9 @@ def test_claims_from_bullets() -> None:
     from metrics.faithfulness import claims_from_bullets
 
     assert claims_from_bullets("- one\n* two") == ["one", "two"]
+
+def test_format_verdict_reason() -> None:
+    """Reason strings name the verdict per claim."""
+    from metrics.faithfulness import format_verdict_reason
+
+    assert "unsupported" in format_verdict_reason("c", False)
