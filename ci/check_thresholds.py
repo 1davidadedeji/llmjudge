@@ -112,3 +112,16 @@ def blended_score(scores: dict[str, float]) -> float:
     if not scores:
         return 0.0
     return sum(scores.values()) / len(scores)
+
+def gate_decision(config: dict, repo: str, scores: dict[str, float]) -> bool:
+    """Decides whether a repo's scores pass its merge-gate threshold.
+
+    Args:
+        config: Parsed thresholds config from load_threshold_config().
+        repo: Repo name to decide for.
+        scores: Per-metric scores from the eval run.
+
+    Returns:
+        passed: True when the blended score meets the repo threshold.
+    """
+    return blended_score(scores) >= resolve_threshold(config, repo).threshold
