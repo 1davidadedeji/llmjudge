@@ -64,3 +64,10 @@ def test_thresholds_yaml_loads() -> None:
 
     config = load_threshold_config()
     assert "default_threshold" in config
+
+def test_gate_decision_pass_and_fail() -> None:
+    """Gate decision follows the blended score against the repo floor."""
+    from ci.check_thresholds import gate_decision
+
+    assert gate_decision(CONFIG, "agentflow", {"m": 0.9})
+    assert not gate_decision(CONFIG, "agentflow", {"m": 0.5})
