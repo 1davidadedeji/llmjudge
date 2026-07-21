@@ -84,3 +84,9 @@ def test_thresholds_within_range() -> None:
     from ci.check_thresholds import load_threshold_config, validate_config
 
     assert validate_config(load_threshold_config()) == []
+
+def test_resolve_unknown_repo_type() -> None:
+    """Resolution returns a RepoThreshold."""
+    from ci.check_thresholds import RepoThreshold
+
+    assert isinstance(resolve_threshold(CONFIG, "x"), RepoThreshold)
