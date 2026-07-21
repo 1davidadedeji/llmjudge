@@ -15,6 +15,7 @@ from harness.test_case import LLMTestCase
 from metrics.base import BaseMetric
 from metrics.judge import JudgeClient
 
+CLAIM_PROMPT_VERSION = 1
 CLAIM_PROMPT = (
     "Context:\n{context}\n\nClaim: {claim}\n"
     "Is the claim fully supported by the context? Answer yes or no."
