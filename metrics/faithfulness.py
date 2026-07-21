@@ -76,7 +76,8 @@ class FaithfulnessMetric(BaseMetric):
         Returns:
             entailed: True when the judge answers yes.
         """
-        verdict = self.judge.complete(CLAIM_PROMPT.format(context=context, claim=claim))
+        prompt = CLAIM_PROMPT.format(context=context, claim=claim)
+        verdict = self.judge.complete(prompt)
         return verdict.strip().lower().startswith("yes")
 
 def claims_from_bullets(answer: str) -> list[str]:
