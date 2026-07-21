@@ -43,7 +43,7 @@ def list_runs(
     Returns:
         runs: Run rows newest-first.
     """
-    return store.list_runs(repo=repo, limit=limit)
+    return [serialize_run(run) for run in store.list_runs(repo=repo, limit=limit)]
 
 
 @router.get("/runs/{run_id}")
