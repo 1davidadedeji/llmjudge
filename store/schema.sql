@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS eval_runs (
     repo TEXT NOT NULL,
     status TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL,
-    finished_at TIMESTAMP
+    finished_at TIMESTAMPTZ
 );
 
 CREATE INDEX IF NOT EXISTS idx_eval_runs_repo_created ON eval_runs (repo, created_at DESC);
