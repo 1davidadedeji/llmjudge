@@ -141,3 +141,12 @@ def test_optimistic_lock_error_raised_on_stale_version() -> None:
     store = ResultsStore("postgresql://unused")
     with pytest.raises(OptimisticLockError):
         store.save_score("r-1", "faithfulness", 0.9, expected_version=3)
+
+def test_ensure_utc_already_aware() -> None:
+    """Aware timestamps pass through ensure_utc unchanged."""
+    from datetime import datetime, timezone
+
+    from store.results_store import ensure_utc
+
+    aware = datetime(2026, 7, 21, 8, 0, 0, tzinfo=timezone.utc)
+    assert ensure_utc(aware) == aware
