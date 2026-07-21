@@ -90,3 +90,10 @@ def test_resolve_unknown_repo_type() -> None:
     from ci.check_thresholds import RepoThreshold
 
     assert isinstance(resolve_threshold(CONFIG, "x"), RepoThreshold)
+
+def test_default_threshold_documented() -> None:
+    """Default threshold is a float in (0, 1)."""
+    from ci.check_thresholds import load_threshold_config
+
+    value = float(load_threshold_config()["default_threshold"])
+    assert 0.0 < value < 1.0
