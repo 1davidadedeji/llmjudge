@@ -152,3 +152,9 @@ def test_format_verdict_reason() -> None:
     from metrics.faithfulness import format_verdict_reason
 
     assert "unsupported" in format_verdict_reason("c", False)
+
+def test_claim_prompt_version_pinned() -> None:
+    """Prompt version is pinned so score changes are attributable."""
+    from metrics.faithfulness import CLAIM_PROMPT_VERSION
+
+    assert CLAIM_PROMPT_VERSION == 1
