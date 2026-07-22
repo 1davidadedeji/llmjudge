@@ -156,3 +156,10 @@ def test_schema_file_present() -> None:
     from pathlib import Path
 
     assert Path("store/schema.sql").exists
+
+def test_schema_defines_both_tables() -> None:
+    """Schema defines eval_runs and eval_scores."""
+    from pathlib import Path
+
+    schema = Path("store/schema.sql").read_text()
+    assert "eval_runs" in schema and "eval_scores" in schema
