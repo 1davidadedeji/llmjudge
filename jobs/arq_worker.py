@@ -78,7 +78,7 @@ class WorkerSettings:
     job_timeout = DEFAULT_JOB_TIMEOUT_S
     max_tries = DEFAULT_MAX_TRIES
     on_failure = on_job_failure
-    cron_jobs = []
+    cron_jobs = [cron(drain_dead_letter, hour=3)]
 
 def retry_backoff_s(attempt: int) -> int:
     """Computes exponential backoff seconds for a retry attempt.
