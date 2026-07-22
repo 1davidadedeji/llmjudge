@@ -51,6 +51,9 @@ export default function RunCompare({ payload }: { payload: ComparePayload }) {
           ))}
         </tbody>
       </table>
+      {payload.regressions.length > 0 && (
+        <p className="regression-note">regressions: {payload.regressions.join(", ")}</p>
+      )}
     </section>
   );
 }
