@@ -201,3 +201,8 @@ main section {
 .run-compare {
   max-width: 48rem;
 }
+
+.compare-table th:first-child,
+.compare-table td:first-child {
+  width: 60%;
+}
