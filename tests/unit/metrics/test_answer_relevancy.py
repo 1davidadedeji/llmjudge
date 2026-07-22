@@ -109,3 +109,9 @@ def test_judge_weight_constant() -> None:
     from metrics.answer_relevancy import JUDGE_WEIGHT
 
     assert JUDGE_WEIGHT == 0.5
+
+def test_is_on_topic_boundary() -> None:
+    """On-topic boundary is inclusive of the threshold."""
+    from metrics.answer_relevancy import is_on_topic
+
+    assert is_on_topic(0.75) and not is_on_topic(0.74)
