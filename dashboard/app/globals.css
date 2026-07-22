@@ -187,6 +187,9 @@ main section {
 
 .regression-note {
   margin-top: 0.75rem;
+  padding: 0.5rem 0.75rem;
   color: #f85149;
   font-size: 0.9rem;
+  border: 1px solid #f8514955;
+  border-radius: 0.4rem;
 }
