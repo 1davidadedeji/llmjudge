@@ -33,6 +33,17 @@ class LLMTestCase:
     expected_tools: list[str] = field(default_factory=list)
     metadata: dict = field(default_factory=dict)
 
+    def with_output(self, actual_output: str) -> "LLMTestCase":
+        """Returns a copy of the case with a different generated answer.
+
+        Args:
+            actual_output: Replacement answer text.
+
+        Returns:
+            updated: Case identical except for actual_output.
+        """
+        return replace(self, actual_output=actual_output)
+
     def redacted(self) -> "LLMTestCase":
         """Returns a copy with metadata values masked for logging.
 
