@@ -13,6 +13,8 @@ from typing import Any
 
 from arq.connections import RedisSettings
 
+from arq.cron import cron
+
 QUEUE_NAME = "llmjudge:eval"
 
 RETRY_BACKOFF_BASE_S = 10
