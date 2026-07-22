@@ -163,3 +163,10 @@ def test_schema_defines_both_tables() -> None:
 
     schema = Path("store/schema.sql").read_text()
     assert "eval_runs" in schema and "eval_scores" in schema
+
+def test_schema_scores_reference_runs() -> None:
+    """Score rows reference their run."""
+    from pathlib import Path
+
+    schema = Path("store/schema.sql").read_text()
+    assert "REFERENCES eval_runs" in schema
