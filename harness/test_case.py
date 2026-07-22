@@ -6,7 +6,7 @@ Contains:
     LLMTestCase: immutable data model for one eval case
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 
 @dataclass(frozen=True)
