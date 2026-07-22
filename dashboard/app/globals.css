@@ -184,3 +184,9 @@ main section {
 .run-compare section + section {
   margin-top: 2rem;
 }
+
+.regression-note {
+  margin-top: 0.75rem;
+  color: #f85149;
+  font-size: 0.9rem;
+}
