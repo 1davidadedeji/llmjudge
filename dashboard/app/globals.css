@@ -180,3 +180,7 @@ main section {
 .bar-fail {
   outline: 1px solid #f8514955;
 }
+
+.run-compare section + section {
+  margin-top: 2rem;
+}
