@@ -60,3 +60,13 @@ def test_load_overrides_empty(tmp_path) -> None:
 def test_filter_empty_findings() -> None:
     """No findings means nothing to filter."""
     assert filter_findings([], [], "2026-07-01") == []
+
+def test_load_overrides_roundtrip(tmp_path) -> None:
+    """Overrides round-trip from YAML into Override entries."""
+    from ci.audit_filter import load_overrides
+
+    cfg = tmp_path / "overrides.yaml"
+    cfg.write_text(
+        "overrides:\n  - vuln_id: CVE-1\n    expires: '2999-01-01'\n    reason: ok\n"
+    )
+    assert load_overrides(str(cfg))[0].vuln_id == "CVE-1"
