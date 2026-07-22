@@ -150,3 +150,9 @@ def test_finish_run_marks_terminal() -> None:
     store.insert_run("r-1", "agentflow")
     conn.runs["r-1"]["status"] = "succeeded"
     assert conn.runs["r-1"]["status"] == "succeeded
+
+def test_schema_file_present() -> None:
+    """The schema file ships with the store package."""
+    from pathlib import Path
+
+    assert Path("store/schema.sql").exists
