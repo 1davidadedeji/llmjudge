@@ -170,3 +170,11 @@ def test_schema_scores_reference_runs() -> None:
 
     schema = Path("store/schema.sql").read_text()
     assert "REFERENCES eval_runs" in schema
+
+def test_schema_uses_timestamptz() -> None:
+    """Timestamps are timezone-aware TIMESTAMPTZ."""
+    from pathlib import Path
+
+    schema = Path("store/schema.sql").read_text()
+    assert "TIMESTAMPTZ" in schema
+    assert " TIMESTAMP" not in schema
