@@ -197,3 +197,7 @@ main section {
 .compare-table tbody tr:last-child td {
   border-bottom: none;
 }
+
+.run-compare {
+  max-width: 48rem;
+}
