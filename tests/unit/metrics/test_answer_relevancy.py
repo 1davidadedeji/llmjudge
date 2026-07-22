@@ -103,3 +103,9 @@ def test_measure_returns_float() -> None:
     """Score is always a plain float."""
     metric = AnswerRelevancyMetric(StubJudge(["yes"]))
     assert isinstance(metric.measure(make_case("q words", "q words")), float)
+
+def test_judge_weight_constant() -> None:
+    """Judge verdict weight is pinned at one half."""
+    from metrics.answer_relevancy import JUDGE_WEIGHT
+
+    assert JUDGE_WEIGHT == 0.5
