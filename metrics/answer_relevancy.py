@@ -83,3 +83,15 @@ class AnswerRelevancyMetric(BaseMetric):
         return len(question_tokens & answer_tokens) / len(question_tokens)
 
 JUDGE_WEIGHT = 0.5
+
+def is_on_topic(score: float, threshold: float = 0.75) -> bool:
+    """Reports whether a relevancy score counts as on-topic.
+
+    Args:
+        score: Relevancy score from AnswerRelevancyMetric.measure().
+        threshold: Minimum on-topic score.
+
+    Returns:
+        on_topic: True when the score meets the threshold.
+    """
+    return score >= threshold
