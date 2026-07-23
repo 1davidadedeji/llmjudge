@@ -96,6 +96,27 @@ class ResultsStore:
             "scores": {metric: score for metric, score in score_rows},
         }
 
+    def average_score(self, repo: str, metric: str, days: int = 7) -> float | None:
+        """Computes a repo's average metric score over recent days.
+
+        Args:
+            repo: Repo whose average is wanted.
+            metric: Metric name.
+            days: Lookback window in days.
+
+        Returns:
+            average: Mean score in the window, or None when no data.
+        """
+        query = (
+            "SELECT AVG(s.score) FROM eval_scores s"
+            " JOIN eval_runs r ON r.id = s.run_id"
+            " WHERE r.repo = %s AND s.metric = %s"
+            " AND r.created_at > NOW() - INTERVAL '%s days'"
+        )
+        with self.connect() as conn:
+            row = conn.execute(query, (repo, metric, days)).fetchone()
+        return float(row[0]) if row and row[0] is not None else None
+
     def scores_for_runs(self, run_ids: list[str]) -> dict[str, dict[str, float]]:
         """Fetches scores for many runs in one query.
 
