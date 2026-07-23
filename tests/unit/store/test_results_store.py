@@ -156,3 +156,11 @@ def test_scores_for_runs_empty() -> None:
     conn = FakeConnection()
     assert make_store(conn).scores_for_runs([]) == {}
     assert conn.statements == []
+
+def test_average_score_window() -> None:
+    """average_score bounds the window with an interval clause."""
+    conn = FakeConnection()
+    make_store(conn).average_score("agentflow", "faithfulness", days=3)
+    sql, params = conn.statements[0]
+    assert "INTERVAL" in sql
+    assert params == ("agentflow", "faithfulness", 3)
