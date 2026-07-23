@@ -125,3 +125,18 @@ def average_precision(verdicts: list[bool]) -> float:
             relevant += 1
             weighted += relevant / rank
     return weighted / relevant if relevant else 0.0
+
+def recall_at_k(verdicts: list[bool], k: int) -> float:
+    """Computes recall over only the top-k ranked passages.
+
+    Args:
+        verdicts: Relevance flags in ranking order.
+        k: Rank cutoff.
+
+    Returns:
+        score: Fraction of top-k passages that are relevant.
+    """
+    window = verdicts[:k]
+    if not window:
+        return 1.0
+    return sum(window) / len(window)
