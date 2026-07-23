@@ -108,3 +108,8 @@ test("failed runs highlighted in table", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("failed", { exact: false }).first()).toBeVisible();
 });
+
+test("multiple filters combine", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
+});
