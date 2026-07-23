@@ -123,3 +123,8 @@ test("page title includes repo name", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("agentflow", { exact: false }).first()).toBeVisible();
 });
+
+test("trend legend visible", async ({ page }) => {
+  await page.goto("/trends");
+  await expect(page.getByText("threshold", { exact: false }).first()).toBeVisible();
+});
