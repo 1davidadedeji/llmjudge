@@ -131,3 +131,9 @@ def test_precision_verdict_prompt_fields() -> None:
     judge = StubJudge(["yes"])
     ContextualPrecisionMetric(judge).is_relevant("some-passage", "some-question")
     assert "some-passage" in judge.calls[0] and "some-question" in judge.calls[0]
+
+def test_recall_supports_prompt_fields() -> None:
+    """Coverage prompt embeds passage and expectation."""
+    judge = StubJudge(["yes"])
+    ContextualRecallMetric(judge).supports("some-passage", "some-expected")
+    assert "some-passage" in judge.calls[0] and "some-expected" in judge.calls[0]
