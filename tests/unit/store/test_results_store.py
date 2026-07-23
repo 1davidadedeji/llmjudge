@@ -164,3 +164,10 @@ def test_average_score_window() -> None:
     sql, params = conn.statements[0]
     assert "INTERVAL" in sql
     assert params == ("agentflow", "faithfulness", 3)
+
+def test_insert_run_params_order() -> None:
+    """insert_run binds params in column order."""
+    conn = FakeConnection()
+    make_store(conn).insert_run("r-7", "shipwright", "running")
+    _, params = conn.statements[0]
+    assert params[0] == "r-7" and params[1] == "shipwright" and params[2] == "running"
