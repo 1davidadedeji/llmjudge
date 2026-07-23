@@ -125,3 +125,9 @@ def test_recall_at_k_window() -> None:
     from metrics.contextual_precision_recall import recall_at_k
 
     assert recall_at_k([True, False, False], 1) == 1.0
+
+def test_precision_verdict_prompt_fields() -> None:
+    """Relevance prompt embeds passage and question."""
+    judge = StubJudge(["yes"])
+    ContextualPrecisionMetric(judge).is_relevant("some-passage", "some-question")
+    assert "some-passage" in judge.calls[0] and "some-question" in judge.calls[0]
