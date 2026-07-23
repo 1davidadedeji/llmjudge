@@ -119,3 +119,9 @@ def test_precision_threshold_stored() -> None:
 def test_recall_threshold_stored() -> None:
     """Recall threshold is stored."""
     assert ContextualRecallMetric(StubJudge([]), threshold=0.65).threshold == 0.65
+
+def test_recall_at_k_window() -> None:
+    """Recall@k ignores passages past the cutoff."""
+    from metrics.contextual_precision_recall import recall_at_k
+
+    assert recall_at_k([True, False, False], 1) == 1.0
