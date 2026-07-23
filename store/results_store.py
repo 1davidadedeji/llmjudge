@@ -9,7 +9,8 @@ Contains:
     ResultsStore.get_run(): fetches one run with its scores
 """
 
-from datetime import datetime, timezone
+from datetime import datetime
+from typing import Any, timezone
 
 import psycopg
 
