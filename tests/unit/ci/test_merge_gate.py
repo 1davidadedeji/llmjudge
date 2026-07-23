@@ -88,3 +88,9 @@ def test_evaluate_gate_passes_exact_floor() -> None:
     """A score exactly at the floor passes."""
     payload = {"status": "succeeded", "scores": {"faithfulness": 0.8}}
     assert evaluate_gate(payload, {"faithfulness": 0.8}).passed
+
+def test_summarize_scores_sorted() -> None:
+    """Score summary lists metrics alphabetically for stable logs."""
+    from ci.merge_gate import summarize_scores
+
+    assert summarize_scores({"b": 1.0, "a": 0.5}) == "a=0.500, b=1.000"
