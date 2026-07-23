@@ -27,7 +27,7 @@ class ResultsStore:
         """Stores the connection string."""
         self.dsn = dsn
 
-    def connect(self) -> psycopg.Connection:
+    def connect(self) -> "psycopg.Connection":
         """Opens a new connection to the store.
 
         Returns:
