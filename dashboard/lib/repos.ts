@@ -146,3 +146,13 @@ export function sortNewestFirst(runs: RunSummary[]): RunSummary[] {
 export function searchRuns(runs: RunSummary[], fragment: string): RunSummary[] {
   return runs.filter((run) => run.id.includes(fragment));
 }
+
+/**
+ * Finds the most recent failed run in a list.
+ *
+ * @param runs - Runs to search.
+ * @returns run - Newest failed run, or undefined.
+ */
+export function latestFailure(runs: RunSummary[]): RunSummary | undefined {
+  return sortNewestFirst(runs).find((run) => run.status === "failed");
+}
