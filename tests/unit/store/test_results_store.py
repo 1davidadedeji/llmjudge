@@ -150,3 +150,9 @@ def test_ensure_utc_already_aware() -> None:
 
     aware = datetime(2026, 7, 21, 8, 0, 0, tzinfo=timezone.utc)
     assert ensure_utc(aware) == aware
+
+def test_scores_for_runs_empty() -> None:
+    """scores_for_runs short-circuits on an empty id list."""
+    conn = FakeConnection()
+    assert make_store(conn).scores_for_runs([]) == {}
+    assert conn.statements == []
