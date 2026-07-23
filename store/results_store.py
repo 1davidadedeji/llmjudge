@@ -96,6 +96,26 @@ class ResultsStore:
             "scores": {metric: score for metric, score in score_rows},
         }
 
+    def scores_for_runs(self, run_ids: list[str]) -> dict[str, dict[str, float]]:
+        """Fetches scores for many runs in one query.
+
+        Args:
+            run_ids: Run identifiers to fetch scores for.
+
+        Returns:
+            scores: Mapping of run id to its metric-score mapping.
+        """
+        if not run_ids:
+            return {}
+        placeholders = ", ".join(["%s"] * len(run_ids))
+        query = f"SELECT run_id, metric, score FROM eval_scores WHERE run_id IN ({placeholders})"
+        with self.connect() as conn:
+            rows = conn.execute(query, tuple(run_ids)).fetchall()
+        scores: dict[str, dict[str, float]] = {run_id: {} for run_id in run_ids}
+        for run_id, metric, score in rows:
+            scores[run_id][metric] = score
+        return scores
+
     def metric_history(self, repo: str, metric: str, limit: int = 30) -> list[dict]:
         """Fetches the recent score history of one metric for a repo.
 
