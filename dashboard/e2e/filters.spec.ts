@@ -118,3 +118,8 @@ test("filter unknown status yields empty", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("No runs yet", { exact: false }).first()).toBeVisible();
 });
+
+test("page title includes repo name", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("agentflow", { exact: false }).first()).toBeVisible();
+});
