@@ -113,3 +113,8 @@ test("multiple filters combine", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
 });
+
+test("filter unknown status yields empty", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("No runs yet", { exact: false }).first()).toBeVisible();
+});
