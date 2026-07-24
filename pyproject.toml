@@ -18,6 +18,7 @@ dependencies = [
     "pyyaml",
     "boto3",
     "python-dotenv",
+    "structlog",
 ]
 
 [project.optional-dependencies]
