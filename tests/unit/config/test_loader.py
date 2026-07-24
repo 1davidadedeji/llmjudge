@@ -75,3 +75,13 @@ def test_uses_metric() -> None:
     config = load_config("llmjudge.example.yaml")
     assert config.repos[0].uses_metric("faithfulness")
     assert not config.repos[0].uses_metric("agent_trajectory")
+
+def test_metric_selection_name_required() -> None:
+    """MetricSelection requires a name."""
+    import pytest
+    from pydantic import ValidationError
+
+    from config.schema import MetricSelection
+
+    with pytest.raises(ValidationError):
+        MetricSelection()
