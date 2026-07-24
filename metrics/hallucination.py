@@ -85,3 +85,15 @@ def hallucination_rate(score: float) -> float:
         rate: Fraction of claims judged hallucinated.
     """
     return 1.0 - score
+
+def contradicted_claims(claims: list[str], verdicts: list[bool]) -> list[str]:
+    """Pairs claims with verdicts and returns the contradicted ones.
+
+    Args:
+        claims: Atomic claims from the answer.
+        verdicts: Contradiction verdicts aligned with the claims.
+
+    Returns:
+        flagged: Claims the context contradicts.
+    """
+    return [claim for claim, flagged in zip(claims, verdicts) if flagged]
