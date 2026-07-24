@@ -13,6 +13,7 @@ from harness.test_case import LLMTestCase
 from metrics.base import BaseMetric
 from metrics.judge import JudgeClient
 
+CONTRADICTION_PROMPT_VERSION = 1
 CONTRADICTION_PROMPT = (
     "Context:\n{context}\n\nClaim: {claim}\n"
     "Does the context contradict this claim? Answer yes or no."
