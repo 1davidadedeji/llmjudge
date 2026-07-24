@@ -145,3 +145,10 @@ def test_app_title_llmjudge() -> None:
     """API title is llmjudge."""
     client = make_client(FakeStore())
     assert client.get("/openapi.json").json()["info"]["title"] == "llmjudge"
+
+def test_list_repos() -> None:
+    """GET /repos returns distinct repo names."""
+    store = FakeStore()
+    store.repos_with_runs = lambda: ["agentflow", "llmjudge"]
+    client = make_client(store)
+    assert client.get("/repos").json() == ["agentflow", "llmjudge"]
