@@ -40,3 +40,14 @@ def find_repo(config: LlmjudgeConfig, repo: str) -> "RepoEvalConfig | None":
         if repo_config.repo == repo:
             return repo_config
     return None
+
+def datasets_in_use(config: LlmjudgeConfig) -> list[str]:
+    """Lists every dataset referenced by the config.
+
+    Args:
+        config: Loaded top-level config.
+
+    Returns:
+        datasets: Sorted distinct dataset identifiers.
+    """
+    return sorted({repo.dataset for repo in config.repos})
