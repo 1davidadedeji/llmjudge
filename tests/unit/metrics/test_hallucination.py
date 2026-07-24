@@ -111,3 +111,9 @@ def test_hallucination_rate_inverse() -> None:
     from metrics.hallucination import hallucination_rate
 
     assert hallucination_rate(0.75) == 0.25
+
+def test_prompt_version_pinned() -> None:
+    """Prompt version is pinned for attributable score changes."""
+    from metrics.hallucination import CONTRADICTION_PROMPT_VERSION
+
+    assert CONTRADICTION_PROMPT_VERSION == 1
