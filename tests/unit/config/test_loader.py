@@ -69,3 +69,9 @@ def test_repo_config_preserves_order() -> None:
     config = load_config("llmjudge.example.yaml")
     names = config.repo_names()
     assert names[0] == "retrieval-core"
+
+def test_uses_metric() -> None:
+    """uses_metric reflects the repo's selections."""
+    config = load_config("llmjudge.example.yaml")
+    assert config.repos[0].uses_metric("faithfulness")
+    assert not config.repos[0].uses_metric("agent_trajectory")
