@@ -146,3 +146,15 @@ def delete_run(run_id: str, store: ResultsStore = Depends(get_store)) -> None:
     """
     if not store.delete_run(run_id):
         raise HTTPException(status_code=404, detail="run not found")
+
+@router.get("/repos")
+def list_repos(store: ResultsStore = Depends(get_store)) -> list[str]:
+    """Lists repos that have at least one stored run.
+
+    Args:
+        store: Results store dependency.
+
+    Returns:
+        repos: Sorted distinct repo names.
+    """
+    return store.repos_with_runs()
