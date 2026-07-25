@@ -115,3 +115,14 @@ def per_judge_breakdown(scores: list[float]) -> dict[str, float]:
     """
     labels = ["judge_a", "judge_b", "judge_c"]
     return dict(zip(labels, scores))
+
+def should_escalate(disagreement: bool) -> bool:
+    """Reports whether a run should be escalated for human review.
+
+    Args:
+        disagreement: Disagreement flag from measure_with_details().
+
+    Returns:
+        escalate: True when judges disagreed and a human should look.
+    """
+    return disagreement
