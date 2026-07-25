@@ -83,3 +83,9 @@ def test_ensemble_details_keys() -> None:
     """measure_with_details exposes scores, mean, and disagreement."""
     details = make_metric(["4", "4", "4"]).measure_with_details(make_case())
     assert set(details) == {"scores", "mean", "disagreement"}
+
+def test_should_escalate_follows_flag() -> None:
+    """Escalation follows the disagreement flag."""
+    from metrics.g_eval import should_escalate
+
+    assert should_escalate(True) and not should_escalate(False)
