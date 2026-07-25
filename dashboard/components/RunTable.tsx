@@ -16,6 +16,9 @@ import StatusBadge from "./StatusBadge";
  * @returns table - Runs table element.
  */
 export default function RunTable({ runs }: { runs: RunSummary[] }) {
+  if (runs.length === 0) {
+    return <EmptyState message="No runs yet" />;
+  }
   return (
     <table className="run-table">
       <thead>
