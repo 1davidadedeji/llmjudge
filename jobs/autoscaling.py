@@ -98,3 +98,16 @@ def headroom(queue_depth: int, current: int, policy: AutoscalePolicy = DEFAULT_P
         headroom: Additional jobs the current fleet absorbs before scaling.
     """
     return max(0, current * policy.scale_up_depth - queue_depth)
+
+def in_cooldown(last_action_ts: float, now_ts: float, policy: AutoscalePolicy = DEFAULT_POLICY) -> bool:
+    """Reports whether a scaling action is still inside the cooldown window.
+
+    Args:
+        last_action_ts: Epoch seconds of the most recent scaling action.
+        now_ts: Current epoch seconds.
+        policy: Autoscaling policy to apply.
+
+    Returns:
+        cooling: True when fewer than cooldown_s seconds have elapsed.
+    """
+    return (now_ts - last_action_ts) < policy.cooldown_s
