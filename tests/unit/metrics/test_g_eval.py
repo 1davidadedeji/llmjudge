@@ -93,3 +93,7 @@ def test_should_escalate_follows_flag() -> None:
 def test_verdict_with_text_around() -> None:
     """Prose around the digit still parses."""
     assert GEvalMetric(StubJudge(["score: 5"])).measure(make_case()) == 1.0
+
+def test_mean_of_all_ones_is_zero() -> None:
+    """Three 1 verdicts average to 0.0."""
+    assert make_metric(["1", "1", "1"]).measure(make_case()) == 0.0
