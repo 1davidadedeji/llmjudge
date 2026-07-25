@@ -89,3 +89,7 @@ def test_should_escalate_follows_flag() -> None:
     from metrics.g_eval import should_escalate
 
     assert should_escalate(True) and not should_escalate(False)
+
+def test_verdict_with_text_around() -> None:
+    """Prose around the digit still parses."""
+    assert GEvalMetric(StubJudge(["score: 5"])).measure(make_case()) == 1.0
