@@ -54,7 +54,9 @@ class DatasetStore:
         prefix: Key prefix inside the bucket.
     """
 
-    def __init__(self, bucket: str, prefix: str = "datasets", client: object = None) -> None:
+    def __init__(
+        self, bucket: str, prefix: str = "datasets", client: "S3Client | None" = None
+    ) -> None:
         """Stores the bucket layout and S3 client."""
         self.bucket = bucket
         self.prefix = prefix
