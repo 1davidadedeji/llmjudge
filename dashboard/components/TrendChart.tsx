@@ -23,9 +23,11 @@ export interface TrendPoint {
 export default function TrendChart({
   points,
   threshold,
+  height = 8,
 }: {
   points: TrendPoint[];
   threshold: number;
+  height?: number;
 }) {
   return (
     <div className="trend-chart">
