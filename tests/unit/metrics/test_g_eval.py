@@ -97,3 +97,7 @@ def test_verdict_with_text_around() -> None:
 def test_mean_of_all_ones_is_zero() -> None:
     """Three 1 verdicts average to 0.0."""
     assert make_metric(["1", "1", "1"]).measure(make_case()) == 0.0
+
+def test_ensemble_all_top_scores() -> None:
+    """Three 5 verdicts average to 1.0."""
+    assert make_metric(["5", "5", "5"]).measure(make_case()) == 1.0
