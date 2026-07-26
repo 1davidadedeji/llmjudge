@@ -194,3 +194,20 @@ export function scoreStdDev(points: TrendPoint[]): number {
 export function sparklinePoints(points: TrendPoint[]): number[] {
   return points.map((point) => Math.round(point.score * 100));
 }
+
+/**
+ * Counts trailing points below the threshold.
+ *
+ * @param points - Score points oldest-first.
+ * @returns result - See description.
+ */
+export function consecutiveFailures(points: TrendPoint[], threshold: number): number {
+  let count = 0;
+  for (let index = points.length - 1; index >= 0; index -= 1) {
+    if (points[index].score >= threshold) {
+      break;
+    }
+    count += 1;
+  }
+  return count;
+}
