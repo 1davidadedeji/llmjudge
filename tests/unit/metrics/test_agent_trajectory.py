@@ -135,3 +135,8 @@ def test_measure_missing_all_expected() -> None:
     """Calling nothing expected scores low."""
     metric = AgentTrajectoryMetric()
     assert metric.measure(make_case(["x"], ["a"])) < 0.5
+
+def test_order_extra_tools_ignored() -> None:
+    """Extra tools do not break order credit."""
+    metric = AgentTrajectoryMetric()
+    assert metric.order_score(["a", "x", "b"], ["a", "b"]) == 1.0
