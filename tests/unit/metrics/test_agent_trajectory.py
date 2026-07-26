@@ -140,3 +140,7 @@ def test_order_extra_tools_ignored() -> None:
     """Extra tools do not break order credit."""
     metric = AgentTrajectoryMetric()
     assert metric.order_score(["a", "x", "b"], ["a", "b"]) == 1.0
+
+def test_threshold_stored() -> None:
+    """Threshold is stored on the metric."""
+    assert AgentTrajectoryMetric(threshold=0.9).threshold == 0.9
