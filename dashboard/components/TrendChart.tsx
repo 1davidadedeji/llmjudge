@@ -30,7 +30,7 @@ export default function TrendChart({
   height?: number;
 }) {
   return (
-    <div className="trend-chart">
+    <div className="trend-chart" style={{ height: `${height}rem` }}>
       {points.map((point, index) => (
         <div
           key={index}
