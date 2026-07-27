@@ -89,3 +89,9 @@ def test_validate_case(tmp_path) -> None:
     generator = make_generator(tmp_path, [])
     assert generator.validate_case({"question": "q"}) == ["missing answer", "missing context"]
     assert generator.validate_case({"question": "q", "answer": "a", "context": "c"}) == []
+
+def test_generate_skips_invalid_cases(tmp_path) -> None:
+    """Invalid generations are dropped from the batch."""
+    generator = make_generator(tmp_path, ["{}", PAYLOAD])
+    cases = generator.generate("economics", count=2)
+    assert cases == [{"question": "q", "answer": "a", "context": "c"}]
