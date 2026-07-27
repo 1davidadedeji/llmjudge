@@ -253,7 +253,7 @@ class ResultsStore:
         ]
 
 def ensure_utc(value: datetime) -> datetime:
-    """Coerces a timestamp to timezone-aware UTC.
+    """Coerces a database timestamp to timezone-aware UTC.
 
     Args:
         value: Timestamp from the database, possibly naive.
