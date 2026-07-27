@@ -16,7 +16,7 @@ from store.results_store import ResultsStore
 
 router = APIRouter(prefix="/compare", tags=["compare"])
 
-REGRESSION_TOLERANCE = 0.01
+REGRESSION_TOLERANCE = 0.02
 
 
 def score_deltas(base: dict[str, float], candidate: dict[str, float]) -> dict[str, float]:
