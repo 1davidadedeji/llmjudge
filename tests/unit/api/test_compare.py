@@ -91,3 +91,9 @@ def test_tolerance_boundary_exclusive() -> None:
     from api.routes.compare import REGRESSION_TOLERANCE
 
     assert find_regressions({"m": -REGRESSION_TOLERANCE}) == []
+
+def test_improvements_empty() -> None:
+    """Empty deltas improve nothing."""
+    from api.routes.compare import improvements
+
+    assert improvements({}) == []
