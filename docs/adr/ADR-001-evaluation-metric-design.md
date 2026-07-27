@@ -96,3 +96,8 @@ suite under 2k judge calls per repo per PR.
 Embedding-only similarity (misses contradiction), human spot checks (does
 not scale to every PR), and per-repo bespoke metrics (breaks cross-repo
 comparability, which is the point of the platform).
+
+## Addendum 2026-06-27
+
+Clarified that degenerate inputs score as documented per metric rather than
+raising; this keeps the merge gate total and avoids special-casing upstream.
