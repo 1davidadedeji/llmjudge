@@ -10,6 +10,8 @@ Contains:
 
 from dataclasses import dataclass
 
+import os
+
 import yaml
 
 CONFIG_PATH = os.environ.get("LLMJUDGE_THRESHOLDS", "ci/thresholds.yaml")
