@@ -103,3 +103,9 @@ def test_gate_decision_empty_scores_fails() -> None:
     from ci.check_thresholds import gate_decision
 
     assert not gate_decision(CONFIG, "agentflow", {})
+
+def test_repo_threshold_equality() -> None:
+    """RepoThreshold compares by value."""
+    from ci.check_thresholds import RepoThreshold
+
+    assert RepoThreshold("a", 0.5) == RepoThreshold("a", 0.5)
