@@ -18,7 +18,7 @@ def test_score_deltas_shared_only() -> None:
 
 def test_find_regressions_respects_tolerance() -> None:
     """Dips within tolerance are not flagged as regressions."""
-    assert find_regressions({"a": -0.005}) == []
+    assert find_regressions({"a": -0.015}) == []
     assert find_regressions({"a": -0.05}) == ["a"]
 
 def test_compare_route() -> None:
