@@ -117,3 +117,8 @@ risk flagged in Option C. Other metrics stay single-judge for now.
 
 Disagreement between ensemble judges now escalates the case for human review
 instead of being averaged away silently.
+
+## References
+
+G-Eval: NLG evaluation with GPT-4-style rubric judges (Liu et al., 2023).
+RAGAS: reference-free RAG evaluation. Internal: retrieval-core eval notes.
