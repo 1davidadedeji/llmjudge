@@ -12,7 +12,7 @@ from dataclasses import dataclass
 
 import yaml
 
-CONFIG_PATH = "ci/thresholds.yaml"
+CONFIG_PATH = os.environ.get("LLMJUDGE_THRESHOLDS", "ci/thresholds.yaml")
 MIN_THRESHOLD = 0.0
 MAX_THRESHOLD = 1.0
 
