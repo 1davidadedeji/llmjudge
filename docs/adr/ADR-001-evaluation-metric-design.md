@@ -106,3 +106,9 @@ raising; this keeps the merge gate total and avoids special-casing upstream.
 
 Added the calibration loop: rubric templates are versioned per metric and
 calibrated against the human-labeled gold set before any threshold change.
+
+## Addendum 2026-07-12
+
+Moved G-Eval to a 3-judge ensemble with disagreement flagging. Measured a
++0.15 average self-preference inflation with the single judge, matching the
+risk flagged in Option C. Other metrics stay single-judge for now.
