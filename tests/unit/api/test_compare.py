@@ -85,3 +85,9 @@ def test_find_regressions_sorted_input() -> None:
     """Regression list follows delta key order."""
     result = find_regressions({"b": -0.5, "a": -0.5})
     assert result == ["a", "b"]
+
+def test_tolerance_boundary_exclusive() -> None:
+    """Exactly -tolerance is not a regression."""
+    from api.routes.compare import REGRESSION_TOLERANCE
+
+    assert find_regressions({"m": -REGRESSION_TOLERANCE}) == []
