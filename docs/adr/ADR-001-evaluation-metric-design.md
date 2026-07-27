@@ -112,3 +112,8 @@ calibrated against the human-labeled gold set before any threshold change.
 Moved G-Eval to a 3-judge ensemble with disagreement flagging. Measured a
 +0.15 average self-preference inflation with the single judge, matching the
 risk flagged in Option C. Other metrics stay single-judge for now.
+
+## Addendum 2026-07-19
+
+Disagreement between ensemble judges now escalates the case for human review
+instead of being averaged away silently.
