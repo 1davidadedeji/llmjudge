@@ -101,3 +101,8 @@ comparability, which is the point of the platform).
 
 Clarified that degenerate inputs score as documented per metric rather than
 raising; this keeps the merge gate total and avoids special-casing upstream.
+
+## Addendum 2026-07-09
+
+Added the calibration loop: rubric templates are versioned per metric and
+calibrated against the human-labeled gold set before any threshold change.
