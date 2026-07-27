@@ -97,3 +97,9 @@ def test_default_threshold_documented() -> None:
 
     value = float(load_threshold_config()["default_threshold"])
     assert 0.0 < value < 1.0
+
+def test_gate_decision_empty_scores_fails() -> None:
+    """Empty scores never pass the gate."""
+    from ci.check_thresholds import gate_decision
+
+    assert not gate_decision(CONFIG, "agentflow", {})
