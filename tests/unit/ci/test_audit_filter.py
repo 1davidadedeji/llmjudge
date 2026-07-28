@@ -70,3 +70,8 @@ def test_load_overrides_roundtrip(tmp_path) -> None:
         "overrides:\n  - vuln_id: CVE-1\n    expires: '2999-01-01'\n    reason: ok\n"
     )
     assert load_overrides(str(cfg))[0].vuln_id == "CVE-1"
+
+def test_filter_boundary_date_is_live() -> None:
+    """An override expiring today still applies today."""
+    overrides = [Override("CVE-9", "2026-07-28", "boundary")]
+    assert filter_findings(["CVE-9"], overrides, "2026-07-28") == []
