@@ -116,3 +116,10 @@ def test_hashable_by_identity_fields() -> None:
     """Cases hash consistently for set membership."""
     case = LLMTestCase(input="q", actual_output="a")
     assert case in {case}
+
+def test_with_output_copies() -> None:
+    """with_output changes only the answer."""
+    case = LLMTestCase(input="q", actual_output="a", retrieval_context=["p"])
+    updated = case.with_output("b")
+    assert updated.actual_output == "b"
+    assert updated.retrieval_context == ["p"]
