@@ -185,3 +185,13 @@ def test_version_column_after_locking_fix() -> None:
 
     schema = Path("store/schema.sql").read_text()
     assert "version INTEGER" in schema
+
+def test_save_score_conflict_raises() -> None:
+    """A stale expected version raises OptimisticLockError."""
+    import pytest
+
+    from store.results_store import OptimisticLockError, ResultsStore
+
+    store = ResultsStore("postgresql://unused")
+    with pytest.raises(OptimisticLockError):
+        store.save_score("r-1", "m", 0.5, expected_version=99)
