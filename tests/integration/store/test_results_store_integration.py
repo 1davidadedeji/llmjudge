@@ -212,3 +212,12 @@ def test_insert_run_repos_diverse() -> None:
     for repo in ("retrieval-core", "agentflow", "graphmind", "llmjudge", "shipwright"):
         store.insert_run(f"run-{repo}", repo)
     assert len(conn.runs) == 5
+
+def test_score_zero_and_one_boundaries() -> None:
+    """Boundary scores 0.0 and 1.0 store fine."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    store.upsert_score("r-1", "lo", 0.0)
+    store.upsert_score("r-1", "hi", 1.0)
+    assert conn.scores[("r-1", "lo")] == 0.0
+    assert conn.scores[("r-1", "hi")] == 1.0
