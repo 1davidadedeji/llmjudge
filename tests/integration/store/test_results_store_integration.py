@@ -204,3 +204,11 @@ def test_concurrent_writers_both_succeed_sequentially() -> None:
     first.upsert_score("r-1", "a", 0.1)
     second.upsert_score("r-1", "b", 0.2)
     assert ("r-1", "a") in conn.scores and ("r-1", "b") in conn.scores
+
+def test_insert_run_repos_diverse() -> None:
+    """Runs for all five repos coexist."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    for repo in ("retrieval-core", "agentflow", "graphmind", "llmjudge", "shipwright"):
+        store.insert_run(f"run-{repo}", repo)
+    assert len(conn.runs) == 5
