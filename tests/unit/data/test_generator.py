@@ -95,3 +95,17 @@ def test_generate_skips_invalid_cases(tmp_path) -> None:
     generator = make_generator(tmp_path, ["{}", PAYLOAD])
     cases = generator.generate("economics", count=2)
     assert cases == [{"question": "q", "answer": "a", "context": "c"}]
+
+def test_gold_set_excludes_real_queries(tmp_path) -> None:
+    """Real production queries never leak into the synthetic gold set."""
+    import json as _json
+
+    generator = make_generator(tmp_path, [PAYLOAD])
+    generator.generate("geography", count=1)
+    real_dir = tmp_path / "real"
+    real_dir.mkdir()
+    leaked = {"question": "real-user-query", "provenance": "real"}
+    (real_dir / "queries.jsonl").write_text(_json.dumps(leaked))
+    gold = generator.load_gold_set()
+    assert all(case.get("provenance") == "synthetic" for case in gold)
+    assert not any(case.get("question") == "real-user-query" for case in gold)
