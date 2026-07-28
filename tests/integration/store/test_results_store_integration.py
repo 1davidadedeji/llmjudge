@@ -178,3 +178,10 @@ def test_schema_uses_timestamptz() -> None:
     schema = Path("store/schema.sql").read_text()
     assert "TIMESTAMPTZ" in schema
     assert " TIMESTAMP" not in schema
+
+def test_version_column_after_locking_fix() -> None:
+    """eval_scores carries a version column for optimistic locking."""
+    from pathlib import Path
+
+    schema = Path("store/schema.sql").read_text()
+    assert "version INTEGER" in schema
