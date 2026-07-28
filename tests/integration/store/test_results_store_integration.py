@@ -195,3 +195,12 @@ def test_save_score_conflict_raises() -> None:
     store = ResultsStore("postgresql://unused")
     with pytest.raises(OptimisticLockError):
         store.save_score("r-1", "m", 0.5, expected_version=99)
+
+def test_concurrent_writers_both_succeed_sequentially() -> None:
+    """Two sequential writers see each other's scores."""
+    conn = RecordingConnection()
+    first = make_store(conn)
+    second = make_store(conn)
+    first.upsert_score("r-1", "a", 0.1)
+    second.upsert_score("r-1", "b", 0.2)
+    assert ("r-1", "a") in conn.scores and ("r-1", "b") in conn.scores
