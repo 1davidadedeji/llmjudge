@@ -53,13 +53,14 @@ class SyntheticGenerator:
         Returns:
             cases: Generated QA case dicts.
         """
-        cache_path = self.cache_dir / f"{self.cache_key(topic)}.jsonl"
+        cache_path = self.cache_dir / "synthetic" / f"{self.cache_key(topic)}.jsonl"
         if cache_path.exists():
             return [json.loads(line) for line in cache_path.read_text().splitlines() if line]
         cases = []
         for _ in range(count):
             raw = self.judge.complete(QA_TEMPLATE.format(topic=topic))
             case = json.loads(raw)
+            case["provenance"] = "synthetic"
             if not self.validate_case(case):
                 cases.append(case)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
