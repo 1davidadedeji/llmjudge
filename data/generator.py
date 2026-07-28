@@ -63,7 +63,7 @@ class SyntheticGenerator:
             case["provenance"] = "synthetic"
             if not self.validate_case(case):
                 cases.append(case)
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
         cache_path.write_text("\n".join(json.dumps(case) for case in cases))
         return cases
 
@@ -74,8 +74,12 @@ class SyntheticGenerator:
             cases: Every cached case across topics.
         """
         cases = []
-        for path in sorted(self.cache_dir.glob("*.jsonl")):
-            cases.extend(json.loads(line) for line in path.read_text().splitlines() if line)
+        for path in sorted((self.cache_dir / "synthetic").glob("*.jsonl")):
+            for line in path.read_text().splitlines():
+                if line:
+                    case = json.loads(line)
+                    if case.get("provenance") == "synthetic":
+                        cases.append(case)
         return cases
 
     def topics(self) -> list[str]:
