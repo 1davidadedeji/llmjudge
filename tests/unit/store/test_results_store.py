@@ -171,3 +171,11 @@ def test_insert_run_params_order() -> None:
     make_store(conn).insert_run("r-7", "shipwright", "running")
     _, params = conn.statements[0]
     assert params[0] == "r-7" and params[1] == "shipwright" and params[2] == "running"
+
+def test_runs_by_status() -> None:
+    """runs_by_status filters on the status column."""
+    conn = FakeConnection()
+    make_store(conn).runs_by_status("failed")
+    sql, params = conn.statements[0]
+    assert "WHERE status = %s" in sql
+    assert params == ("failed",)
