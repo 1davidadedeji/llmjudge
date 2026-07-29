@@ -69,3 +69,9 @@ def test_score_band_mapping() -> None:
     assert score_band(0.9) == "strong"
     assert score_band(0.6) == "ok"
     assert score_band(0.1) == "weak"
+
+def test_metric_error_is_exception() -> None:
+    """MetricError derives from Exception."""
+    from metrics.base import MetricError
+
+    assert issubclass(MetricError, Exception)
