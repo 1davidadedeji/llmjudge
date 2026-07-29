@@ -97,6 +97,26 @@ class ResultsStore:
             "scores": {metric: score for metric, score in score_rows},
         }
 
+    def runs_by_status(self, status: str) -> list[dict]:
+        """Lists runs with a given status.
+
+        Args:
+            status: Status filter (queued, running, succeeded, failed).
+
+        Returns:
+            runs: Matching run rows newest-first.
+        """
+        with self.connect() as conn:
+            rows = conn.execute(
+                "SELECT id, repo, status, created_at FROM eval_runs"
+                " WHERE status = %s ORDER BY created_at DESC",
+                (status,),
+            ).fetchall()
+        return [
+            {"id": row[0], "repo": row[1], "status": row[2], "created_at": row[3]}
+            for row in rows
+        ]
+
     def average_score(self, repo: str, metric: str, days: int = 7) -> float | None:
         """Computes a repo's average metric score over recent days.
 
