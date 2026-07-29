@@ -61,3 +61,11 @@ def test_build_metric_unknown_raises() -> None:
 
     with pytest.raises(KeyError):
         build_metric("not-a-metric")
+
+def test_score_band_mapping() -> None:
+    """Score bands follow the documented cutoffs."""
+    from metrics.base import score_band
+
+    assert score_band(0.9) == "strong"
+    assert score_band(0.6) == "ok"
+    assert score_band(0.1) == "weak"
