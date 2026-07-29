@@ -186,3 +186,10 @@ def test_upsert_score_conflict_target() -> None:
     make_store(conn).upsert_score("r-1", "m", 0.5)
     sql, _ = conn.statements[0]
     assert "(run_id, metric)" in sql
+
+def test_list_runs_limit_param() -> None:
+    """list_runs binds the limit parameter."""
+    conn = FakeConnection()
+    make_store(conn).list_runs(limit=5)
+    _, params = conn.statements[0]
+    assert params[-1] == 5
