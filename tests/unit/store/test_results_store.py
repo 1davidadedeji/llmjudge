@@ -179,3 +179,10 @@ def test_runs_by_status() -> None:
     sql, params = conn.statements[0]
     assert "WHERE status = %s" in sql
     assert params == ("failed",)
+
+def test_upsert_score_conflict_target() -> None:
+    """Upsert targets the (run_id, metric) conflict key."""
+    conn = FakeConnection()
+    make_store(conn).upsert_score("r-1", "m", 0.5)
+    sql, _ = conn.statements[0]
+    assert "(run_id, metric)" in sql
