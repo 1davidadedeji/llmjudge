@@ -193,3 +193,11 @@ def test_list_runs_limit_param() -> None:
     make_store(conn).list_runs(limit=5)
     _, params = conn.statements[0]
     assert params[-1] == 5
+
+def test_get_run_selects_by_id() -> None:
+    """get_run selects on the run id."""
+    conn = FakeConnection()
+    make_store(conn).get_run("r-42")
+    sql, params = conn.statements[0]
+    assert "WHERE id = %s" in sql
+    assert params == ("r-42",)
