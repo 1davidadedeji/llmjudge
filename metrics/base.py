@@ -71,3 +71,6 @@ def score_band(score: float) -> str:
     if score >= 0.5:
         return "ok"
     return "weak"
+
+class MetricError(Exception):
+    """Raised when a metric cannot produce a score for a test case."""
