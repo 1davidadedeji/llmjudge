@@ -19,3 +19,4 @@
 {"example_id": "gold-cal-019", "question": "Who painted the Mona Lisa?", "answer": "Leonardo da Vinci.", "label": 1.0}
 {"example_id": "gold-cal-020", "question": "What is H2O?", "answer": "Hydrogen peroxide.", "label": 0.0}
 {"example_id": "gold-cal-021", "question": "Olympic rings count?", "answer": "Five.", "label": 1.0}
+{"example_id": "gold-cal-022", "question": "Titanic sank in which year?", "answer": "1912.", "label": 1.0}
