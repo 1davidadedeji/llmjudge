@@ -34,6 +34,7 @@ def load_queue_config() -> QueueConfig:
     """
     return QueueConfig(
         redis_url=os.environ.get("REDIS_URL", "redis://localhost:6379"),
+        queue_name=os.environ.get("EVAL_QUEUE_NAME", DEFAULT_QUEUE_NAME),
         job_timeout_s=int(os.environ.get("EVAL_JOB_TIMEOUT_S", "900")),
         max_tries=int(os.environ.get("EVAL_JOB_MAX_TRIES", "3")),
     )
