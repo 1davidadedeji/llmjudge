@@ -19,6 +19,7 @@ class QueueConfig:
         redis_url: Connection string for the Redis instance backing arq.
         job_timeout_s: Maximum wall-clock seconds one eval job may run.
         max_tries: Maximum attempts for a job before it is dead-lettered.
+        queue_name: Name of the queue eval jobs are enqueued onto.
     """
 
     redis_url: str
