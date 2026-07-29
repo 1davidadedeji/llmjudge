@@ -85,3 +85,24 @@ def suggest_threshold(labels: list[float], steps: int = 20) -> float:
             best_accuracy = accuracy
             best_threshold = candidate
     return best_threshold
+
+def cohens_kappa(judge_pass: list[bool], human_pass: list[bool]) -> float:
+    """Computes Cohen's kappa between judge and human pass decisions.
+
+    Args:
+        judge_pass: Judge pass/fail decisions.
+        human_pass: Human pass/fail decisions, aligned with the judge's.
+
+    Returns:
+        kappa: Agreement corrected for chance; 1.0 is perfect agreement.
+    """
+    if not human_pass:
+        return 1.0
+    total = len(human_pass)
+    observed = sum(j == h for j, h in zip(judge_pass, human_pass)) / total
+    judge_rate = sum(judge_pass) / total
+    human_rate = sum(human_pass) / total
+    expected = judge_rate * human_rate + (1 - judge_rate) * (1 - human_rate)
+    if expected == 1.0:
+        return 1.0
+    return (observed - expected) / (1 - expected)
