@@ -48,3 +48,5 @@ def dead_letter_key(queue_name: str) -> str:
         key: Redis key of the associated dead-letter queue.
     """
     return f"{queue_name}:dead"
+
+DEFAULT_QUEUE_NAME = "llmjudge:eval"
