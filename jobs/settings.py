@@ -25,6 +25,7 @@ class QueueConfig:
     redis_url: str
     job_timeout_s: int
     max_tries: int
+    queue_name: str
 
 
 def load_queue_config() -> QueueConfig:
