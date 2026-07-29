@@ -151,3 +151,15 @@ async def drain_dead_letter(ctx: dict[str, Any]) -> int:
     while await ctx["redis"].rpop(DEAD_LETTER_QUEUE) is not None:
         requeued += 1
     return requeued
+
+async def cancel_eval_run(redis: Any, run_id: str) -> bool:
+    """Cancels a queued eval run if it has not started yet.
+
+    Args:
+        redis: arq redis connection pool.
+        run_id: Identifier of the eval run to cancel.
+
+    Returns:
+        cancelled: True if the run was still queued and is now cancelled.
+    """
+    return bool(await redis.delete(f"arq:job:{run_id}"))
