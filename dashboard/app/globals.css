@@ -217,3 +217,8 @@ main section {
   content: "⇄ ";
   color: #8b949e;
 }
+
+.compare-table {
+  border: 1px solid #30363d;
+  border-radius: 0.4rem;
+}
