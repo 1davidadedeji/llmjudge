@@ -55,3 +55,10 @@ def test_validate_template_accepts_loaded() -> None:
     from metrics.rubrics import validate_template
 
     assert validate_template(load_rubric("g_eval")) == []
+
+def test_validate_template_flags_empty_criteria() -> None:
+    """Templates without criteria are rejected."""
+    from metrics.rubrics import RubricTemplate, validate_template
+
+    bad = RubricTemplate("x", 1, [], 0, 1)
+    assert validate_template(bad) == ["x: no criteria defined"]
