@@ -212,3 +212,8 @@ main section {
     overflow-x: auto;
   }
 }
+
+.run-compare h2::before {
+  content: "⇄ ";
+  color: #8b949e;
+}
