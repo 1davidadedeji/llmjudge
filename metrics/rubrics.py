@@ -78,3 +78,19 @@ def template_version(metric: str) -> int:
         version: Template version number.
     """
     return load_rubric(metric).version
+
+def validate_template(template: RubricTemplate) -> list[str]:
+    """Validates a loaded rubric template.
+
+    Args:
+        template: RubricTemplate to check.
+
+    Returns:
+        problems: Validation error messages; empty when valid.
+    """
+    problems = []
+    if not template.criteria:
+        problems.append(f"{template.metric}: no criteria defined")
+    if template.scale_min >= template.scale_max:
+        problems.append(f"{template.metric}: scale_min must be below scale_max")
+    return problems
