@@ -1,5 +1,5 @@
 metric: contextual_recall
-version: 1
+version: 2
 criteria:
   - "Each passage is judged on whether it supports the expected answer."
 scale_min: 0
