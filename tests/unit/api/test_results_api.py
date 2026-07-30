@@ -163,3 +163,9 @@ def test_404_detail_message() -> None:
     """Missing run 404 carries a detail message."""
     client = make_client(FakeStore())
     assert client.get("/runs/nope").json()["detail"] == "run not found"
+
+def test_list_metric_names() -> None:
+    """GET /metrics returns the registry names."""
+    client = make_client(FakeStore())
+    names = client.get("/metrics").json()
+    assert "faithfulness" in names
