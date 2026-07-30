@@ -1,5 +1,5 @@
 metric: contextual_precision
-version: 1
+version: 2
 criteria:
   - "Relevant passages ranked earlier contribute more to the score."
 scale_min: 0
