@@ -152,3 +152,9 @@ def test_list_repos() -> None:
     store.repos_with_runs = lambda: ["agentflow", "llmjudge"]
     client = make_client(store)
     assert client.get("/repos").json() == ["agentflow", "llmjudge"]
+
+def test_get_run_scores_shape() -> None:
+    """Run payload carries a scores mapping."""
+    client = make_client(FakeStore())
+    payload = client.get("/runs/r-1").json()
+    assert isinstance(payload["scores"], dict)
