@@ -94,3 +94,13 @@ def test_summarize_scores_sorted() -> None:
     from ci.merge_gate import summarize_scores
 
     assert summarize_scores({"b": 1.0, "a": 0.5}) == "a=0.500, b=1.000"
+
+def test_gate_result_frozen() -> None:
+    """GateResult is immutable so gate outcomes cannot be edited after the fact."""
+    import dataclasses
+
+    from ci.merge_gate import GateResult
+
+    result = GateResult(True, [])
+    with pytest.raises(dataclasses.FrozenInstanceError):
+        result.passed = False
