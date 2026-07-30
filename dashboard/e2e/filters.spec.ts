@@ -133,3 +133,8 @@ test("compare view shows deltas", async ({ page }) => {
   await page.goto("/compare");
   await expect(page.getByText("Delta", { exact: false }).first()).toBeVisible();
 });
+
+test("regression note lists metrics", async ({ page }) => {
+  await page.goto("/compare");
+  await expect(page.getByText("regressions", { exact: false }).first()).toBeVisible();
+});
