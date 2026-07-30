@@ -158,3 +158,14 @@ def list_repos(store: ResultsStore = Depends(get_store)) -> list[str]:
         repos: Sorted distinct repo names.
     """
     return store.repos_with_runs()
+
+@router.get("/metrics")
+def list_metric_names() -> list[str]:
+    """Lists the metric names the platform can score.
+
+    Returns:
+        names: Registered metric names.
+    """
+    from metrics.registry import METRIC_REGISTRY
+
+    return sorted(METRIC_REGISTRY)
