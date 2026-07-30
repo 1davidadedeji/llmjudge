@@ -169,3 +169,24 @@ def list_metric_names() -> list[str]:
     from metrics.registry import METRIC_REGISTRY
 
     return sorted(METRIC_REGISTRY)
+
+@router.get("/runs/{run_id}/summary")
+def run_summary(run_id: str, store: ResultsStore = Depends(get_store)) -> dict:
+    """Builds a compact summary of one run.
+
+    Args:
+        run_id: Run identifier.
+        store: Results store dependency.
+
+    Returns:
+        summary: Repo, status, and score count for the run.
+    """
+    run = store.get_run(run_id)
+    if run is None:
+        raise HTTPException(status_code=404, detail="run not found")
+    return {
+        "id": run_id,
+        "repo": run["repo"],
+        "status": run["status"],
+        "score_count": len(run["scores"]),
+    }
