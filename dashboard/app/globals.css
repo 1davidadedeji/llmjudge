@@ -206,3 +206,9 @@ main section {
 .compare-table td:first-child {
   width: 60%;
 }
+
+@media (max-width: 640px) {
+  .run-compare {
+    overflow-x: auto;
+  }
+}
