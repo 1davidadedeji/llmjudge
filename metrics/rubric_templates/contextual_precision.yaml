@@ -4,3 +4,5 @@ criteria:
   - "Relevant passages ranked earlier contribute more to the score."
 scale_min: 0
 scale_max: 1
+
+  - "A passage is relevant only if it helps answer the question."
