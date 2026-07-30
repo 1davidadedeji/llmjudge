@@ -49,3 +49,9 @@ def test_templates_exist_for_judged_metrics() -> None:
 
     for name in ("g_eval", "faithfulness", "hallucination"):
         assert Path(rubric_path(name)).exists()
+
+def test_validate_template_accepts_loaded() -> None:
+    """All shipped templates validate cleanly."""
+    from metrics.rubrics import validate_template
+
+    assert validate_template(load_rubric("g_eval")) == []
