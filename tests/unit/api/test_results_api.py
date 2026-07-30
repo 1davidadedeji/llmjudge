@@ -158,3 +158,8 @@ def test_get_run_scores_shape() -> None:
     client = make_client(FakeStore())
     payload = client.get("/runs/r-1").json()
     assert isinstance(payload["scores"], dict)
+
+def test_404_detail_message() -> None:
+    """Missing run 404 carries a detail message."""
+    client = make_client(FakeStore())
+    assert client.get("/runs/nope").json()["detail"] == "run not found"
