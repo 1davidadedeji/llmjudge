@@ -141,3 +141,9 @@ def test_download_missing_key_raises() -> None:
     store = make_store()
     with pytest.raises(KeyError):
         store.client.get_object(Bucket="test-bucket", Key="nope")
+
+def test_prefix_in_every_key() -> None:
+    """Every object key carries the configured prefix."""
+    store = make_store()
+    info = store.upload("gold", 1, b"x")
+    assert info.key.startswith("datasets/")
