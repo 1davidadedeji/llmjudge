@@ -85,3 +85,10 @@ def test_metric_selection_name_required() -> None:
 
     with pytest.raises(ValidationError):
         MetricSelection()
+
+def test_datasets_in_use() -> None:
+    """datasets_in_use deduplicates and sorts."""
+    from config.loader import datasets_in_use
+
+    config = load_config("llmjudge.example.yaml")
+    assert datasets_in_use(config) == sorted(datasets_in_use(config))
