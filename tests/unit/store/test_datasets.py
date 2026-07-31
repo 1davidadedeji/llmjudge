@@ -147,3 +147,10 @@ def test_prefix_in_every_key() -> None:
     store = make_store()
     info = store.upload("gold", 1, b"x")
     assert info.key.startswith("datasets/")
+
+def test_distinct_datasets_isolated() -> None:
+    """Two datasets never share keys."""
+    store = make_store()
+    first = store.upload("gold-a", 1, b"same")
+    second = store.upload("gold-b", 1, b"same")
+    assert first.key != second.key
