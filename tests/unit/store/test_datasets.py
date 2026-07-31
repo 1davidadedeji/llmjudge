@@ -154,3 +154,9 @@ def test_distinct_datasets_isolated() -> None:
     first = store.upload("gold-a", 1, b"same")
     second = store.upload("gold-b", 1, b"same")
     assert first.key != second.key
+
+def test_version_zero_padded_in_key() -> None:
+    """Version numbers are zero-padded in keys."""
+    store = make_store()
+    key = store.object_key("gold", 12, "abcdef012345")
+    assert "v0012-" in key
