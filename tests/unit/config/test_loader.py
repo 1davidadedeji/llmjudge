@@ -92,3 +92,9 @@ def test_datasets_in_use() -> None:
 
     config = load_config("llmjudge.example.yaml")
     assert datasets_in_use(config) == sorted(datasets_in_use(config))
+
+def test_config_immutable_semantics() -> None:
+    """Loaded repos compare equal to a reload."""
+    first = load_config("llmjudge.example.yaml")
+    second = load_config("llmjudge.example.yaml")
+    assert first == second
