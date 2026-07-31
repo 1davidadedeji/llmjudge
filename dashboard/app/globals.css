@@ -222,3 +222,10 @@ main section {
   border: 1px solid #30363d;
   border-radius: 0.4rem;
 }
+
+.metric-breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0.75rem 0;
+}
