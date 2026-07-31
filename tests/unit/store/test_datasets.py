@@ -126,3 +126,10 @@ def test_verify_intact() -> None:
     store = make_store()
     info = store.upload("gold", 1, b"data")
     assert store.verify(info)
+
+def test_verify_detects_tampering() -> None:
+    """verify rejects a payload changed after upload."""
+    store = make_store()
+    info = store.upload("gold", 1, b"data")
+    store.client.objects[("test-bucket", info.key)] = b"tampered"
+    assert not store.verify(info)
