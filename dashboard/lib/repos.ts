@@ -156,3 +156,17 @@ export function searchRuns(runs: RunSummary[], fragment: string): RunSummary[] {
 export function latestFailure(runs: RunSummary[]): RunSummary | undefined {
   return sortNewestFirst(runs).find((run) => run.status === "failed");
 }
+
+/**
+ * Groups runs by their repo field.
+ *
+ * @param runs - Runs to group.
+ * @returns grouped - Mapping of repo name to its runs.
+ */
+export function groupByRepo(runs: RunSummary[]): Record<string, RunSummary[]> {
+  const grouped: Record<string, RunSummary[]> = {};
+  for (const run of runs) {
+    grouped[run.repo] = [...(grouped[run.repo] ?? []), run];
+  }
+  return grouped;
+}
