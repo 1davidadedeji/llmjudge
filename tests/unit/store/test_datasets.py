@@ -133,3 +133,11 @@ def test_verify_detects_tampering() -> None:
     info = store.upload("gold", 1, b"data")
     store.client.objects[("test-bucket", info.key)] = b"tampered"
     assert not store.verify(info)
+
+def test_download_missing_key_raises() -> None:
+    """Downloading an unknown key raises KeyError."""
+    import pytest
+
+    store = make_store()
+    with pytest.raises(KeyError):
+        store.client.get_object(Bucket="test-bucket", Key="nope")
