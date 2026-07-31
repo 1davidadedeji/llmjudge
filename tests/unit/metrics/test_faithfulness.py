@@ -158,3 +158,9 @@ def test_claim_prompt_version_pinned() -> None:
     from metrics.faithfulness import CLAIM_PROMPT_VERSION
 
     assert CLAIM_PROMPT_VERSION == 1
+
+def test_normalize_answer_collapses_whitespace() -> None:
+    """Normalization collapses runs of whitespace."""
+    from metrics.faithfulness import normalize_answer
+
+    assert normalize_answer("a  b\tc") == "a b c"
