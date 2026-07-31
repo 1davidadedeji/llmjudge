@@ -48,7 +48,7 @@ class FaithfulnessMetric(BaseMetric):
         Returns:
             score: Fraction of answer claims entailed by the context.
         """
-        claims = self.extract_claims(test_case.actual_output)
+        claims = self.extract_claims(normalize_answer(test_case.actual_output))
         if not claims:
             return 1.0
         context = "\n".join(test_case.retrieval_context)
