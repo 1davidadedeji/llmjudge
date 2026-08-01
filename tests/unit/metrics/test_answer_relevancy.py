@@ -115,3 +115,7 @@ def test_is_on_topic_boundary() -> None:
     from metrics.answer_relevancy import is_on_topic
 
     assert is_on_topic(0.75) and not is_on_topic(0.74)
+
+def test_tokenize_keeps_digits() -> None:
+    """Tokenizer keeps numeric tokens."""
+    assert tokenize("version 2 rocks") == ["version", "2", "rocks"]
