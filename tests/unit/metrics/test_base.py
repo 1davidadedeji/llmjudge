@@ -75,3 +75,11 @@ def test_metric_error_is_exception() -> None:
     from metrics.base import MetricError
 
     assert issubclass(MetricError, Exception)
+
+def test_registry_values_are_base_metrics() -> None:
+    """Every registered class implements BaseMetric."""
+    from metrics.base import BaseMetric
+    from metrics.registry import METRIC_REGISTRY
+
+    for cls in METRIC_REGISTRY.values():
+        assert issubclass(cls, BaseMetric)
