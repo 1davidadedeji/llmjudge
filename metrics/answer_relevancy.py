@@ -31,7 +31,7 @@ def tokenize(text: str) -> list[str]:
     Returns:
         tokens: Alphabetic tokens with stopwords removed.
     """
-    return [tok for tok in re.findall(r"[a-z']+", text.lower()) if tok not in STOPWORDS]
+    return [tok for tok in re.findall(r"[a-z0-9']+", text.lower()) if tok not in STOPWORDS]
 
 
 class AnswerRelevancyMetric(BaseMetric):
