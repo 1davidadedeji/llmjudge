@@ -101,3 +101,10 @@ def test_mean_of_all_ones_is_zero() -> None:
 def test_ensemble_all_top_scores() -> None:
     """Three 5 verdicts average to 1.0."""
     assert make_metric(["5", "5", "5"]).measure(make_case()) == 1.0
+
+def test_ensemble_rejects_two_judges() -> None:
+    """Two judges are not a valid ensemble."""
+    import pytest
+
+    with pytest.raises(ValueError):
+        GEvalMetric([StubJudge([]), StubJudge([])])
