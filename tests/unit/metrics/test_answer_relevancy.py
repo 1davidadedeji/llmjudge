@@ -119,3 +119,8 @@ def test_is_on_topic_boundary() -> None:
 def test_tokenize_keeps_digits() -> None:
     """Tokenizer keeps numeric tokens."""
     assert tokenize("version 2 rocks") == ["version", "2", "rocks"]
+
+def test_overlap_case_insensitive() -> None:
+    """Overlap ignores casing."""
+    metric = AnswerRelevancyMetric(StubJudge([]))
+    assert metric.overlap("Sky", "sky") == 1.0
