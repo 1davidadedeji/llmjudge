@@ -67,3 +67,10 @@ def test_headroom() -> None:
 
     assert headroom(0, 2) == 2 * DEFAULT_POLICY.scale_up_depth
     assert headroom(100, 1) == 0
+
+def test_in_cooldown_window() -> None:
+    """Cooldown is active inside the window and clear after it."""
+    from jobs.autoscaling import in_cooldown
+
+    assert in_cooldown(100.0, 200.0)
+    assert not in_cooldown(100.0, 1000.0)
