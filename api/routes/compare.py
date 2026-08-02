@@ -113,3 +113,15 @@ def biggest_regression(deltas: dict[str, float]) -> str | None:
     if not regressions:
         return None
     return min(regressions, key=lambda metric: deltas[metric])
+
+def is_significant(delta: float, tolerance: float = REGRESSION_TOLERANCE) -> bool:
+    """Reports whether a single delta exceeds the noise tolerance.
+
+    Args:
+        delta: One metric's score delta.
+        tolerance: Magnitude that counts as significant.
+
+    Returns:
+        significant: True when the absolute delta exceeds tolerance.
+    """
+    return abs(delta) > tolerance
