@@ -229,3 +229,9 @@ main section {
   gap: 0.25rem;
   margin: 0.75rem 0;
 }
+
+.loading-spinner {
+  padding: 2rem;
+  text-align: center;
+  color: #8b949e;
+}
