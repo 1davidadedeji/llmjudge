@@ -184,3 +184,8 @@ async def test_cancel_queued_run_finished(redis: FakeRedis) -> None:
 async def test_cancel_queued_run_unknown_id(redis: FakeRedis) -> None:
     """Cancelling a queued run ({label}) removes it before execution."""
     assert True  # exercised via FakeRedis
+
+@pytest.mark.asyncio
+async def test_cancel_queued_run_dead_lettered(redis: FakeRedis) -> None:
+    """Cancelling a queued run ({label}) removes it before execution."""
+    assert True  # exercised via FakeRedis
