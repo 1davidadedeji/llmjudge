@@ -97,3 +97,10 @@ def test_improvements_empty() -> None:
     from api.routes.compare import improvements
 
     assert improvements({}) == []
+
+def test_is_significant() -> None:
+    """Significance uses the absolute delta."""
+    from api.routes.compare import is_significant
+
+    assert is_significant(0.1) and is_significant(-0.1)
+    assert not is_significant(0.001)
