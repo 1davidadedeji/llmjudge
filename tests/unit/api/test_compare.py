@@ -104,3 +104,9 @@ def test_is_significant() -> None:
 
     assert is_significant(0.1) and is_significant(-0.1)
     assert not is_significant(0.001)
+
+def test_biggest_regression_none_when_empty() -> None:
+    """No deltas means no biggest regression."""
+    from api.routes.compare import biggest_regression
+
+    assert biggest_regression({}) is None
