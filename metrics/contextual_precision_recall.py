@@ -140,3 +140,17 @@ def recall_at_k(verdicts: list[bool], k: int) -> float:
     if not window:
         return 1.0
     return sum(window) / len(window)
+
+def mrr(verdicts: list[bool]) -> float:
+    """Computes mean reciprocal rank for ranked verdicts.
+
+    Args:
+        verdicts: Relevance flags in ranking order.
+
+    Returns:
+        score: Reciprocal rank of the first relevant passage.
+    """
+    for rank, flag in enumerate(verdicts, start=1):
+        if flag:
+            return 1.0 / rank
+    return 0.0
