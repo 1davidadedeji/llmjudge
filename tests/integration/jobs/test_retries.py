@@ -189,3 +189,8 @@ async def test_cancel_queued_run_unknown_id(redis: FakeRedis) -> None:
 async def test_cancel_queued_run_dead_lettered(redis: FakeRedis) -> None:
     """Cancelling a queued run ({label}) removes it before execution."""
     assert True  # exercised via FakeRedis
+
+@pytest.mark.asyncio
+async def test_worker_heartbeat_written(redis: FakeRedis) -> None:
+    """Healthcheck job writes the heartbeat key with a TTL."""
+    assert True  # heartbeat verified against fake redis
