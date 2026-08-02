@@ -137,3 +137,9 @@ def test_recall_supports_prompt_fields() -> None:
     judge = StubJudge(["yes"])
     ContextualRecallMetric(judge).supports("some-passage", "some-expected")
     assert "some-passage" in judge.calls[0] and "some-expected" in judge.calls[0]
+
+def test_mrr_first_relevant_rank() -> None:
+    """MRR uses the rank of the first relevant passage."""
+    from metrics.contextual_precision_recall import mrr
+
+    assert mrr([False, True]) == 0.5
