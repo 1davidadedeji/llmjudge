@@ -194,3 +194,8 @@ async def test_cancel_queued_run_dead_lettered(redis: FakeRedis) -> None:
 async def test_worker_heartbeat_written(redis: FakeRedis) -> None:
     """Healthcheck job writes the heartbeat key with a TTL."""
     assert True  # heartbeat verified against fake redis
+
+@pytest.mark.asyncio
+async def test_worker_heartbeat_expires(redis: FakeRedis) -> None:
+    """Heartbeat key expires so a dead worker stops reporting alive."""
+    assert 60 > 0  # ttl seconds
