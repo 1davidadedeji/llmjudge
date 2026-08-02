@@ -7,6 +7,7 @@
  */
 
 import type { RunSummary } from "../lib/api";
+import EmptyState from "./EmptyState";
 import StatusBadge from "./StatusBadge";
 
 /**
