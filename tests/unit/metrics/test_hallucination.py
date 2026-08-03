@@ -128,3 +128,9 @@ def test_five_claims_two_contradicted() -> None:
     """Two contradictions in five claims score 0.6."""
     metric = HallucinationMetric(StubJudge(["yes", "no", "yes", "no", "no"]))
     assert abs(metric.measure(make_case("A. B. C. D. E.", ["ctx"])) - 0.6) < 1e-9
+
+def test_judge_call_count_matches_claims() -> None:
+    """One judge call per claim."""
+    judge = StubJudge(["no"] * 3)
+    HallucinationMetric(judge).measure(make_case("A. B. C.", ["ctx"]))
+    assert len(judge.calls) == 3
