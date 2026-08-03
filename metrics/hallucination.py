@@ -72,7 +72,8 @@ class HallucinationMetric(BaseMetric):
         Returns:
             contradicted: True when the judge answers yes.
         """
-        verdict = self.judge.complete(CONTRADICTION_PROMPT.format(context=context, claim=claim))
+        prompt = CONTRADICTION_PROMPT.format(context=context, claim=claim)
+        verdict = self.judge.complete(prompt)
         return verdict.strip().lower().startswith("yes")
 
 def hallucination_rate(score: float) -> float:
