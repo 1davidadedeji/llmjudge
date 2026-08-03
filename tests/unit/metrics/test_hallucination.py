@@ -123,3 +123,8 @@ def test_contradicted_claims_filtered() -> None:
     from metrics.hallucination import contradicted_claims
 
     assert contradicted_claims(["a", "b"], [False, True]) == ["b"]
+
+def test_five_claims_two_contradicted() -> None:
+    """Two contradictions in five claims score 0.6."""
+    metric = HallucinationMetric(StubJudge(["yes", "no", "yes", "no", "no"]))
+    assert abs(metric.measure(make_case("A. B. C. D. E.", ["ctx"])) - 0.6) < 1e-9
