@@ -67,6 +67,8 @@ def compare_runs(
     if base is None or candidate is None:
         raise HTTPException(status_code=404, detail="run not found")
     deltas = score_deltas(base["scores"], candidate["scores"])
+    from api.routes.results import serialize_run
+
     return {
         "base": base_run,
         "candidate": candidate_run,
