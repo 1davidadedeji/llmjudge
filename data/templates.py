@@ -21,6 +21,8 @@ TOPICS = [
     "biology",
     "physics",
     "economics",
+    "astronomy",
+    "linguistics",
 ]
 
 RAG_TEMPLATE = (
