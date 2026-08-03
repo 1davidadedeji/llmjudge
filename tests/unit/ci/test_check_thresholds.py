@@ -109,3 +109,15 @@ def test_repo_threshold_equality() -> None:
     from ci.check_thresholds import RepoThreshold
 
     assert RepoThreshold("a", 0.5) == RepoThreshold("a", 0.5)
+
+def test_repo_threshold_frozen() -> None:
+    """RepoThreshold is immutable once resolved."""
+    import dataclasses
+
+    import pytest
+
+    from ci.check_thresholds import RepoThreshold
+
+    entry = RepoThreshold("agentflow", 0.8)
+    with pytest.raises(dataclasses.FrozenInstanceError):
+        entry.threshold = 0.1
