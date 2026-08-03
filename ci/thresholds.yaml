@@ -7,7 +7,7 @@ repos:
     threshold: 0.80
 
   agentflow:
-    threshold: 0.79
+    threshold: 0.80
 
   graphmind:
     threshold: 0.77
