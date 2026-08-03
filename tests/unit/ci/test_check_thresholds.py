@@ -127,3 +127,10 @@ def test_blended_single_metric() -> None:
     from ci.check_thresholds import blended_score
 
     assert blended_score({"m": 0.42}) == 0.42
+
+def test_strictest_empty_raises() -> None:
+    """strictest on an empty config raises."""
+    import pytest
+
+    with pytest.raises(ValueError):
+        strictest({"repos": {}})
