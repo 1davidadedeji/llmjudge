@@ -134,3 +134,7 @@ def test_judge_call_count_matches_claims() -> None:
     judge = StubJudge(["no"] * 3)
     HallucinationMetric(judge).measure(make_case("A. B. C.", ["ctx"]))
     assert len(judge.calls) == 3
+
+def test_threshold_custom() -> None:
+    """Custom threshold is stored."""
+    assert HallucinationMetric(StubJudge([]), threshold=0.95).threshold == 0.95
