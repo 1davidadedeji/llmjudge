@@ -121,3 +121,9 @@ def test_repo_threshold_frozen() -> None:
     entry = RepoThreshold("agentflow", 0.8)
     with pytest.raises(dataclasses.FrozenInstanceError):
         entry.threshold = 0.1
+
+def test_blended_single_metric() -> None:
+    """A single metric blends to itself."""
+    from ci.check_thresholds import blended_score
+
+    assert blended_score({"m": 0.42}) == 0.42
