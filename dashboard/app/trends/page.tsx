@@ -14,6 +14,7 @@ export default function TrendsPage() {
   return (
     <section>
       <h2>Regression trends</h2>
+      <p>Newest {points.length} runs</p>
       <TrendChart points={points} threshold={0.8} />
     </section>
   );
