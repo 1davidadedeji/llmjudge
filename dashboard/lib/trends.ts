@@ -236,3 +236,14 @@ export function recentMean(points: TrendPoint[], size: number): number {
   }
   return window.reduce((sum, point) => sum + point.score, 0) / window.length;
 }
+
+/**
+ * Formats a trend direction label for display.
+ *
+ * @param points - Score points oldest-first.
+ * @returns label - Capitalized direction label.
+ */
+export function directionLabel(points: TrendPoint[]): string {
+  const direction = trendDirection(points);
+  return direction[0].toUpperCase() + direction.slice(1);
+}
