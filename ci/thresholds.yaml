@@ -16,4 +16,4 @@ repos:
     threshold: 0.83
 
   shipwright:
-    threshold: 0.85
+    threshold: 0.86
