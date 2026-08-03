@@ -221,3 +221,18 @@ export function consecutiveFailures(points: TrendPoint[], threshold: number): nu
 export function windowedSeries(points: TrendPoint[], size: number): TrendPoint[] {
   return points.slice(-size);
 }
+
+/**
+ * Computes the mean of the newest window of points.
+ *
+ * @param points - Score points oldest-first.
+ * @param size - Window size.
+ * @returns mean - Window mean; 0 for an empty window.
+ */
+export function recentMean(points: TrendPoint[], size: number): number {
+  const window = points.slice(-size);
+  if (window.length === 0) {
+    return 0;
+  }
+  return window.reduce((sum, point) => sum + point.score, 0) / window.length;
+}
