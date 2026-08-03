@@ -138,3 +138,8 @@ def test_judge_call_count_matches_claims() -> None:
 def test_threshold_custom() -> None:
     """Custom threshold is stored."""
     assert HallucinationMetric(StubJudge([]), threshold=0.95).threshold == 0.95
+
+def test_exclamation_splits_claims() -> None:
+    """Exclamations split claims too."""
+    metric = HallucinationMetric(StubJudge([]))
+    assert metric.extract_claims("Wow! Really? Yes.") == ["Wow!", "Really?", "Yes."]
