@@ -211,3 +211,13 @@ export function consecutiveFailures(points: TrendPoint[], threshold: number): nu
   }
   return count;
 }
+
+/**
+ * Slices the series down to the newest N points.
+ *
+ * @param points - Score points oldest-first.
+ * @returns result - See description.
+ */
+export function windowedSeries(points: TrendPoint[], size: number): TrendPoint[] {
+  return points.slice(-size);
+}
