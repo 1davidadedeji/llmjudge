@@ -117,3 +117,9 @@ def test_prompt_version_pinned() -> None:
     from metrics.hallucination import CONTRADICTION_PROMPT_VERSION
 
     assert CONTRADICTION_PROMPT_VERSION == 1
+
+def test_contradicted_claims_filtered() -> None:
+    """Only verdict-flagged claims are returned."""
+    from metrics.hallucination import contradicted_claims
+
+    assert contradicted_claims(["a", "b"], [False, True]) == ["b"]
