@@ -110,7 +110,10 @@ async def healthcheck_job(ctx: dict[str, Any]) -> bool:
     Returns:
         alive: Always True once the heartbeat write succeeds.
     """
-    await ctx["redis"].set("llmjudge:worker:heartbeat", "1", ex=60)
+    from datetime import datetime, timezone
+
+    stamp = datetime.now(timezone.utc).isoformat()
+    await ctx["redis"].set("llmjudge:worker:heartbeat", stamp, ex=60)
     return True
 
 async def enqueue_eval_suite(redis: Any, run_ids: list[str], repo: str) -> list[str]:
