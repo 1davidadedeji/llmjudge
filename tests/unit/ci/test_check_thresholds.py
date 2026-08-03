@@ -134,3 +134,9 @@ def test_strictest_empty_raises() -> None:
 
     with pytest.raises(ValueError):
         strictest({"repos": {}})
+
+def test_thresholds_file_repos_mapping() -> None:
+    """Thresholds file stores repos under a mapping."""
+    from ci.check_thresholds import load_threshold_config
+
+    assert isinstance(load_threshold_config()["repos"], dict)
