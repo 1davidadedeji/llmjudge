@@ -140,3 +140,11 @@ def test_thresholds_file_repos_mapping() -> None:
     from ci.check_thresholds import load_threshold_config
 
     assert isinstance(load_threshold_config()["repos"], dict)
+
+def test_config_path_constant() -> None:
+    """CONFIG_PATH points at the shipped file."""
+    from pathlib import Path
+
+    from ci.check_thresholds import CONFIG_PATH
+
+    assert Path(CONFIG_PATH).name == "thresholds.yaml"
