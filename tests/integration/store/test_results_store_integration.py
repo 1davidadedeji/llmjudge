@@ -229,3 +229,10 @@ def test_run_ids_unique_keys() -> None:
     store.insert_run("r-1", "agentflow")
     store.insert_run("r-1", "graphmind")
     assert conn.runs["r-1"]["repo"] == "graphmind
+
+def test_metric_names_with_underscores() -> None:
+    """Metric names containing underscores store fine."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    store.upsert_score("r-1", "contextual_precision", 0.8)
+    assert ("r-1", "contextual_precision") in conn.scores
