@@ -81,3 +81,8 @@ def test_expiring_soon_empty() -> None:
     from ci.audit_filter import expiring_soon
 
     assert expiring_soon([], "2026-08-04") == []
+
+def test_override_expiry_string_format() -> None:
+    """Expiry dates are ISO strings."""
+    override = Override("CVE-1", "2026-12-31", "x")
+    assert override.expires.count("-") == 2
