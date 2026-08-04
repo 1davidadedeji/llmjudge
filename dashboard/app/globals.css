@@ -248,3 +248,7 @@ main section {
   color: #8b949e;
   padding-bottom: 0.5rem;
 }
+
+.delta-down td:first-child {
+  border-left: none;
+}
