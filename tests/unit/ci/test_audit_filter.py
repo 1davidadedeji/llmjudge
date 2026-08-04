@@ -86,3 +86,9 @@ def test_override_expiry_string_format() -> None:
     """Expiry dates are ISO strings."""
     override = Override("CVE-1", "2026-12-31", "x")
     assert override.expires.count("-") == 2
+
+def test_filter_idempotent() -> None:
+    """Filtering twice changes nothing further."""
+    overrides = [Override("CVE-1", "2999-01-01", "ok")]
+    once = filter_findings(["CVE-1", "CVE-2"], overrides, "2026-07-28")
+    assert filter_findings(once, overrides, "2026-07-28") == once
