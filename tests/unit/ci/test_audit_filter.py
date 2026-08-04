@@ -75,3 +75,9 @@ def test_filter_boundary_date_is_live() -> None:
     """An override expiring today still applies today."""
     overrides = [Override("CVE-9", "2026-07-28", "boundary")]
     assert filter_findings(["CVE-9"], overrides, "2026-07-28") == []
+
+def test_expiring_soon_empty() -> None:
+    """No overrides means nothing expiring."""
+    from ci.audit_filter import expiring_soon
+
+    assert expiring_soon([], "2026-08-04") == []
