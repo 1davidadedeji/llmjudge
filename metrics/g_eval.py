@@ -19,7 +19,7 @@ G_EVAL_PROMPT = (
     "Score the answer against the rubric on a 1-5 scale. Reply with the number only."
 )
 DEFAULT_RUBRIC = "1: wrong or off-topic, 3: partially correct, 5: fully correct and complete"
-G_EVAL_PROMPT_VERSION = 1
+G_EVAL_PROMPT_VERSION = 2
 DISAGREEMENT_SPREAD = 0.25  # max-min spread that flags judge disagreement
 
 
