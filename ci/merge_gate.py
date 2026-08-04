@@ -69,7 +69,8 @@ def evaluate_gate(payload: dict, thresholds: dict[str, float]) -> GateResult:
         result: GateResult listing any metrics that regressed.
     """
     if payload["status"] == "unknown":
-        return GateResult(passed=True, regressions=[])
+        # Fail closed: a gate that could not observe the run must block, not pass.
+        return GateResult(passed=False, regressions=["<gate-timeout>"])
     scores = payload.get("scores", {})
     regressions = [name for name, floor in thresholds.items() if scores.get(name, 0.0) < floor]
     return GateResult(passed=not regressions, regressions=regressions)

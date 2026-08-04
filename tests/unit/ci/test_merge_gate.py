@@ -104,3 +104,9 @@ def test_gate_result_frozen() -> None:
     result = GateResult(True, [])
     with pytest.raises(dataclasses.FrozenInstanceError):
         result.passed = False
+
+def test_evaluate_gate_fails_closed_on_timeout() -> None:
+    """A timed-out gate run blocks the merge instead of silently passing."""
+    result = evaluate_gate({"status": "unknown", "scores": {}}, THRESHOLDS)
+    assert not result.passed
+    assert result.regressions == ["<gate-timeout>"]
