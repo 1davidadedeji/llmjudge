@@ -34,3 +34,9 @@ def test_suggest_threshold_perfect_split() -> None:
 def test_suggest_threshold_empty() -> None:
     """Empty labels fall back to 0.5."""
     assert suggest_threshold([]) == 0.5
+
+def test_cohens_kappa_perfect() -> None:
+    """Perfect agreement gives kappa 1.0."""
+    from calibration.calibrate import cohens_kappa
+
+    assert cohens_kappa([True, False], [True, False]) == 1.0
