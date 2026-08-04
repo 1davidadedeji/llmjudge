@@ -85,3 +85,20 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+def expiring_soon(overrides: list[Override], today: str, window_days: int = 14) -> list[Override]:
+    """Lists overrides expiring within the warning window.
+
+    Args:
+        overrides: Accepted-risk entries from load_overrides().
+        today: Current date as an ISO string.
+        window_days: Days ahead to warn about.
+
+    Returns:
+        expiring: Overrides whose expiry falls inside the window.
+    """
+    import datetime
+
+    today_date = datetime.date.fromisoformat(today)
+    horizon = (today_date + datetime.timedelta(days=window_days)).isoformat()
+    return [o for o in overrides if today <= o.expires <= horizon]
