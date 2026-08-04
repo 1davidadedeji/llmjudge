@@ -242,3 +242,9 @@ main section {
   font-size: 0.85rem;
   color: #8b949e;
 }
+
+.run-compare caption {
+  text-align: left;
+  color: #8b949e;
+  padding-bottom: 0.5rem;
+}
