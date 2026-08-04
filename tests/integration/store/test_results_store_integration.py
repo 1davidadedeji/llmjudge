@@ -221,3 +221,11 @@ def test_score_zero_and_one_boundaries() -> None:
     store.upsert_score("r-1", "hi", 1.0)
     assert conn.scores[("r-1", "lo")] == 0.0
     assert conn.scores[("r-1", "hi")] == 1.0
+
+def test_run_ids_unique_keys() -> None:
+    """Run ids act as primary keys in the fake."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    store.insert_run("r-1", "agentflow")
+    store.insert_run("r-1", "graphmind")
+    assert conn.runs["r-1"]["repo"] == "graphmind
