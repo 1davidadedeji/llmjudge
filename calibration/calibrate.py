@@ -106,3 +106,17 @@ def cohens_kappa(judge_pass: list[bool], human_pass: list[bool]) -> float:
     if expected == 1.0:
         return 1.0
     return (observed - expected) / (1 - expected)
+
+def mean_absolute_error(judge_scores: list[float], labels: list[float]) -> float:
+    """Computes MAE between judge scores and human labels.
+
+    Args:
+        judge_scores: Scores produced by the judge.
+        labels: Human labels aligned with the judge scores.
+
+    Returns:
+        mae: Mean absolute gap; 0.0 for empty inputs.
+    """
+    if not labels:
+        return 0.0
+    return sum(abs(s - label) for s, label in zip(judge_scores, labels)) / len(labels)
