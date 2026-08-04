@@ -40,3 +40,9 @@ def test_cohens_kappa_perfect() -> None:
     from calibration.calibrate import cohens_kappa
 
     assert cohens_kappa([True, False], [True, False]) == 1.0
+
+def test_cohens_kappa_empty() -> None:
+    """Empty inputs give kappa 1.0 by convention."""
+    from calibration.calibrate import cohens_kappa
+
+    assert cohens_kappa([], []) == 1.0
