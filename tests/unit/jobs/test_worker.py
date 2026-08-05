@@ -31,3 +31,10 @@ def test_describe_job_format() -> None:
 def test_queue_name_mentions_eval() -> None:
     """Queue name identifies the eval purpose in its label."""
     assert ":eval" in QUEUE_NAME
+
+def test_parse_queue_depth() -> None:
+    """Depth parsing handles valid and malformed payloads."""
+    from jobs.arq_worker import parse_queue_depth
+
+    assert parse_queue_depth("7") == 7
+    assert parse_queue_depth("junk") == 0
