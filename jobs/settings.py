@@ -53,3 +53,14 @@ def dead_letter_key(queue_name: str) -> str:
     return f"{queue_name}:dead"
 
 DEFAULT_QUEUE_NAME = "llmjudge:eval"
+
+def is_dead_letter_enabled(config: QueueConfig) -> bool:
+    """Reports whether dead-lettering is active for the queue.
+
+    Args:
+        config: Queue configuration to inspect.
+
+    Returns:
+        enabled: True when the queue allows more than one attempt.
+    """
+    return config.max_tries > 1
