@@ -153,3 +153,8 @@ test("keyboard navigation reaches filters", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("failed", { exact: false }).first()).toBeVisible();
 });
+
+test("special-character repo names render", async ({ page }) => {
+  await page.goto("/repos/shipwright");
+  await expect(page.getByText("shipwright", { exact: false }).first()).toBeVisible();
+});
