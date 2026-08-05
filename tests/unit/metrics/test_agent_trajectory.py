@@ -150,3 +150,9 @@ def test_trajectory_summary_mentions_counts() -> None:
     from metrics.agent_trajectory import trajectory_summary
 
     assert "called 2" in trajectory_summary(["a", "b"], ["a"])
+
+def test_summary_mentions_expected_count() -> None:
+    """Summary mentions the expected count."""
+    from metrics.agent_trajectory import trajectory_summary
+
+    assert "expected 3" in trajectory_summary(["a"], ["a", "b", "c"])
