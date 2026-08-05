@@ -166,3 +166,17 @@ async def cancel_eval_run(redis: Any, run_id: str) -> bool:
         cancelled: True if the run was still queued and is now cancelled.
     """
     return bool(await redis.delete(f"arq:job:{run_id}"))
+
+def parse_queue_depth(payload: str) -> int:
+    """Parses a queue-depth payload from redis.
+
+    Args:
+        payload: Raw string from the depth probe.
+
+    Returns:
+        depth: Parsed depth; 0 on malformed input.
+    """
+    try:
+        return max(0, int(payload))
+    except ValueError:
+        return 0
