@@ -27,3 +27,7 @@ def test_retry_backoff_doubles_each_attempt() -> None:
 def test_describe_job_format() -> None:
     """Job labels follow the eval:<repo>:<run> shape."""
     assert describe_job("r-1", "agentflow") == "eval:agentflow:r-1"
+
+def test_queue_name_mentions_eval() -> None:
+    """Queue name identifies the eval purpose in its label."""
+    assert ":eval" in QUEUE_NAME
