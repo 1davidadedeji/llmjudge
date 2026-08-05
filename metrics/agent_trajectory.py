@@ -133,3 +133,15 @@ def step_count_delta(called: list[str], expected: list[str]) -> int:
         delta: Extra step count; negative when the run was shorter.
     """
     return len(called) - len(expected)
+
+def trajectory_summary(called: list[str], expected: list[str]) -> str:
+    """Builds a one-line summary of a scored trajectory.
+
+    Args:
+        called: Tools the agent invoked, in order.
+        expected: Tools the run was expected to invoke.
+
+    Returns:
+        summary: Human-readable comparison of called versus expected tools.
+    """
+    return f"called {len(called)} tools, expected {len(expected)}: {', '.join(called)}"
