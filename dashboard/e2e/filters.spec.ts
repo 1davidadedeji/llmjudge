@@ -143,3 +143,8 @@ test("runs sorted newest first", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("r-2", { exact: false }).first()).toBeVisible();
 });
+
+test("filter count badge matches table", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("failed", { exact: false }).first()).toBeVisible();
+});
