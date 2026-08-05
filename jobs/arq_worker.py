@@ -74,7 +74,7 @@ class WorkerSettings:
 
     functions = [run_eval_job, healthcheck_job]
     redis_settings = _redis_settings()
-    max_jobs = 8
+    max_jobs = 12
     job_timeout = DEFAULT_JOB_TIMEOUT_S
     max_tries = DEFAULT_MAX_TRIES
     on_failure = on_job_failure
