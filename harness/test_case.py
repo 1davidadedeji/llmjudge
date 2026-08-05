@@ -33,6 +33,19 @@ class LLMTestCase:
     expected_tools: list[str] = field(default_factory=list)
     metadata: dict = field(default_factory=dict)
 
+    def tag(self, key: str, value: str) -> "LLMTestCase":
+        """Returns a copy with one metadata tag added.
+
+        Args:
+            key: Metadata key to set.
+            value: Metadata value to store.
+
+        Returns:
+            tagged: Case with the metadata entry added.
+        """
+        metadata = {**self.metadata, key: value}
+        return replace(self, metadata=metadata)
+
     def with_output(self, actual_output: str) -> "LLMTestCase":
         """Returns a copy of the case with a different generated answer.
 
