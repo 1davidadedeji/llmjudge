@@ -158,3 +158,8 @@ test("special-character repo names render", async ({ page }) => {
   await page.goto("/repos/shipwright");
   await expect(page.getByText("shipwright", { exact: false }).first()).toBeVisible();
 });
+
+test("long run ids truncate gracefully", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
+});
