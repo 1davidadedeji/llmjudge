@@ -138,3 +138,8 @@ test("regression note lists metrics", async ({ page }) => {
   await page.goto("/compare");
   await expect(page.getByText("regressions", { exact: false }).first()).toBeVisible();
 });
+
+test("runs sorted newest first", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("r-2", { exact: false }).first()).toBeVisible();
+});
