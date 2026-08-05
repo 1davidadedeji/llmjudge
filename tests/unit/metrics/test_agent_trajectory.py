@@ -156,3 +156,8 @@ def test_summary_mentions_expected_count() -> None:
     from metrics.agent_trajectory import trajectory_summary
 
     assert "expected 3" in trajectory_summary(["a"], ["a", "b", "c"])
+
+def test_efficiency_shorter_run_capped() -> None:
+    """Shorter-than-expected runs cap at one."""
+    metric = AgentTrajectoryMetric()
+    assert metric.efficiency_score(["a"], ["a", "b"]) == 1.0
