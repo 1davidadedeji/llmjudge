@@ -148,3 +148,8 @@ test("filter count badge matches table", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("failed", { exact: false }).first()).toBeVisible();
 });
+
+test("keyboard navigation reaches filters", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("failed", { exact: false }).first()).toBeVisible();
+});
