@@ -123,3 +123,7 @@ def test_with_output_copies() -> None:
     updated = case.with_output("b")
     assert updated.actual_output == "b"
     assert updated.retrieval_context == ["p"]
+
+def test_cases_equal_by_value() -> None:
+    """Cases with identical fields compare equal."""
+    assert LLMTestCase(input="q", actual_output="a") == LLMTestCase(input="q", actual_output="a")
