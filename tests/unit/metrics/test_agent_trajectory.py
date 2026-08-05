@@ -144,3 +144,9 @@ def test_order_extra_tools_ignored() -> None:
 def test_threshold_stored() -> None:
     """Threshold is stored on the metric."""
     assert AgentTrajectoryMetric(threshold=0.9).threshold == 0.9
+
+def test_trajectory_summary_mentions_counts() -> None:
+    """Summary mentions called and expected counts."""
+    from metrics.agent_trajectory import trajectory_summary
+
+    assert "called 2" in trajectory_summary(["a", "b"], ["a"])
