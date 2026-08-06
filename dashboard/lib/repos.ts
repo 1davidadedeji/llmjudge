@@ -170,3 +170,17 @@ export function groupByRepo(runs: RunSummary[]): Record<string, RunSummary[]> {
   }
   return grouped;
 }
+
+/**
+ * Computes the share of succeeded runs.
+ *
+ * @param runs - Runs to measure.
+ * @returns rate - Success rate in [0, 1]; 1 for an empty list.
+ */
+export function successRate(runs: RunSummary[]): number {
+  if (runs.length === 0) {
+    return 1;
+  }
+  const succeeded = runs.filter((run) => run.status === "succeeded").length;
+  return succeeded / runs.length;
+}
