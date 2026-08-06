@@ -7,6 +7,7 @@
  */
 
 import type { RunSummary } from "../lib/api";
+import { formatTimestamp } from "../lib/format";
 import StatusBadge from "./StatusBadge";
 
 export default function DrillDownTable({ runs }: { runs: RunSummary[] }) {
