@@ -138,3 +138,8 @@ so dataset edits cannot silently change what a case exercises.
 
 Judge: the LLM client scoring a metric. Gold set: the human-labeled
 calibration dataset. Gate: the CI check that blocks regressions from merging.
+
+## Related decisions
+
+The merge-gate threshold model (per-repo, blended) is documented in
+ci/thresholds.yaml and will get its own ADR if it moves to per-metric gating.
