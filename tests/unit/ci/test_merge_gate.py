@@ -7,6 +7,8 @@ Contains:
     test_evaluate_gate_blocks_on_regression: one score below floor blocks
 """
 
+import pytest
+
 from ci.merge_gate import evaluate_gate, threshold_for
 
 THRESHOLDS = {"faithfulness": 0.80, "hallucination": 0.90}
