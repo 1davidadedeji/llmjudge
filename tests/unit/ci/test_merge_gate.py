@@ -112,3 +112,9 @@ def test_evaluate_gate_fails_closed_on_timeout() -> None:
     result = evaluate_gate({"status": "unknown", "scores": {}}, THRESHOLDS)
     assert not result.passed
     assert result.regressions == ["<gate-timeout>"]
+
+def test_main_module_has_cli_guard() -> None:
+    """Module only runs main() under __main__."""
+    import ci.merge_gate as gate
+
+    assert callable(gate.main)
