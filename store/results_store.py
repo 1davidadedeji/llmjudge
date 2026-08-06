@@ -97,6 +97,21 @@ class ResultsStore:
             "scores": {metric: score for metric, score in score_rows},
         }
 
+    def failing_metrics(self, repo: str, floor: float) -> list[str]:
+        """Lists metrics whose latest score is below a floor.
+
+        Args:
+            repo: Repo to inspect.
+            floor: Score floor.
+
+        Returns:
+            metrics: Metric names currently below the floor.
+        """
+        latest = self.latest_run(repo)
+        if latest is None:
+            return []
+        return [name for name, score in latest["scores"].items() if score < floor]
+
     def runs_by_status(self, status: str) -> list[dict]:
         """Lists runs with a given status.
 
