@@ -7,6 +7,7 @@
  */
 
 import DrillDownTable from "../../../components/DrillDownTable";
+import MetricBreakdown from "../../../components/MetricBreakdown";
 import { sortNewestFirst } from "../../../lib/repos";
 import RepoHeader from "../../../components/RepoHeader";
 import { fetchRuns } from "../../../lib/api";
