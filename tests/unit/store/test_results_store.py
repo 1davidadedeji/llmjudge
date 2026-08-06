@@ -201,3 +201,9 @@ def test_get_run_selects_by_id() -> None:
     sql, params = conn.statements[0]
     assert "WHERE id = %s" in sql
     assert params == ("r-42",)
+
+def test_failing_metrics_empty_without_runs() -> None:
+    """failing_metrics returns empty when the repo has no runs."""
+    conn = FakeConnection()
+    conn.rows = []
+    assert make_store(conn).failing_metrics("agentflow", 0.5) == []
