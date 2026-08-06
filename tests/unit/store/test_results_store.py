@@ -207,3 +207,10 @@ def test_failing_metrics_empty_without_runs() -> None:
     conn = FakeConnection()
     conn.rows = []
     assert make_store(conn).failing_metrics("agentflow", 0.5) == []
+
+def test_schema_index_on_repo_created() -> None:
+    """Schema indexes runs by repo and creation time."""
+    from pathlib import Path
+
+    schema = Path("store/schema.sql").read_text()
+    assert "idx_eval_runs_repo_created" in schema
