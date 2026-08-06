@@ -122,3 +122,8 @@ instead of being averaged away silently.
 
 G-Eval: NLG evaluation with GPT-4-style rubric judges (Liu et al., 2023).
 RAGAS: reference-free RAG evaluation. Internal: retrieval-core eval notes.
+
+## Addendum 2026-07-27
+
+Golden-set coverage extended; golden tests now assert per-case verdict counts
+so dataset edits cannot silently change what a case exercises.
