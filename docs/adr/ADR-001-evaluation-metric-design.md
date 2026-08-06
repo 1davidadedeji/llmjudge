@@ -133,3 +133,8 @@ RAGAS: reference-free RAG evaluation. Internal: retrieval-core eval notes.
 
 Golden-set coverage extended; golden tests now assert per-case verdict counts
 so dataset edits cannot silently change what a case exercises.
+
+## Glossary
+
+Judge: the LLM client scoring a metric. Gold set: the human-labeled
+calibration dataset. Gate: the CI check that blocks regressions from merging.
