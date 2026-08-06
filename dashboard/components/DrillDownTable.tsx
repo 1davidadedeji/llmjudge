@@ -19,7 +19,7 @@ export default function DrillDownTable({ runs }: { runs: RunSummary[] }) {
             <td>
               <StatusBadge status={run.status} />
             </td>
-            <td>{run.created_at}</td>
+            <td>{formatTimestamp(run.created_at)}</td>
           </tr>
         ))}
       </tbody>
