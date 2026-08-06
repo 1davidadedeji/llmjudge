@@ -214,3 +214,10 @@ def test_schema_index_on_repo_created() -> None:
 
     schema = Path("store/schema.sql").read_text()
     assert "idx_eval_runs_repo_created" in schema
+
+def test_finish_run_binds_run_id_last() -> None:
+    """finish_run binds the run id as the last param."""
+    conn = FakeConnection()
+    make_store(conn).finish_run("r-3", "failed")
+    _, params = conn.statements[0]
+    assert params[-1] == "r-3"
