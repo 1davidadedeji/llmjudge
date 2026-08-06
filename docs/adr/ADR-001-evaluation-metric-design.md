@@ -1,6 +1,7 @@
 # ADR-001: Evaluation metric design
 
 - Status: accepted
+- Reviewers: Kenny
 - Date: 2026-06-13
 - Deciders: Peter, David, Yannick, Angel
 
