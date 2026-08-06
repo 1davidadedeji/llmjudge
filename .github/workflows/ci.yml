@@ -45,7 +45,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e .[dev]
-      - run: pytest tests/integration -q
+      - run: pytest tests/integration -q --junitxml=integration-junit.xml
 
   test:
     runs-on: ubuntu-latest
