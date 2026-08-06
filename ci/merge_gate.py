@@ -148,3 +148,14 @@ def summarize_scores(scores: dict[str, float]) -> str:
         summary: Comma-separated metric=score pairs, sorted by metric name.
     """
     return ", ".join(f"{name}={scores[name]:.3f}" for name in sorted(scores))
+
+def retryable_status(status: str) -> bool:
+    """Reports whether a run status is worth re-polling.
+
+    Args:
+        status: Run status string from the API.
+
+    Returns:
+        retryable: True while the run is still making progress.
+    """
+    return status in ("queued", "running")
