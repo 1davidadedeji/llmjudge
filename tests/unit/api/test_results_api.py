@@ -176,3 +176,10 @@ def test_latest_run_route() -> None:
     store.latest_run = lambda repo: store.runs["r-1"]
     client = make_client(store)
     assert client.get("/repos/agentflow/latest").json()["id"] == "r-1"
+
+def test_latest_run_404_without_runs() -> None:
+    """Latest-run route 404s when the repo has no runs."""
+    store = FakeStore()
+    store.latest_run = lambda repo: None
+    client = make_client(store)
+    assert client.get("/repos/empty/latest").status_code == 404
