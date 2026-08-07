@@ -169,3 +169,10 @@ def test_list_metric_names() -> None:
     client = make_client(FakeStore())
     names = client.get("/metrics").json()
     assert "faithfulness" in names
+
+def test_latest_run_route() -> None:
+    """GET /repos/{repo}/latest returns the newest run."""
+    store = FakeStore()
+    store.latest_run = lambda repo: store.runs["r-1"]
+    client = make_client(store)
+    assert client.get("/repos/agentflow/latest").json()["id"] == "r-1"
