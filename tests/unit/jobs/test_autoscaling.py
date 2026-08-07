@@ -12,7 +12,7 @@ from jobs.autoscaling import DEFAULT_POLICY, desired_workers, should_scale_up
 
 def test_desired_workers_empty_queue() -> None:
     """Empty queue keeps the minimum worker count."""
-    assert desired_workers(0) == DEFAULT_POLICY.min_workers
+    assert desired_workers(0) == 2
 
 
 def test_desired_workers_scales_with_depth() -> None:
