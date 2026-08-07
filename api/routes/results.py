@@ -190,3 +190,19 @@ def run_summary(run_id: str, store: ResultsStore = Depends(get_store)) -> dict:
         "status": run["status"],
         "score_count": len(run["scores"]),
     }
+
+@router.get("/repos/{repo}/latest")
+def latest_run(repo: str, store: ResultsStore = Depends(get_store)) -> dict:
+    """Fetches the most recent run for a repo.
+
+    Args:
+        repo: Repo whose latest run is wanted.
+        store: Results store dependency.
+
+    Returns:
+        run: Newest run payload for the repo.
+    """
+    run = store.latest_run(repo)
+    if run is None:
+        raise HTTPException(status_code=404, detail="no runs for repo")
+    return run
