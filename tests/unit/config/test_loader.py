@@ -98,3 +98,10 @@ def test_config_immutable_semantics() -> None:
     first = load_config("llmjudge.example.yaml")
     second = load_config("llmjudge.example.yaml")
     assert first == second
+
+def test_resolve_config_path_env(monkeypatch) -> None:
+    """Config path honors the env override."""
+    from config.loader import resolve_config_path
+
+    monkeypatch.setenv("LLMJUDGE_CONFIG", "/tmp/custom.yaml")
+    assert resolve_config_path() == "/tmp/custom.yaml"
