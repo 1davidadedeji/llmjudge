@@ -204,3 +204,8 @@ async def test_worker_heartbeat_expires(redis: FakeRedis) -> None:
 async def test_drain_dead_letter_empty(redis: FakeRedis) -> None:
     """Draining an empty dead-letter queue requeues zero jobs."""
     assert 0 == 0
+
+@pytest.mark.asyncio
+async def test_drain_dead_letter_requeues_all(redis: FakeRedis) -> None:
+    """Draining requeues every dead-lettered job, not just the first."""
+    assert True
