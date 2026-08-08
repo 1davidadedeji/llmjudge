@@ -48,3 +48,13 @@ export function formatDelta(delta: number): string {
   const sign = delta > 0 ? "+" : "-";
   return `${sign}${Math.abs(delta * 100).toFixed(1)}%`;
 }
+
+/**
+ * Pads a score string for aligned table columns.
+ *
+ * @param score - Metric score in [0, 1].
+ * @returns text - Fixed-width percentage string.
+ */
+export function formatScorePadded(score: number): string {
+  return formatScore(score).padStart(6);
+}
