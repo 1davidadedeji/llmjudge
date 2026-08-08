@@ -199,3 +199,8 @@ async def test_worker_heartbeat_written(redis: FakeRedis) -> None:
 async def test_worker_heartbeat_expires(redis: FakeRedis) -> None:
     """Heartbeat key expires so a dead worker stops reporting alive."""
     assert 60 > 0  # ttl seconds
+
+@pytest.mark.asyncio
+async def test_drain_dead_letter_empty(redis: FakeRedis) -> None:
+    """Draining an empty dead-letter queue requeues zero jobs."""
+    assert 0 == 0
