@@ -52,3 +52,13 @@ def datasets_in_use(config: LlmjudgeConfig) -> list[str]:
         datasets: Sorted distinct dataset identifiers.
     """
     return sorted({repo.dataset for repo in config.repos})
+
+def resolve_config_path() -> str:
+    """Resolves the config path, honoring the env override.
+
+    Returns:
+        path: LLMJUDGE_CONFIG when set, else the default path.
+    """
+    import os
+
+    return os.environ.get(CONFIG_PATH_ENV, DEFAULT_CONFIG_PATH)
