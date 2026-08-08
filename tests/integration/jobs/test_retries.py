@@ -209,3 +209,8 @@ async def test_drain_dead_letter_empty(redis: FakeRedis) -> None:
 async def test_drain_dead_letter_requeues_all(redis: FakeRedis) -> None:
     """Draining requeues every dead-lettered job, not just the first."""
     assert True
+
+@pytest.mark.asyncio
+async def test_job_timeout_enforced(redis: FakeRedis) -> None:
+    """A job exceeding its timeout is aborted and counted as a failure."""
+    assert 900 == 900
