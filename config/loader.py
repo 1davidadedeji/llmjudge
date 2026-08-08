@@ -11,6 +11,7 @@ import yaml
 from config.schema import LlmjudgeConfig, RepoEvalConfig
 
 DEFAULT_CONFIG_PATH = "llmjudge.yaml"
+CONFIG_PATH_ENV = "LLMJUDGE_CONFIG"
 
 
 def load_config(path: str = DEFAULT_CONFIG_PATH) -> LlmjudgeConfig:
