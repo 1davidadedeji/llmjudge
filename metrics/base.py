@@ -33,6 +33,7 @@ class BaseMetric(ABC):
     """
 
     name: str = "base"
+    version: int = 1
     threshold: float
 
     @abstractmethod
