@@ -168,3 +168,9 @@ def test_content_hash_binary_safe() -> None:
 def test_store_default_prefix() -> None:
     """Default prefix is datasets."""
     assert DatasetStore("b", client=FakeS3Client()).prefix == "datasets"
+
+def test_uploaded_payload_stored_under_bucket() -> None:
+    """Upload writes to the configured bucket."""
+    store = make_store()
+    info = store.upload("gold", 1, b"x")
+    assert ("test-bucket", info.key) in store.client.objects
