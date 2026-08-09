@@ -148,3 +148,9 @@ def test_config_path_constant() -> None:
     from ci.check_thresholds import CONFIG_PATH
 
     assert Path(CONFIG_PATH).name == "thresholds.yaml"
+
+def test_describe_unknown_repo_uses_default() -> None:
+    """Description falls back to the default floor."""
+    from ci.check_thresholds import describe
+
+    assert "0.75" in describe(CONFIG, "mystery") or "0.76" in describe(CONFIG, "mystery")
