@@ -160,3 +160,7 @@ def test_version_zero_padded_in_key() -> None:
     store = make_store()
     key = store.object_key("gold", 12, "abcdef012345")
     assert "v0012-" in key
+
+def test_content_hash_binary_safe() -> None:
+    """Hashing handles arbitrary bytes."""
+    assert content_hash(bytes(range(256)))
