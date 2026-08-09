@@ -6,3 +6,5 @@ criteria:
   - "Score 5 when the answer is fully correct, complete, and direct."
 scale_min: 1
 scale_max: 5
+
+  - "Score 2 when the answer is mostly wrong but shows partial understanding."
