@@ -1,5 +1,5 @@
 metric: hallucination
-version: 1
+version: 2
 criteria:
   - "A claim is hallucinated when the context contradicts it."
   - "Unsupported-but-not-contradicted claims are not hallucinations."
