@@ -164,3 +164,7 @@ def test_version_zero_padded_in_key() -> None:
 def test_content_hash_binary_safe() -> None:
     """Hashing handles arbitrary bytes."""
     assert content_hash(bytes(range(256)))
+
+def test_store_default_prefix() -> None:
+    """Default prefix is datasets."""
+    assert DatasetStore("b", client=FakeS3Client()).prefix == "datasets"
