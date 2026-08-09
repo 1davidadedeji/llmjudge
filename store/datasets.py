@@ -114,6 +114,20 @@ class DatasetStore:
         response = self.client.get_object(Bucket=self.bucket, Key=version_info.key)
         return response["Body"].read()
 
+    def delete_dataset(self, dataset: str) -> int:
+        """Deletes every stored version of a dataset.
+
+        Args:
+            dataset: Dataset identifier.
+
+        Returns:
+            deleted: Number of objects removed.
+        """
+        versions = self.manifest(dataset)
+        for version_info in versions:
+            self.client.delete_object(Bucket=self.bucket, Key=version_info.key)
+        return len(versions)
+
     def verify(self, version_info: DatasetVersion) -> bool:
         """Re-hashes the stored payload against the version descriptor.
 
