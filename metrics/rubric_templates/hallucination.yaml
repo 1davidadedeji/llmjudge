@@ -5,3 +5,5 @@ criteria:
   - "Unsupported-but-not-contradicted claims are not hallucinations."
 scale_min: 0
 scale_max: 1
+
+  - "Quoted text that appears verbatim in the context is never hallucinated."
