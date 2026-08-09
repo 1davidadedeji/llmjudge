@@ -247,3 +247,18 @@ export function directionLabel(points: TrendPoint[]): string {
   const direction = trendDirection(points);
   return direction[0].toUpperCase() + direction.slice(1);
 }
+
+/**
+ * Computes the median score of the series.
+ *
+ * @param points - Score points oldest-first.
+ * @returns median - Median score; 0 for an empty series.
+ */
+export function medianScore(points: TrendPoint[]): number {
+  if (points.length === 0) {
+    return 0;
+  }
+  const scores = points.map((point) => point.score).sort((a, b) => a - b);
+  const mid = Math.floor(scores.length / 2);
+  return scores.length % 2 === 0 ? (scores[mid - 1] + scores[mid]) / 2 : scores[mid];
+}
