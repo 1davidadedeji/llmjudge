@@ -127,3 +127,16 @@ def gate_decision(config: dict, repo: str, scores: dict[str, float]) -> bool:
         passed: True when the blended score meets the repo threshold.
     """
     return blended_score(scores) >= resolve_threshold(config, repo).threshold
+
+def describe(config: dict, repo: str) -> str:
+    """Builds a one-line description of a repo's gate configuration.
+
+    Args:
+        config: Parsed thresholds config from load_threshold_config().
+        repo: Repo name to describe.
+
+    Returns:
+        summary: Human-readable threshold summary for CI logs.
+    """
+    entry = resolve_threshold(config, repo)
+    return f"{entry.repo}: blended score must be >= {entry.threshold:.2f}"
