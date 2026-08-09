@@ -42,3 +42,17 @@ export default function TrendChart({
     </div>
   );
 }
+
+/**
+ * Renders the pass/fail legend under a trend chart.
+ *
+ * @returns legend - Legend element.
+ */
+export function TrendLegend() {
+  return (
+    <div className="trend-legend">
+      <span className="bar bar-pass" /> at/above threshold
+      <span className="bar bar-fail" /> below threshold
+    </div>
+  );
+}
