@@ -1,5 +1,5 @@
 metric: g_eval
-version: 2
+version: 3
 criteria:
   - "Score 1 when the answer is wrong or off-topic."
   - "Score 3 when the answer is partially correct or missing key details."
