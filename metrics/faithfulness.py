@@ -114,3 +114,15 @@ def normalize_answer(answer: str) -> str:
         normalized: Answer with collapsed whitespace.
     """
     return " ".join(answer.split())
+
+def is_passing_score(score: float, threshold: float = 0.8) -> bool:
+    """Reports whether a faithfulness score passes.
+
+    Args:
+        score: Faithfulness score from FaithfulnessMetric.measure().
+        threshold: Minimum passing score.
+
+    Returns:
+        passing: True when the score meets the threshold.
+    """
+    return score >= threshold
