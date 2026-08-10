@@ -170,3 +170,8 @@ def test_is_passing_score_boundary() -> None:
     from metrics.faithfulness import is_passing_score
 
     assert is_passing_score(0.8) and not is_passing_score(0.79)
+
+def test_verdict_with_leading_whitespace() -> None:
+    """Verdict parsing strips whitespace."""
+    metric = FaithfulnessMetric(StubJudge(["  yes"]))
+    assert metric.is_entailed("c", "ctx")
