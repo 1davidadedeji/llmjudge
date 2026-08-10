@@ -130,3 +130,7 @@ def test_measure_bounded() -> None:
     metric = AnswerRelevancyMetric(StubJudge(["yes"]))
     score = metric.measure(make_case("q", "a"))
     assert 0.0 <= score <= 1.0
+
+def test_tokenize_empty_string() -> None:
+    """Tokenizing an empty string yields no tokens."""
+    assert tokenize("") == []
