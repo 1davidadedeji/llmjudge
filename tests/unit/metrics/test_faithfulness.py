@@ -175,3 +175,8 @@ def test_verdict_with_leading_whitespace() -> None:
     """Verdict parsing strips whitespace."""
     metric = FaithfulnessMetric(StubJudge(["  yes"]))
     assert metric.is_entailed("c", "ctx")
+
+def test_measure_three_of_three() -> None:
+    """Three entailed claims score one."""
+    metric = FaithfulnessMetric(StubJudge(["yes", "yes", "yes"]))
+    assert metric.measure(make_case("A. B. C.", ["ctx"])) == 1.0
