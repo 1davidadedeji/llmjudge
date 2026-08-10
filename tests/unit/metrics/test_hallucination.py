@@ -143,3 +143,9 @@ def test_exclamation_splits_claims() -> None:
     """Exclamations split claims too."""
     metric = HallucinationMetric(StubJudge([]))
     assert metric.extract_claims("Wow! Really? Yes.") == ["Wow!", "Really?", "Yes."]
+
+def test_contradiction_prompt_version_constant() -> None:
+    """Prompt version constant exists and is an int."""
+    from metrics.hallucination import CONTRADICTION_PROMPT_VERSION
+
+    assert isinstance(CONTRADICTION_PROMPT_VERSION, int)
