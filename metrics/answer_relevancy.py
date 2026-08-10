@@ -95,3 +95,17 @@ def is_on_topic(score: float, threshold: float = 0.75) -> bool:
         on_topic: True when the score meets the threshold.
     """
     return score >= threshold
+
+def coverage(answer_tokens: list[str], question_tokens: list[str]) -> float:
+    """Computes what fraction of the question the answer covers.
+
+    Args:
+        answer_tokens: Content tokens from the answer.
+        question_tokens: Content tokens from the question.
+
+    Returns:
+        coverage: Fraction of question tokens present in the answer.
+    """
+    if not question_tokens:
+        return 1.0
+    return len(set(answer_tokens) & set(question_tokens)) / len(set(question_tokens))
