@@ -161,3 +161,9 @@ def test_efficiency_shorter_run_capped() -> None:
     """Shorter-than-expected runs cap at one."""
     metric = AgentTrajectoryMetric()
     assert metric.efficiency_score(["a"], ["a", "b"]) == 1.0
+
+def test_order_weight_bounds() -> None:
+    """Order weight blends coverage and order within [0, 1]."""
+    metric = AgentTrajectoryMetric(order_weight=1.0)
+    score = metric.measure(make_case(["a", "b"], ["a", "b"]))
+    assert score == 1.0
