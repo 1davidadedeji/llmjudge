@@ -62,3 +62,9 @@ def test_validate_template_flags_empty_criteria() -> None:
 
     bad = RubricTemplate("x", 1, [], 0, 1)
     assert validate_template(bad) == ["x: no criteria defined"]
+
+def test_load_faithfulness_rubric() -> None:
+    """Faithfulness template loads with its criteria."""
+    template = load_rubric("faithfulness")
+    assert template.metric == "faithfulness"
+    assert template.criteria
