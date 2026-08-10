@@ -92,3 +92,13 @@ def test_filter_idempotent() -> None:
     overrides = [Override("CVE-1", "2999-01-01", "ok")]
     once = filter_findings(["CVE-1", "CVE-2"], overrides, "2026-07-28")
     assert filter_findings(once, overrides, "2026-07-28") == once
+
+def test_expiring_soon_window() -> None:
+    """Only overrides inside the warning window are flagged."""
+    from ci.audit_filter import expiring_soon
+
+    overrides = [
+        Override("CVE-1", "2026-08-05", "soon"),
+        Override("CVE-2", "2999-01-01", "far"),
+    ]
+    assert [o.vuln_id for o in expiring_soon(overrides, "2026-08-04")] == ["CVE-1"]
