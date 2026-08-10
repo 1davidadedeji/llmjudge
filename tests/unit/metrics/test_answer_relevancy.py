@@ -124,3 +124,9 @@ def test_overlap_case_insensitive() -> None:
     """Overlap ignores casing."""
     metric = AnswerRelevancyMetric(StubJudge([]))
     assert metric.overlap("Sky", "sky") == 1.0
+
+def test_measure_bounded() -> None:
+    """Score stays within [0, 1]."""
+    metric = AnswerRelevancyMetric(StubJudge(["yes"]))
+    score = metric.measure(make_case("q", "a"))
+    assert 0.0 <= score <= 1.0
