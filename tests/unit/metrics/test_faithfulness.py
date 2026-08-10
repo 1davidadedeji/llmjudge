@@ -164,3 +164,9 @@ def test_normalize_answer_collapses_whitespace() -> None:
     from metrics.faithfulness import normalize_answer
 
     assert normalize_answer("a  b\tc") == "a b c"
+
+def test_is_passing_score_boundary() -> None:
+    """Pass boundary is inclusive of the threshold."""
+    from metrics.faithfulness import is_passing_score
+
+    assert is_passing_score(0.8) and not is_passing_score(0.79)
