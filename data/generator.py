@@ -162,3 +162,16 @@ class SyntheticGenerator:
             batches: Mapping of topic to generated cases.
         """
         return {topic: self.generate(topic, count_per_topic) for topic in self.topics()}
+
+    def difficulty_mix(self, count: int) -> dict[str, int]:
+        """Plans the easy/medium/hard split for a batch.
+
+        Args:
+            count: Total cases planned.
+
+        Returns:
+            mix: Mapping of difficulty label to case count.
+        """
+        hard = max(1, count // 5)
+        medium = max(1, count // 3)
+        return {"easy": count - hard - medium, "medium": medium, "hard": hard}
