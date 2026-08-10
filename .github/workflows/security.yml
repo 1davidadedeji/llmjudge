@@ -15,7 +15,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pip-audit
+      - run: pip install pip-audit cyclonedx-bom
+      - run: cyclonedx-py environment -o sbom.json || true
       - run: pip-audit --strict --output json > audit.json || true
       - run: python ci/audit_filter.py --check audit.json
 
