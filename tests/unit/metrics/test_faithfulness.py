@@ -180,3 +180,7 @@ def test_measure_three_of_three() -> None:
     """Three entailed claims score one."""
     metric = FaithfulnessMetric(StubJudge(["yes", "yes", "yes"]))
     assert metric.measure(make_case("A. B. C.", ["ctx"])) == 1.0
+
+def test_threshold_custom_value() -> None:
+    """Custom threshold is stored."""
+    assert FaithfulnessMetric(StubJudge([]), threshold=0.6).threshold == 0.6
