@@ -64,3 +64,19 @@ def is_dead_letter_enabled(config: QueueConfig) -> bool:
         enabled: True when the queue allows more than one attempt.
     """
     return config.max_tries > 1
+
+def validate_config(config: QueueConfig) -> list[str]:
+    """Validates a queue configuration.
+
+    Args:
+        config: QueueConfig to check.
+
+    Returns:
+        problems: Validation error messages; empty when valid.
+    """
+    problems = []
+    if config.job_timeout_s <= 0:
+        problems.append("job_timeout_s must be positive")
+    if config.max_tries < 1:
+        problems.append("max_tries must be at least 1")
+    return problems
