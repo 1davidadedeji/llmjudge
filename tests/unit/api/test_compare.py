@@ -137,3 +137,18 @@ def test_summarize_multiple_metrics() -> None:
 def test_score_deltas_zero_change() -> None:
     """Unchanged scores delta to zero."""
     assert score_deltas({"m": 0.7}, {"m": 0.7}) == {"m": 0.0}
+
+def test_compare_404_for_unknown_run() -> None:
+    """Unknown run ids 404 the comparison."""
+    from fastapi.testclient import TestClient
+
+    from api.deps import get_store
+    from api.main import create_app
+
+    class _Empty:
+        def get_run(self, run_id):
+            return None
+
+    app = create_app()
+    app.dependency_overrides[get_store] = _Empty
+    assert TestClient(app).get("/compare/x/y").status_code == 404
