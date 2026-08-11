@@ -152,3 +152,9 @@ def test_compare_404_for_unknown_run() -> None:
     app = create_app()
     app.dependency_overrides[get_store] = _Empty
     assert TestClient(app).get("/compare/x/y").status_code == 404
+
+def test_is_significant_zero() -> None:
+    """Zero delta is never significant."""
+    from api.routes.compare import is_significant
+
+    assert not is_significant(0.0)
