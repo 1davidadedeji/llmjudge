@@ -127,3 +127,20 @@ def is_significant(delta: float, tolerance: float = REGRESSION_TOLERANCE) -> boo
         significant: True when the absolute delta exceeds tolerance.
     """
     return abs(delta) > tolerance
+
+@router.get("/{base_run}/{candidate_run}/summary")
+def compare_summary(
+    base_run: str, candidate_run: str, store: ResultsStore = Depends(get_store)
+) -> dict:
+    """Renders a text summary of a run comparison.
+
+    Args:
+        base_run: Run id of the baseline.
+        candidate_run: Run id of the candidate.
+        store: Results store dependency.
+
+    Returns:
+        summary: One-line human-readable comparison.
+    """
+    payload = compare_runs(base_run, candidate_run, store)
+    return {"summary": summarize(payload["deltas"])}
