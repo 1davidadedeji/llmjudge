@@ -149,3 +149,9 @@ def test_contradiction_prompt_version_constant() -> None:
     from metrics.hallucination import CONTRADICTION_PROMPT_VERSION
 
     assert isinstance(CONTRADICTION_PROMPT_VERSION, int)
+
+def test_is_clean_boundary() -> None:
+    """Clean boundary is inclusive of the threshold."""
+    from metrics.hallucination import is_clean
+
+    assert is_clean(0.9) and not is_clean(0.89)
