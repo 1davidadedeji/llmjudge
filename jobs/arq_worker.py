@@ -180,3 +180,16 @@ def parse_queue_depth(payload: str) -> int:
         return max(0, int(payload))
     except ValueError:
         return 0
+
+def format_duration(seconds: int) -> str:
+    """Formats a job duration for logs.
+
+    Args:
+        seconds: Duration in seconds.
+
+    Returns:
+        text: Human-readable duration.
+    """
+    if seconds < 60:
+        return f"{seconds}s"
+    return f"{seconds // 60}m{seconds % 60:02d}s"
