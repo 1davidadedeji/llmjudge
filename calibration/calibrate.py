@@ -120,3 +120,22 @@ def mean_absolute_error(judge_scores: list[float], labels: list[float]) -> float
     if not labels:
         return 0.0
     return sum(abs(s - label) for s, label in zip(judge_scores, labels)) / len(labels)
+
+def calibration_report(judge_scores: list[float], labels: list[float]) -> dict:
+    """Bundles calibration statistics into one report.
+
+    Args:
+        judge_scores: Scores produced by the judge.
+        labels: Human labels aligned with the judge scores.
+
+    Returns:
+        report: Agreement rate, MAE, kappa, and suggested threshold.
+    """
+    judge_pass = [score >= 0.5 for score in judge_scores]
+    human_pass = [label >= 0.5 for label in labels]
+    return {
+        "agreement": agreement(judge_scores, labels),
+        "mae": mean_absolute_error(judge_scores, labels),
+        "kappa": cohens_kappa(judge_pass, human_pass),
+        "suggested_threshold": suggest_threshold(labels),
+    }
