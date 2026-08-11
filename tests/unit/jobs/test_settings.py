@@ -35,3 +35,7 @@ def test_load_queue_config_from_env(monkeypatch) -> None:
 def test_dead_letter_key_appends_suffix() -> None:
     """Dead-letter key is the queue name with a dead suffix."""
     assert dead_letter_key("llmjudge:eval") == "llmjudge:eval:dead"
+
+def test_is_dead_letter_enabled() -> None:
+    """Dead-lettering is active only when retries are allowed."""
+    assert is_dead_letter_enabled(load_queue_config())
