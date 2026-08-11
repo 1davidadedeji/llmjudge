@@ -155,3 +155,8 @@ def test_is_clean_boundary() -> None:
     from metrics.hallucination import is_clean
 
     assert is_clean(0.9) and not is_clean(0.89)
+
+def test_two_thirds_clean() -> None:
+    """One contradiction in three claims scores 0.667."""
+    metric = HallucinationMetric(StubJudge(["no", "no", "yes"]))
+    assert abs(metric.measure(make_case("A. B. C.", ["ctx"])) - 2 / 3) < 1e-9
