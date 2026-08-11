@@ -165,3 +165,9 @@ def test_whitespace_claim_dropped() -> None:
     """Whitespace-only fragments are not claims."""
     metric = HallucinationMetric(StubJudge([]))
     assert metric.extract_claims("A.   ") == ["A."]
+
+def test_name_matches_registry_key() -> None:
+    """Hallucination name matches the registry key."""
+    from metrics.registry import METRIC_REGISTRY
+
+    assert METRIC_REGISTRY["hallucination"].name == "hallucination"
