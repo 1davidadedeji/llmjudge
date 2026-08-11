@@ -126,3 +126,10 @@ def test_compare_summary_route() -> None:
     app.dependency_overrides[get_store] = _Store
     payload = TestClient(app).get("/compare/b/c/summary").json()
     assert payload["summary"] == "m +0.000"
+
+def test_summarize_multiple_metrics() -> None:
+    """Summary lists every metric."""
+    from api.routes.compare import summarize
+
+    text = summarize({"a": 0.1, "b": -0.1})
+    assert "a +0.100" in text and "b -0.100" in text
