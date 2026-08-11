@@ -158,3 +158,7 @@ def test_is_significant_zero() -> None:
     from api.routes.compare import is_significant
 
     assert not is_significant(0.0)
+
+def test_regressions_only_negative() -> None:
+    """Positive deltas are never regressions."""
+    assert find_regressions({"m": 0.99}) == []
