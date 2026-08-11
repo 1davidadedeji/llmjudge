@@ -38,3 +38,10 @@ def test_parse_queue_depth() -> None:
 
     assert parse_queue_depth("7") == 7
     assert parse_queue_depth("junk") == 0
+
+def test_format_duration() -> None:
+    """Duration formatting switches units at one minute."""
+    from jobs.arq_worker import format_duration
+
+    assert format_duration(45) == "45s"
+    assert format_duration(125) == "2m05s"
