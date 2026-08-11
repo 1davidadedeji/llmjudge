@@ -98,3 +98,15 @@ def contradicted_claims(claims: list[str], verdicts: list[bool]) -> list[str]:
         flagged: Claims the context contradicts.
     """
     return [claim for claim, flagged in zip(claims, verdicts) if flagged]
+
+def is_clean(score: float, threshold: float = 0.9) -> bool:
+    """Reports whether an answer counts as hallucination-free.
+
+    Args:
+        score: Hallucination score from HallucinationMetric.measure().
+        threshold: Minimum acceptable score.
+
+    Returns:
+        clean: True when the score meets the threshold.
+    """
+    return score >= threshold
