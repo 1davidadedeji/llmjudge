@@ -143,3 +143,9 @@ def test_mrr_first_relevant_rank() -> None:
     from metrics.contextual_precision_recall import mrr
 
     assert mrr([False, True]) == 0.5
+
+def test_precision_longer_ranking() -> None:
+    """Longer rankings still bound the score."""
+    metric = ContextualPrecisionMetric(StubJudge(["yes"] * 6))
+    score = metric.measure(make_case([f"p{i}" for i in range(6)]))
+    assert 0.0 <= score <= 1.0
