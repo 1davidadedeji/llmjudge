@@ -46,3 +46,9 @@ def test_cohens_kappa_empty() -> None:
     from calibration.calibrate import cohens_kappa
 
     assert cohens_kappa([], []) == 1.0
+
+def test_mean_absolute_error() -> None:
+    """MAE averages the absolute judge-label gaps."""
+    from calibration.calibrate import mean_absolute_error
+
+    assert mean_absolute_error([1.0, 0.0], [0.5, 0.5]) == 0.5
