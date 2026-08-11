@@ -160,3 +160,8 @@ def test_two_thirds_clean() -> None:
     """One contradiction in three claims scores 0.667."""
     metric = HallucinationMetric(StubJudge(["no", "no", "yes"]))
     assert abs(metric.measure(make_case("A. B. C.", ["ctx"])) - 2 / 3) < 1e-9
+
+def test_whitespace_claim_dropped() -> None:
+    """Whitespace-only fragments are not claims."""
+    metric = HallucinationMetric(StubJudge([]))
+    assert metric.extract_claims("A.   ") == ["A."]
