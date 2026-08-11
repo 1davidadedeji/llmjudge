@@ -110,3 +110,19 @@ def test_biggest_regression_none_when_empty() -> None:
     from api.routes.compare import biggest_regression
 
     assert biggest_regression({}) is None
+
+def test_compare_summary_route() -> None:
+    """Summary route renders the one-line delta listing."""
+    from fastapi.testclient import TestClient
+
+    from api.deps import get_store
+    from api.main import create_app
+
+    class _Store:
+        def get_run(self, run_id: str) -> dict | None:
+            return {"scores": {"m": 0.8}}
+
+    app = create_app()
+    app.dependency_overrides[get_store] = _Store
+    payload = TestClient(app).get("/compare/b/c/summary").json()
+    assert payload["summary"] == "m +0.000"
