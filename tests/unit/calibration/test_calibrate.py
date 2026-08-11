@@ -52,3 +52,10 @@ def test_mean_absolute_error() -> None:
     from calibration.calibrate import mean_absolute_error
 
     assert mean_absolute_error([1.0, 0.0], [0.5, 0.5]) == 0.5
+
+def test_calibration_report_keys() -> None:
+    """Report carries agreement, mae, kappa, and threshold."""
+    from calibration.calibrate import calibration_report
+
+    report = calibration_report([1.0, 0.0], [1.0, 0.0])
+    assert set(report) == {"agreement", "mae", "kappa", "suggested_threshold"}
