@@ -133,3 +133,7 @@ def test_summarize_multiple_metrics() -> None:
 
     text = summarize({"a": 0.1, "b": -0.1})
     assert "a +0.100" in text and "b -0.100" in text
+
+def test_score_deltas_zero_change() -> None:
+    """Unchanged scores delta to zero."""
+    assert score_deltas({"m": 0.7}, {"m": 0.7}) == {"m": 0.0}
