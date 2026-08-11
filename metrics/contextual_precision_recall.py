@@ -14,7 +14,7 @@ from metrics.judge import JudgeClient
 
 VERDICT_PROMPT = (
     "Passage: {passage}\nQuestion: {question}\n"
-    "Is this passage relevant to answering the question? Answer yes or no."
+    "Is this passage useful for answering the question? Answer yes or no."
 )
 COVERAGE_PROMPT = (
     "Expected answer: {expected}\nPassage: {passage}\n"
