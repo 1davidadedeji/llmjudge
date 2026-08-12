@@ -126,3 +126,8 @@ def test_ensemble_confidence_drops_with_spread() -> None:
     from metrics.g_eval import ensemble_confidence
 
     assert ensemble_confidence([0.0, 1.0, 0.5]) == 0.0
+
+def test_details_scores_match_judges() -> None:
+    """Per-judge scores appear in ensemble order."""
+    details = make_metric(["5", "3", "1"]).measure_with_details(make_case())
+    assert details["scores"] == [1.0, 0.5, 0.0]
