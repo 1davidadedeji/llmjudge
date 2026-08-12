@@ -118,3 +118,10 @@ def test_main_module_has_cli_guard() -> None:
     import ci.merge_gate as gate
 
     assert callable(gate.main)
+
+def test_retryable_status() -> None:
+    """Queued and running runs are worth re-polling; terminal ones are not."""
+    from ci.merge_gate import retryable_status
+
+    assert retryable_status("queued") and retryable_status("running")
+    assert not retryable_status("succeeded")
