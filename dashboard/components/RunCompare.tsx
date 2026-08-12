@@ -28,6 +28,7 @@ export default function RunCompare({ payload }: { payload: ComparePayload }) {
         Comparing {payload.base} → {payload.candidate}
       </h2>
       <table className="compare-table">
+        <caption>per-metric score deltas</caption>
         <thead>
           <tr>
             <th>Metric</th>
