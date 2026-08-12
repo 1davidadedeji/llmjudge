@@ -75,6 +75,8 @@ def compare_runs(
         "deltas": deltas,
         "regressions": find_regressions(deltas),
         "improvements": improvements(deltas),
+        "base_created_at": serialize_run(base).get("created_at"),
+        "candidate_created_at": serialize_run(candidate).get("created_at"),
     }
 
 def summarize(deltas: dict[str, float]) -> str:
