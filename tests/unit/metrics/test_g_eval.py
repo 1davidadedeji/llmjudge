@@ -120,3 +120,9 @@ def test_ensemble_confidence_perfect() -> None:
     from metrics.g_eval import ensemble_confidence
 
     assert ensemble_confidence([0.5, 0.5, 0.5]) == 1.0
+
+def test_ensemble_confidence_drops_with_spread() -> None:
+    """Confidence falls as judge spread widens."""
+    from metrics.g_eval import ensemble_confidence
+
+    assert ensemble_confidence([0.0, 1.0, 0.5]) == 0.0
