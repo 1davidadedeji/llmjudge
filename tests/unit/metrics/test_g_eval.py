@@ -108,3 +108,9 @@ def test_ensemble_rejects_two_judges() -> None:
 
     with pytest.raises(ValueError):
         GEvalMetric([StubJudge([]), StubJudge([])])
+
+def test_ensemble_mean_symmetric() -> None:
+    """Mean is insensitive to judge ordering."""
+    assert make_metric(["1", "3", "5"]).measure(make_case()) == make_metric(
+        ["5", "3", "1"]
+    ).measure(make_case())
