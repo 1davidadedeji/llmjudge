@@ -114,3 +114,9 @@ def test_ensemble_mean_symmetric() -> None:
     assert make_metric(["1", "3", "5"]).measure(make_case()) == make_metric(
         ["5", "3", "1"]
     ).measure(make_case())
+
+def test_ensemble_confidence_perfect() -> None:
+    """Perfect agreement gives full confidence."""
+    from metrics.g_eval import ensemble_confidence
+
+    assert ensemble_confidence([0.5, 0.5, 0.5]) == 1.0
