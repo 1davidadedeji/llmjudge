@@ -87,7 +87,7 @@ def main() -> int:
     parser.add_argument("--run-id", default=os.environ.get("LLMJUDGE_RUN_ID", "latest"))
     args = parser.parse_args()
     base_url = os.environ.get("LLMJUDGE_API_URL", "http://localhost:8000")
-    with httpx.Client(base_url=base_url, timeout=30.0) as client:
+    with httpx.Client(base_url=base_url, timeout=60.0) as client:
         payload = await_eval_run(client, args.run_id)
     result = evaluate_gate(payload, DEFAULT_THRESHOLDS)
     if not result.passed:
