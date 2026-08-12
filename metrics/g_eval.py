@@ -126,3 +126,14 @@ def should_escalate(disagreement: bool) -> bool:
         escalate: True when judges disagreed and a human should look.
     """
     return disagreement
+
+def ensemble_confidence(scores: list[float]) -> float:
+    """Converts judge agreement into a confidence figure.
+
+    Args:
+        scores: Normalized per-judge scores.
+
+    Returns:
+        confidence: 1.0 for perfect agreement, lower as spread grows.
+    """
+    return 1.0 - (max(scores) - min(scores))
