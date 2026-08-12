@@ -137,3 +137,14 @@ def ensemble_confidence(scores: list[float]) -> float:
         confidence: 1.0 for perfect agreement, lower as spread grows.
     """
     return 1.0 - (max(scores) - min(scores))
+
+def spread(scores: list[float]) -> float:
+    """Computes the max-min spread of ensemble scores.
+
+    Args:
+        scores: Normalized per-judge scores.
+
+    Returns:
+        spread: Difference between the highest and lowest score.
+    """
+    return max(scores) - min(scores)
