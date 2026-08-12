@@ -264,3 +264,7 @@ main section {
 .compare-table caption {
   font-size: 0.8rem;
 }
+
+.run-compare {
+  padding-bottom: 2rem;
+}
