@@ -260,3 +260,7 @@ main section {
 .run-compare p {
   line-height: 1.5;
 }
+
+.compare-table caption {
+  font-size: 0.8rem;
+}
