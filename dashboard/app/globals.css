@@ -272,3 +272,7 @@ main section {
 .filter-bar {
   margin: 0.75rem 0;
 }
+
+.drill-table tr:hover {
+  background: #161b22;
+}
