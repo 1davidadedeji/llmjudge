@@ -81,3 +81,17 @@ def by_category(cases: list[SafetyCase], category: str) -> list[SafetyCase]:
         filtered: Cases whose category matches, in input order.
     """
     return [case for case in cases if case.category == category]
+
+def pack_summary(cases: list[SafetyCase]) -> dict[str, int]:
+    """Counts cases per category for pack reporting.
+
+    Args:
+        cases: Full case list from a loaded pack.
+
+    Returns:
+        counts: Mapping of category name to case count.
+    """
+    counts: dict[str, int] = {}
+    for case in cases:
+        counts[case.category] = counts.get(case.category, 0) + 1
+    return counts
