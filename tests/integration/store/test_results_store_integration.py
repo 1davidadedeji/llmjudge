@@ -251,3 +251,13 @@ def test_long_metric_name() -> None:
     name = "m" * 120
     store.upsert_score("r-1", name, 0.5)
     assert ("r-1", name) in conn.scores
+
+def test_many_scores_one_run() -> None:
+    """A run can carry the full metric suite."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    metrics = ["faithfulness", "answer_relevancy", "hallucination", "g_eval",
+               "contextual_precision", "contextual_recall", "agent_trajectory"]
+    for metric in metrics:
+        store.upsert_score("r-1", metric, 0.75)
+    assert len([k for k in conn.scores if k[0] == "r-1"]) == 7
