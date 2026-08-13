@@ -243,3 +243,11 @@ def test_empty_repo_name_allowed() -> None:
     store = make_store(conn)
     store.insert_run("r-1", "")
     assert conn.runs["r-1"]["repo"] == ""
+
+def test_long_metric_name() -> None:
+    """Long metric names are stored without truncation."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    name = "m" * 120
+    store.upsert_score("r-1", name, 0.5)
+    assert ("r-1", name) in conn.scores
