@@ -148,3 +148,8 @@ ci/thresholds.yaml and will get its own ADR if it moves to per-metric gating.
 
 Documented the CI failure mode taxonomy (infra timeout vs. regression) after
 the merge-gate fail-open incident; gate now fails closed on unknown states.
+
+## Addendum 2026-08-13
+
+Metric `version` field added to the shared interface so the results store can
+attribute score shifts to metric changes rather than model regressions.
