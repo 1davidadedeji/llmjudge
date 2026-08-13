@@ -145,3 +145,20 @@ def trajectory_summary(called: list[str], expected: list[str]) -> str:
         summary: Human-readable comparison of called versus expected tools.
     """
     return f"called {len(called)} tools, expected {len(expected)}: {', '.join(called)}"
+
+def has_loop(called: list[str], window: int = 3) -> bool:
+    """Detects immediate repetition loops in a trajectory.
+
+    Args:
+        called: Tools the agent invoked, in order.
+        window: Minimum run length of identical calls to count as a loop.
+
+    Returns:
+        looping: True when any tool repeats window times in a row.
+    """
+    run = 1
+    for prev, cur in zip(called, called[1:]):
+        run = run + 1 if cur == prev else 1
+        if run >= window:
+            return True
+    return False
