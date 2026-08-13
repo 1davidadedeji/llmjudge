@@ -261,3 +261,12 @@ def test_many_scores_one_run() -> None:
     for metric in metrics:
         store.upsert_score("r-1", metric, 0.75)
     assert len([k for k in conn.scores if k[0] == "r-1"]) == 7
+
+def test_updated_at_recorded_on_scores() -> None:
+    """Score writes carry an updated_at timestamp."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    store.upsert_score("r-1", "m", 0.5)
+    sql, params = conn.statements[-1]
+    assert "updated_at" in sql
+    assert params[3] is not None
