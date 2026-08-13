@@ -236,3 +236,10 @@ def test_metric_names_with_underscores() -> None:
     store = make_store(conn)
     store.upsert_score("r-1", "contextual_precision", 0.8)
     assert ("r-1", "contextual_precision") in conn.scores
+
+def test_empty_repo_name_allowed() -> None:
+    """Store does not impose its own repo-name policy."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    store.insert_run("r-1", "")
+    assert conn.runs["r-1"]["repo"] == ""
