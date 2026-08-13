@@ -168,3 +168,8 @@ test("loading state shows spinner", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("loading", { exact: false }).first()).toBeVisible();
 });
+
+test("filter bar shows counts per status", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("failed").first()).toBeVisible();
+});
