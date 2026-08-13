@@ -194,3 +194,20 @@ export function successRate(runs: RunSummary[]): number {
 export function repoTitle(repo: string): string {
   return `llmjudge / ${repo}`;
 }
+
+/**
+ * Computes the median run count across repos.
+ *
+ * @param grouped - Runs grouped by repo.
+ * @returns median - Median run count.
+ */
+export function medianRunCount(grouped: Record<string, RunSummary[]>): number {
+  const counts = Object.values(grouped)
+    .map((runs) => runs.length)
+    .sort((a, b) => a - b);
+  if (counts.length === 0) {
+    return 0;
+  }
+  const mid = Math.floor(counts.length / 2);
+  return counts.length % 2 === 0 ? (counts[mid - 1] + counts[mid]) / 2 : counts[mid];
+}
