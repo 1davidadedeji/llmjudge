@@ -163,3 +163,8 @@ test("long run ids truncate gracefully", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("r-1", { exact: false }).first()).toBeVisible();
 });
+
+test("loading state shows spinner", async ({ page }) => {
+  await page.goto("/repos/agentflow");
+  await expect(page.getByText("loading", { exact: false }).first()).toBeVisible();
+});
