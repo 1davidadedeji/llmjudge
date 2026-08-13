@@ -167,3 +167,10 @@ def test_order_weight_bounds() -> None:
     metric = AgentTrajectoryMetric(order_weight=1.0)
     score = metric.measure(make_case(["a", "b"], ["a", "b"]))
     assert score == 1.0
+
+def test_has_loop_detection() -> None:
+    """Loop detection catches three identical calls in a row."""
+    from metrics.agent_trajectory import has_loop
+
+    assert has_loop(["a", "a", "a"])
+    assert not has_loop(["a", "b", "a"])
