@@ -184,3 +184,13 @@ export function successRate(runs: RunSummary[]): number {
   const succeeded = runs.filter((run) => run.status === "succeeded").length;
   return succeeded / runs.length;
 }
+
+/**
+ * Builds the drill-down page title for a repo.
+ *
+ * @param repo - Repo name.
+ * @returns title - Page title string.
+ */
+export function repoTitle(repo: string): string {
+  return `llmjudge / ${repo}`;
+}
