@@ -174,3 +174,7 @@ def test_has_loop_detection() -> None:
 
     assert has_loop(["a", "a", "a"])
     assert not has_loop(["a", "b", "a"])
+
+def test_metric_default_threshold() -> None:
+    """Default threshold is 0.7."""
+    assert AgentTrajectoryMetric().threshold == 0.7
