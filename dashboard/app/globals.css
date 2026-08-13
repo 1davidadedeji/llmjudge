@@ -268,3 +268,7 @@ main section {
 .run-compare {
   padding-bottom: 2rem;
 }
+
+.filter-bar {
+  margin: 0.75rem 0;
+}
