@@ -279,3 +279,7 @@ def test_status_transitions_queued_to_succeeded() -> None:
     assert conn.runs["r-1"]["status"] == "queued"
     conn.runs["r-1"]["status"] = "succeeded"
     assert conn.runs["r-1"]["status"] == "succeeded
+
+def test_store_dsn_stored() -> None:
+    """The store keeps the DSN it was built with."""
+    assert ResultsStore("postgresql://x").dsn == "postgresql://x"
