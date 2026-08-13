@@ -173,3 +173,8 @@ test("filter bar shows counts per status", async ({ page }) => {
   await page.goto("/repos/agentflow");
   await expect(page.getByText("failed").first()).toBeVisible();
 });
+
+test("direct link to repo page renders", async ({ page }) => {
+  await page.goto("/repos/llmjudge");
+  await expect(page.getByText("llmjudge").first()).toBeVisible();
+});
