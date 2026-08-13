@@ -111,3 +111,16 @@ def in_cooldown(last_action_ts: float, now_ts: float, policy: AutoscalePolicy = 
         cooling: True when fewer than cooldown_s seconds have elapsed.
     """
     return (now_ts - last_action_ts) < policy.cooldown_s
+
+def scale_step(queue_depth: int, current: int, policy: AutoscalePolicy = DEFAULT_POLICY) -> int:
+    """Computes the signed worker delta for one scaling decision.
+
+    Args:
+        queue_depth: Number of eval jobs currently waiting in the queue.
+        current: Number of workers currently running.
+        policy: Autoscaling policy to apply.
+
+    Returns:
+        delta: Workers to add (positive) or remove (negative).
+    """
+    return desired_workers(queue_depth, policy) - current
