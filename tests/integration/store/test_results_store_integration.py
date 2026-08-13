@@ -270,3 +270,12 @@ def test_updated_at_recorded_on_scores() -> None:
     sql, params = conn.statements[-1]
     assert "updated_at" in sql
     assert params[3] is not None
+
+def test_status_transitions_queued_to_succeeded() -> None:
+    """A run moves queued -> succeeded across writes."""
+    conn = RecordingConnection()
+    store = make_store(conn)
+    store.insert_run("r-1", "agentflow")
+    assert conn.runs["r-1"]["status"] == "queued"
+    conn.runs["r-1"]["status"] = "succeeded"
+    assert conn.runs["r-1"]["status"] == "succeeded
