@@ -143,3 +143,8 @@ calibration dataset. Gate: the CI check that blocks regressions from merging.
 
 The merge-gate threshold model (per-repo, blended) is documented in
 ci/thresholds.yaml and will get its own ADR if it moves to per-metric gating.
+
+## Addendum 2026-08-06
+
+Documented the CI failure mode taxonomy (infra timeout vs. regression) after
+the merge-gate fail-open incident; gate now fails closed on unknown states.
