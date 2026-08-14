@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <a href="/">runs</a> <a href="/trends">trends</a>
           </nav>
         </header>
-        <main>{children}</main>
+        <main className="app-main">{children}</main>
       </body>
     </html>
   );
