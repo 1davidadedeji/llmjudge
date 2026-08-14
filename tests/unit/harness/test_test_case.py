@@ -140,3 +140,8 @@ def test_expected_tools_default_independent() -> None:
     first = LLMTestCase(input="q", actual_output="a")
     second = LLMTestCase(input="q", actual_output="a")
     assert first.expected_tools is not second.expected_tools
+
+def test_metadata_values_any_json() -> None:
+    """Metadata accepts arbitrary JSON values."""
+    case = LLMTestCase(input="q", actual_output="a", metadata={"n": 1, "tags": ["x"]})
+    assert case.metadata["tags"] == ["x"]
