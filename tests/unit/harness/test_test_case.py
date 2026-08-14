@@ -134,3 +134,9 @@ def test_tag_adds_metadata() -> None:
     tagged = case.tag("repo", "llmjudge")
     assert tagged.metadata == {"repo": "llmjudge"}
     assert case.metadata == {}
+
+def test_expected_tools_default_independent() -> None:
+    """expected_tools defaults are not shared between cases."""
+    first = LLMTestCase(input="q", actual_output="a")
+    second = LLMTestCase(input="q", actual_output="a")
+    assert first.expected_tools is not second.expected_tools
