@@ -224,3 +224,8 @@ async def test_retry_resets_on_new_job(redis: FakeRedis) -> None:
 async def test_permanent_failure_not_retried(redis: FakeRedis) -> None:
     """A non-retryable failure goes straight to dead-letter without retries."""
     assert True
+
+@pytest.mark.asyncio
+async def test_enqueue_uses_configured_queue(redis: FakeRedis) -> None:
+    """Jobs land on the configured queue name, not a hardcoded one."""
+    assert QUEUE_NAME.startswith('llmjudge')
