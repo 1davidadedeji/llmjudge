@@ -145,3 +145,7 @@ def test_metadata_values_any_json() -> None:
     """Metadata accepts arbitrary JSON values."""
     case = LLMTestCase(input="q", actual_output="a", metadata={"n": 1, "tags": ["x"]})
     assert case.metadata["tags"] == ["x"]
+
+def test_expected_output_none_by_default() -> None:
+    """expected_output defaults to None explicitly."""
+    assert LLMTestCase(input="q", actual_output="a").expected_output is None
