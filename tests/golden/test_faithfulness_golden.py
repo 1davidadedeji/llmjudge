@@ -43,3 +43,8 @@ def test_golden_ids_unique() -> None:
     """Golden case ids never collide."""
     ids = [case["id"] for case in load_golden_cases()]
     assert len(ids) == len(set(ids))
+
+def test_golden_bands_valid() -> None:
+    """Every golden band lies inside [0, 1] with min <= max."""
+    for case in load_golden_cases():
+        assert 0.0 <= case["min_score"] <= case["max_score"] <= 1.0
