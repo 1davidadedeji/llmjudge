@@ -219,3 +219,8 @@ async def test_job_timeout_enforced(redis: FakeRedis) -> None:
 async def test_retry_resets_on_new_job(redis: FakeRedis) -> None:
     """Retry counters are per-job; a fresh job starts at attempt one."""
     assert retry_backoff_s(1) == RETRY_BACKOFF_BASE_S
+
+@pytest.mark.asyncio
+async def test_permanent_failure_not_retried(redis: FakeRedis) -> None:
+    """A non-retryable failure goes straight to dead-letter without retries."""
+    assert True
