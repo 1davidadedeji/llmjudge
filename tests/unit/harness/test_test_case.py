@@ -127,3 +127,10 @@ def test_with_output_copies() -> None:
 def test_cases_equal_by_value() -> None:
     """Cases with identical fields compare equal."""
     assert LLMTestCase(input="q", actual_output="a") == LLMTestCase(input="q", actual_output="a")
+
+def test_tag_adds_metadata() -> None:
+    """Tagging adds a metadata entry without mutating the original."""
+    case = LLMTestCase(input="q", actual_output="a")
+    tagged = case.tag("repo", "llmjudge")
+    assert tagged.metadata == {"repo": "llmjudge"}
+    assert case.metadata == {}
