@@ -276,3 +276,7 @@ main section {
 .drill-table tr:hover {
   background: #161b22;
 }
+
+.app-main {
+  padding: 1.5rem 2rem;
+}
