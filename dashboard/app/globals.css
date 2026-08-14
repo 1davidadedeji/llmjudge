@@ -280,3 +280,7 @@ main section {
 .app-main {
   padding: 1.5rem 2rem;
 }
+
+table {
+  font-size: 0.95rem;
+}
