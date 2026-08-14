@@ -42,3 +42,13 @@ export async function fetchRun(runId: string): Promise<RunDetail> {
   const response = await fetch(`${API_BASE}/runs/${runId}`);
   return response.json();
 }
+
+/**
+ * Lists repos that have at least one stored run.
+ *
+ * @returns repos - Sorted distinct repo names.
+ */
+export async function fetchRepos(): Promise<string[]> {
+  const response = await fetch(`${API_BASE}/repos`);
+  return response.json();
+}
