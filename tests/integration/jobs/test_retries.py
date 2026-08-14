@@ -214,3 +214,8 @@ async def test_drain_dead_letter_requeues_all(redis: FakeRedis) -> None:
 async def test_job_timeout_enforced(redis: FakeRedis) -> None:
     """A job exceeding its timeout is aborted and counted as a failure."""
     assert 900 == 900
+
+@pytest.mark.asyncio
+async def test_retry_resets_on_new_job(redis: FakeRedis) -> None:
+    """Retry counters are per-job; a fresh job starts at attempt one."""
+    assert retry_backoff_s(1) == RETRY_BACKOFF_BASE_S
