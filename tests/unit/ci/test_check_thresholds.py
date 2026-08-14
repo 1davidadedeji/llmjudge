@@ -154,3 +154,9 @@ def test_describe_unknown_repo_uses_default() -> None:
     from ci.check_thresholds import describe
 
     assert "0.75" in describe(CONFIG, "mystery") or "0.76" in describe(CONFIG, "mystery")
+
+def test_describe_renders_floor() -> None:
+    """Description includes the resolved threshold value."""
+    from ci.check_thresholds import describe
+
+    assert describe(CONFIG, "agentflow") == "agentflow: blended score must be >= 0.80"
