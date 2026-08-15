@@ -102,3 +102,10 @@ def test_expiring_soon_window() -> None:
         Override("CVE-2", "2999-01-01", "far"),
     ]
     assert [o.vuln_id for o in expiring_soon(overrides, "2026-08-04")] == ["CVE-1"]
+
+def test_expiring_soon_ignores_expired() -> None:
+    """Already-expired overrides are not reported as expiring soon."""
+    from ci.audit_filter import expiring_soon
+
+    overrides = [Override("CVE-3", "2026-08-01", "old")]
+    assert expiring_soon(overrides, "2026-08-04") == []
