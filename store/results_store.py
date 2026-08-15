@@ -202,7 +202,7 @@ class ResultsStore:
         """
         with self.connect() as conn:
             rows = conn.execute("SELECT DISTINCT repo FROM eval_runs ORDER BY repo").fetchall()
-        return [row[0] for row in rows]
+        return [str(row[0]) for row in rows]
 
     def delete_run(self, run_id: str) -> bool:
         """Deletes a run and its scores.
