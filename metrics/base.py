@@ -9,6 +9,7 @@ Contains:
 """
 
 from abc import ABC, abstractmethod
+from typing import Final
 
 from harness.test_case import LLMTestCase
 
