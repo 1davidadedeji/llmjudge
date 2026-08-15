@@ -83,3 +83,12 @@ def test_registry_values_are_base_metrics() -> None:
 
     for cls in METRIC_REGISTRY.values():
         assert issubclass(cls, BaseMetric)
+
+def test_describe_metric_renders_threshold() -> None:
+    """Description includes the metric threshold."""
+    from metrics.base import describe_metric
+    from metrics.faithfulness import FaithfulnessMetric
+    from metrics.judge import StubJudge
+
+    text = describe_metric(FaithfulnessMetric(StubJudge([]), threshold=0.8))
+    assert "faithfulness" in text and "0.8" in text
