@@ -6,7 +6,7 @@
  *   TrendsPage: renders trend charts for the latest runs
  */
 
-import TrendChart from "../../components/TrendChart";
+import TrendChart, { TrendLegend } from "../../components/TrendChart";
 
 const points: { created_at: string; score: number }[] = [];
 
