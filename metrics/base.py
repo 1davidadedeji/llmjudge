@@ -75,3 +75,14 @@ def score_band(score: float) -> str:
 
 class MetricError(Exception):
     """Raised when a metric cannot produce a score for a test case."""
+
+def describe_metric(metric: "BaseMetric") -> str:
+    """Builds a one-line description of a metric instance.
+
+    Args:
+        metric: Metric instance to describe.
+
+    Returns:
+        summary: Name, version, and threshold for logs and the API.
+    """
+    return f"{metric.name} v{metric.version} (threshold={metric.threshold})"
