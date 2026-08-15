@@ -262,3 +262,13 @@ export function medianScore(points: TrendPoint[]): number {
   const mid = Math.floor(scores.length / 2);
   return scores.length % 2 === 0 ? (scores[mid - 1] + scores[mid]) / 2 : scores[mid];
 }
+
+/**
+ * Picks the worst point in the series.
+ *
+ * @param points - Score points oldest-first.
+ * @returns point - Lowest-scoring point.
+ */
+export function worstPoint(points: TrendPoint[]): TrendPoint {
+  return points.reduce((worst, point) => (point.score < worst.score ? point : worst));
+}
