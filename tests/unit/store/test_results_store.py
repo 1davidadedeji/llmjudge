@@ -221,3 +221,7 @@ def test_finish_run_binds_run_id_last() -> None:
     make_store(conn).finish_run("r-3", "failed")
     _, params = conn.statements[0]
     assert params[-1] == "r-3"
+
+def test_store_init_stores_dsn() -> None:
+    """ResultsStore keeps its DSN."""
+    assert ResultsStore("postgresql://y").dsn == "postgresql://y"
