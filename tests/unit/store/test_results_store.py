@@ -225,3 +225,12 @@ def test_finish_run_binds_run_id_last() -> None:
 def test_store_init_stores_dsn() -> None:
     """ResultsStore keeps its DSN."""
     assert ResultsStore("postgresql://y").dsn == "postgresql://y"
+
+def test_delete_run_issues_two_statements() -> None:
+    """delete_run clears scores then the run."""
+    conn = FakeConnection()
+    conn.rowcount = 1
+    make_store(conn).delete_run("r-1")
+    assert len(conn.statements) == 2
+    assert "eval_scores" in conn.statements[0][0]
+    assert "eval_runs" in conn.statements[1][0]
