@@ -92,3 +92,10 @@ def test_describe_metric_renders_threshold() -> None:
 
     text = describe_metric(FaithfulnessMetric(StubJudge([]), threshold=0.8))
     assert "faithfulness" in text and "0.8" in text
+
+def test_all_registry_metrics_have_names() -> None:
+    """Every registered metric class exposes a stable name."""
+    from metrics.registry import METRIC_REGISTRY
+
+    for key, cls in METRIC_REGISTRY.items():
+        assert cls.name == key
