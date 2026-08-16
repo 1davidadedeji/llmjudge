@@ -39,3 +39,9 @@ def test_dead_letter_key_appends_suffix() -> None:
 def test_is_dead_letter_enabled() -> None:
     """Dead-lettering is active only when retries are allowed."""
     assert is_dead_letter_enabled(load_queue_config())
+
+def test_validate_config_defaults_valid() -> None:
+    """Default queue config validates cleanly."""
+    from jobs.settings import validate_config
+
+    assert validate_config(load_queue_config()) == []
