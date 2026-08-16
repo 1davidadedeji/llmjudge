@@ -115,3 +115,8 @@ def test_difficulty_mix_sums_to_count(tmp_path) -> None:
     generator = make_generator(tmp_path, [])
     for count in (5, 10, 33):
         assert sum(generator.difficulty_mix(count).values()) == count
+
+def test_gold_set_empty_cache(tmp_path) -> None:
+    """Empty cache yields an empty gold set."""
+    generator = make_generator(tmp_path, [])
+    assert generator.load_gold_set() == []
