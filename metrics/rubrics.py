@@ -94,3 +94,15 @@ def validate_template(template: RubricTemplate) -> list[str]:
     if template.scale_min >= template.scale_max:
         problems.append(f"{template.metric}: scale_min must be below scale_max")
     return problems
+
+def render_rubric(template: RubricTemplate) -> str:
+    """Renders a template as judge-facing rubric text.
+
+    Args:
+        template: RubricTemplate to render.
+
+    Returns:
+        text: Numbered criteria list for inclusion in a judge prompt.
+    """
+    lines = [f"{i}. {criterion}" for i, criterion in enumerate(template.criteria, start=1)]
+    return "\n".join(lines)
