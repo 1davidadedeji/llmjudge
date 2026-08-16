@@ -45,3 +45,10 @@ def test_validate_config_defaults_valid() -> None:
     from jobs.settings import validate_config
 
     assert validate_config(load_queue_config()) == []
+
+def test_validate_config_flags_bad_timeout() -> None:
+    """A non-positive timeout is rejected."""
+    from jobs.settings import QueueConfig, validate_config
+
+    bad = QueueConfig("redis://x", 0, 3, "q")
+    assert validate_config(bad) == ["job_timeout_s must be positive"]
