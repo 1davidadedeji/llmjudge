@@ -11,6 +11,7 @@ import os
 from store.results_store import ResultsStore
 
 DEFAULT_DSN = "postgresql://llmjudge:llmjudge@localhost:5432/llmjudge"
+API_VERSION = "1.0"
 
 
 def get_store() -> ResultsStore:
