@@ -68,3 +68,9 @@ def test_load_faithfulness_rubric() -> None:
     template = load_rubric("faithfulness")
     assert template.metric == "faithfulness"
     assert template.criteria
+
+def test_render_rubric_numbers_criteria() -> None:
+    """Rendering numbers the criteria starting at 1."""
+    from metrics.rubrics import render_rubric
+
+    assert render_rubric(load_rubric("g_eval")).startswith("1. ")
