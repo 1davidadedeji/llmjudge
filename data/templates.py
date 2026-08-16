@@ -39,3 +39,5 @@ SELF_CHECK_TEMPLATE = (
     "Review this QA pair about {topic} for factual errors. "
     "Return the same JSON with a corrected answer if needed."
 )
+
+HARD_SUFFIX = " Make the question require multi-hop reasoning over the context."
