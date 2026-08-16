@@ -29,7 +29,7 @@ def _redis_settings() -> RedisSettings:
     Returns:
         settings: RedisSettings parsed from REDIS_URL.
     """
-    return RedisSettings.from_dsn(os.environ.get("REDIS_URL", "redis://localhost:6379"))
+    return RedisSettings.from_dsn(os.environ.get("REDIS_URL", "redis://localhost:6379/0"))
 
 
 async def run_eval_job(ctx: dict[str, Any], run_id: str, repo: str) -> dict[str, Any]:
