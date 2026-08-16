@@ -59,7 +59,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: unit-test-report
+          name: unit-test-report-${{ github.run_id }}
           path: junit.xml
 
   merge-gate:
