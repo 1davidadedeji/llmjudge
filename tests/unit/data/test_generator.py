@@ -109,3 +109,9 @@ def test_gold_set_excludes_real_queries(tmp_path) -> None:
     gold = generator.load_gold_set()
     assert all(case.get("provenance") == "synthetic" for case in gold)
     assert not any(case.get("question") == "real-user-query" for case in gold)
+
+def test_difficulty_mix_sums_to_count(tmp_path) -> None:
+    """Difficulty split always sums to the planned count."""
+    generator = make_generator(tmp_path, [])
+    for count in (5, 10, 33):
+        assert sum(generator.difficulty_mix(count).values()) == count
