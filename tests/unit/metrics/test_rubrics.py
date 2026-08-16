@@ -74,3 +74,8 @@ def test_render_rubric_numbers_criteria() -> None:
     from metrics.rubrics import render_rubric
 
     assert render_rubric(load_rubric("g_eval")).startswith("1. ")
+
+def test_template_version_positive() -> None:
+    """Template versions are positive integers."""
+    for name in ("g_eval", "faithfulness", "hallucination"):
+        assert load_rubric(name).version >= 1
