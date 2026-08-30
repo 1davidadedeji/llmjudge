@@ -14,6 +14,7 @@ import os
 import sys
 import time
 from dataclasses import dataclass
+from typing import Any
 
 import httpx
 
@@ -35,7 +36,9 @@ class GateResult:
     regressions: list[str]
 
 
-def await_eval_run(client: httpx.Client, run_id: str, timeout_s: int = DEFAULT_TIMEOUT_S) -> dict:
+def await_eval_run(
+    client: httpx.Client, run_id: str, timeout_s: int = DEFAULT_TIMEOUT_S
+) -> dict[str, Any]:
     """Polls the API until the eval run reaches a terminal state.
 
     Args:
@@ -50,7 +53,7 @@ def await_eval_run(client: httpx.Client, run_id: str, timeout_s: int = DEFAULT_T
     while time.monotonic() < deadline:
         response = client.get(f"/runs/{run_id}")
         response.raise_for_status()
-        payload = response.json()
+        payload: dict[str, Any] = response.json()
         if is_terminal(payload["status"]):
             return payload
         time.sleep(POLL_INTERVAL_S)
@@ -58,7 +61,7 @@ def await_eval_run(client: httpx.Client, run_id: str, timeout_s: int = DEFAULT_T
     return {"status": "unknown", "scores": {}}
 
 
-def evaluate_gate(payload: dict, thresholds: dict[str, float]) -> GateResult:
+def evaluate_gate(payload: dict[str, Any], thresholds: dict[str, float]) -> GateResult:
     """Compares run scores against thresholds.
 
     Args:
@@ -100,6 +103,7 @@ def main() -> int:
 if __name__ == "__main__":
     sys.exit(main())
 
+
 def format_regression_report(result: GateResult, repo: str) -> str:
     """Formats the gate outcome for the CI log and PR status.
 
@@ -114,6 +118,7 @@ def format_regression_report(result: GateResult, repo: str) -> str:
         return f"[{repo}] merge gate passed"
     return f"[{repo}] BLOCKED: {', '.join(result.regressions)}"
 
+
 def threshold_for(thresholds: dict[str, float], metric: str, default: float = 0.75) -> float:
     """Resolves the threshold for one metric with a fallback.
 
@@ -127,6 +132,7 @@ def threshold_for(thresholds: dict[str, float], metric: str, default: float = 0.
     """
     return thresholds.get(metric, default)
 
+
 def is_terminal(status: str) -> bool:
     """Reports whether a run status is terminal.
 
@@ -138,6 +144,7 @@ def is_terminal(status: str) -> bool:
     """
     return status in ("succeeded", "failed")
 
+
 def summarize_scores(scores: dict[str, float]) -> str:
     """Renders per-metric scores as a compact one-liner.
 
@@ -148,6 +155,7 @@ def summarize_scores(scores: dict[str, float]) -> str:
         summary: Comma-separated metric=score pairs, sorted by metric name.
     """
     return ", ".join(f"{name}={scores[name]:.3f}" for name in sorted(scores))
+
 
 def retryable_status(status: str) -> bool:
     """Reports whether a run status is worth re-polling.

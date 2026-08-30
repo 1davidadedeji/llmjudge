@@ -9,7 +9,6 @@ Contains:
 """
 
 from abc import ABC, abstractmethod
-from typing import Final
 
 from harness.test_case import LLMTestCase
 
@@ -59,6 +58,7 @@ class BaseMetric(ABC):
         """
         return score >= self.threshold
 
+
 def score_band(score: float) -> str:
     """Maps a score to a coarse quality band for reporting.
 
@@ -74,8 +74,10 @@ def score_band(score: float) -> str:
         return "ok"
     return "weak"
 
+
 class MetricError(Exception):
     """Raised when a metric cannot produce a score for a test case."""
+
 
 def describe_metric(metric: "BaseMetric") -> str:
     """Builds a one-line description of a metric instance.

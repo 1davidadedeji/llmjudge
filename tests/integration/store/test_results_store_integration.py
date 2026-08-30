@@ -24,6 +24,7 @@ class RecordingConnection:
         self.runs: dict[str, dict] = {}
         self.scores: dict[tuple[str, str], float] = {}
         self.statements: list[tuple] = []
+        self.rowcount = 0
 
     def __enter__(self) -> "RecordingConnection":
         """Returns itself as the context value."""
@@ -38,7 +39,10 @@ class RecordingConnection:
         if sql.startswith("INSERT INTO eval_runs"):
             run_id, repo, status, created_at = params
             self.runs[run_id] = {
-                "id": run_id, "repo": repo, "status": status, "created_at": created_at,
+                "id": run_id,
+                "repo": repo,
+                "status": status,
+                "created_at": created_at,
             }
         elif sql.startswith("INSERT INTO eval_scores"):
             run_id, metric, score, _ = params
@@ -75,6 +79,7 @@ def test_insert_then_get_roundtrip() -> None:
     store.insert_run("r-1", "agentflow", "queued")
     assert conn.runs["r-1"]["repo"] == "agentflow"
 
+
 def test_upsert_overwrites_score() -> None:
     """A second upsert for the same metric overwrites."""
     conn = RecordingConnection()
@@ -82,6 +87,7 @@ def test_upsert_overwrites_score() -> None:
     store.upsert_score("r-1", "faithfulness", 0.5)
     store.upsert_score("r-1", "faithfulness", 0.9)
     assert conn.scores[("r-1", "faithfulness")] == 0.9
+
 
 def test_scores_isolated_per_run() -> None:
     """Scores for one run never leak into another."""
@@ -92,11 +98,13 @@ def test_scores_isolated_per_run() -> None:
     assert conn.scores[("r-1", "m")] == 0.1
     assert conn.scores[("r-2", "m")] == 0.9
 
+
 def test_insert_run_default_status_queued() -> None:
     """insert_run defaults the status to queued."""
     conn = RecordingConnection()
     make_store(conn).insert_run("r-9", "llmjudge")
-    assert conn.runs["r-9"]["status"] == "queued
+    assert conn.runs["r-9"]["status"] == "queued"
+
 
 def test_multiple_metrics_same_run() -> None:
     """One run accumulates many metric scores."""
@@ -106,11 +114,13 @@ def test_multiple_metrics_same_run() -> None:
         store.upsert_score("r-1", metric, 0.7)
     assert len([key for key in conn.scores if key[0] == "r-1"]) == 3
 
+
 def test_created_at_recorded() -> None:
     """insert_run records a creation timestamp."""
     conn = RecordingConnection()
     make_store(conn).insert_run("r-1", "agentflow")
     assert conn.runs["r-1"]["created_at"] is not None
+
 
 def test_score_types_preserved() -> None:
     """Scores round-trip as floats."""
@@ -118,6 +128,7 @@ def test_score_types_preserved() -> None:
     store = make_store(conn)
     store.upsert_score("r-1", "m", 0.333)
     assert isinstance(conn.scores[("r-1", "m")], float)
+
 
 def test_many_runs_same_repo() -> None:
     """One repo can hold many runs."""
@@ -127,12 +138,14 @@ def test_many_runs_same_repo() -> None:
         store.insert_run(f"r-{i}", "agentflow")
     assert len(conn.runs) == 5
 
+
 def test_upsert_requires_matching_run() -> None:
     """Scores key by run id, not by metric alone."""
     conn = RecordingConnection()
     store = make_store(conn)
     store.upsert_score("r-1", "m", 0.5)
     assert ("r-2", "m") not in conn.scores
+
 
 def test_statement_order_insert_before_score() -> None:
     """Run row is written before its scores."""
@@ -143,19 +156,22 @@ def test_statement_order_insert_before_score() -> None:
     assert conn.statements[0][0].startswith("INSERT INTO eval_runs")
     assert conn.statements[1][0].startswith("INSERT INTO eval_scores")
 
+
 def test_finish_run_marks_terminal() -> None:
     """finish_run flips the run to a terminal status."""
     conn = RecordingConnection()
     store = make_store(conn)
     store.insert_run("r-1", "agentflow")
     conn.runs["r-1"]["status"] = "succeeded"
-    assert conn.runs["r-1"]["status"] == "succeeded
+    assert conn.runs["r-1"]["status"] == "succeeded"
+
 
 def test_schema_file_present() -> None:
     """The schema file ships with the store package."""
     from pathlib import Path
 
     assert Path("store/schema.sql").exists
+
 
 def test_schema_defines_both_tables() -> None:
     """Schema defines eval_runs and eval_scores."""
@@ -164,6 +180,7 @@ def test_schema_defines_both_tables() -> None:
     schema = Path("store/schema.sql").read_text()
     assert "eval_runs" in schema and "eval_scores" in schema
 
+
 def test_schema_scores_reference_runs() -> None:
     """Score rows reference their run."""
     from pathlib import Path
@@ -171,13 +188,16 @@ def test_schema_scores_reference_runs() -> None:
     schema = Path("store/schema.sql").read_text()
     assert "REFERENCES eval_runs" in schema
 
+
 def test_schema_uses_timestamptz() -> None:
     """Timestamps are timezone-aware TIMESTAMPTZ."""
     from pathlib import Path
 
     schema = Path("store/schema.sql").read_text()
     assert "TIMESTAMPTZ" in schema
-    assert " TIMESTAMP" not in schema
+    assert " TIMESTAMP\n" not in schema
+    assert " TIMESTAMP " not in schema
+
 
 def test_version_column_after_locking_fix() -> None:
     """eval_scores carries a version column for optimistic locking."""
@@ -186,15 +206,18 @@ def test_version_column_after_locking_fix() -> None:
     schema = Path("store/schema.sql").read_text()
     assert "version INTEGER" in schema
 
+
 def test_save_score_conflict_raises() -> None:
     """A stale expected version raises OptimisticLockError."""
     import pytest
 
-    from store.results_store import OptimisticLockError, ResultsStore
+    from store.results_store import OptimisticLockError
 
-    store = ResultsStore("postgresql://unused")
+    conn = RecordingConnection()
+    store = make_store(conn)
     with pytest.raises(OptimisticLockError):
         store.save_score("r-1", "m", 0.5, expected_version=99)
+
 
 def test_concurrent_writers_both_succeed_sequentially() -> None:
     """Two sequential writers see each other's scores."""
@@ -205,6 +228,7 @@ def test_concurrent_writers_both_succeed_sequentially() -> None:
     second.upsert_score("r-1", "b", 0.2)
     assert ("r-1", "a") in conn.scores and ("r-1", "b") in conn.scores
 
+
 def test_insert_run_repos_diverse() -> None:
     """Runs for all five repos coexist."""
     conn = RecordingConnection()
@@ -212,6 +236,7 @@ def test_insert_run_repos_diverse() -> None:
     for repo in ("retrieval-core", "agentflow", "graphmind", "llmjudge", "shipwright"):
         store.insert_run(f"run-{repo}", repo)
     assert len(conn.runs) == 5
+
 
 def test_score_zero_and_one_boundaries() -> None:
     """Boundary scores 0.0 and 1.0 store fine."""
@@ -222,13 +247,15 @@ def test_score_zero_and_one_boundaries() -> None:
     assert conn.scores[("r-1", "lo")] == 0.0
     assert conn.scores[("r-1", "hi")] == 1.0
 
+
 def test_run_ids_unique_keys() -> None:
     """Run ids act as primary keys in the fake."""
     conn = RecordingConnection()
     store = make_store(conn)
     store.insert_run("r-1", "agentflow")
     store.insert_run("r-1", "graphmind")
-    assert conn.runs["r-1"]["repo"] == "graphmind
+    assert conn.runs["r-1"]["repo"] == "graphmind"
+
 
 def test_metric_names_with_underscores() -> None:
     """Metric names containing underscores store fine."""
@@ -237,12 +264,14 @@ def test_metric_names_with_underscores() -> None:
     store.upsert_score("r-1", "contextual_precision", 0.8)
     assert ("r-1", "contextual_precision") in conn.scores
 
+
 def test_empty_repo_name_allowed() -> None:
     """Store does not impose its own repo-name policy."""
     conn = RecordingConnection()
     store = make_store(conn)
     store.insert_run("r-1", "")
     assert conn.runs["r-1"]["repo"] == ""
+
 
 def test_long_metric_name() -> None:
     """Long metric names are stored without truncation."""
@@ -252,15 +281,24 @@ def test_long_metric_name() -> None:
     store.upsert_score("r-1", name, 0.5)
     assert ("r-1", name) in conn.scores
 
+
 def test_many_scores_one_run() -> None:
     """A run can carry the full metric suite."""
     conn = RecordingConnection()
     store = make_store(conn)
-    metrics = ["faithfulness", "answer_relevancy", "hallucination", "g_eval",
-               "contextual_precision", "contextual_recall", "agent_trajectory"]
+    metrics = [
+        "faithfulness",
+        "answer_relevancy",
+        "hallucination",
+        "g_eval",
+        "contextual_precision",
+        "contextual_recall",
+        "agent_trajectory",
+    ]
     for metric in metrics:
         store.upsert_score("r-1", metric, 0.75)
     assert len([k for k in conn.scores if k[0] == "r-1"]) == 7
+
 
 def test_updated_at_recorded_on_scores() -> None:
     """Score writes carry an updated_at timestamp."""
@@ -271,6 +309,7 @@ def test_updated_at_recorded_on_scores() -> None:
     assert "updated_at" in sql
     assert params[3] is not None
 
+
 def test_status_transitions_queued_to_succeeded() -> None:
     """A run moves queued -> succeeded across writes."""
     conn = RecordingConnection()
@@ -278,7 +317,8 @@ def test_status_transitions_queued_to_succeeded() -> None:
     store.insert_run("r-1", "agentflow")
     assert conn.runs["r-1"]["status"] == "queued"
     conn.runs["r-1"]["status"] = "succeeded"
-    assert conn.runs["r-1"]["status"] == "succeeded
+    assert conn.runs["r-1"]["status"] == "succeeded"
+
 
 def test_store_dsn_stored() -> None:
     """The store keeps the DSN it was built with."""

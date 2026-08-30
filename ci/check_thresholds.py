@@ -8,9 +8,9 @@ Contains:
     resolve_threshold(): resolves the effective threshold for a repo
 """
 
-from dataclasses import dataclass
-
 import os
+from dataclasses import dataclass
+from typing import Any
 
 import yaml
 
@@ -32,7 +32,7 @@ class RepoThreshold:
     threshold: float
 
 
-def load_threshold_config(path: str = CONFIG_PATH) -> dict:
+def load_threshold_config(path: str = CONFIG_PATH) -> dict[str, Any]:
     """Parses the thresholds config file.
 
     Args:
@@ -42,10 +42,11 @@ def load_threshold_config(path: str = CONFIG_PATH) -> dict:
         config: Parsed mapping with default_threshold and per-repo entries.
     """
     with open(path) as fh:
-        return yaml.safe_load(fh)
+        config: dict[str, Any] = yaml.safe_load(fh)
+    return config
 
 
-def resolve_threshold(config: dict, repo: str) -> RepoThreshold:
+def resolve_threshold(config: dict[str, Any], repo: str) -> RepoThreshold:
     """Resolves the effective threshold for a repo.
 
     Args:
@@ -60,7 +61,8 @@ def resolve_threshold(config: dict, repo: str) -> RepoThreshold:
         return RepoThreshold(repo=repo, threshold=float(repos[repo]["threshold"]))
     return RepoThreshold(repo=repo, threshold=float(config["default_threshold"]))
 
-def validate_config(config: dict) -> list[str]:
+
+def validate_config(config: dict[str, Any]) -> list[str]:
     """Validates a parsed thresholds config.
 
     Args:
@@ -78,7 +80,8 @@ def validate_config(config: dict) -> list[str]:
             problems.append(f"{repo}: threshold {value} out of range [0, 1]")
     return problems
 
-def all_repos(config: dict) -> list[str]:
+
+def all_repos(config: dict[str, Any]) -> list[str]:
     """Lists every repo with an explicit threshold entry.
 
     Args:
@@ -89,7 +92,8 @@ def all_repos(config: dict) -> list[str]:
     """
     return sorted(config.get("repos", {}))
 
-def strictest(config: dict) -> RepoThreshold:
+
+def strictest(config: dict[str, Any]) -> RepoThreshold:
     """Finds the repo with the strictest threshold.
 
     Args:
@@ -101,6 +105,7 @@ def strictest(config: dict) -> RepoThreshold:
     repos = config.get("repos", {})
     name = max(repos, key=lambda repo: float(repos[repo]["threshold"]))
     return RepoThreshold(repo=name, threshold=float(repos[name]["threshold"]))
+
 
 def blended_score(scores: dict[str, float]) -> float:
     """Computes the blended gate score from per-metric scores.
@@ -115,7 +120,8 @@ def blended_score(scores: dict[str, float]) -> float:
         return 0.0
     return sum(scores.values()) / len(scores)
 
-def gate_decision(config: dict, repo: str, scores: dict[str, float]) -> bool:
+
+def gate_decision(config: dict[str, Any], repo: str, scores: dict[str, float]) -> bool:
     """Decides whether a repo's scores pass its merge-gate threshold.
 
     Args:
@@ -128,7 +134,8 @@ def gate_decision(config: dict, repo: str, scores: dict[str, float]) -> bool:
     """
     return blended_score(scores) >= resolve_threshold(config, repo).threshold
 
-def describe(config: dict, repo: str) -> str:
+
+def describe(config: dict[str, Any], repo: str) -> str:
     """Builds a one-line description of a repo's gate configuration.
 
     Args:

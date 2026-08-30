@@ -57,15 +57,18 @@ def test_requires_exactly_three_judges() -> None:
     with pytest.raises(ValueError):
         GEvalMetric([StubJudge([])])
 
+
 def test_self_preference_bias_guard() -> None:
     """Ensemble mean dampens a single judge inflating its own family's answers."""
     biased = make_metric(["5", "3", "3"]).measure(make_case())
     single_judge_view = 1.0
     assert biased < single_judge_view
 
+
 def test_parse_score_still_handles_prose() -> None:
     """Ensemble judge verdict parsing still finds digits in prose."""
-    assert make_metric(["4"]).parse_score("a solid 4") == 0.75
+    assert make_metric(["4", "4", "4"]).parse_score("a solid 4") == 0.75
+
 
 def test_each_judge_called_once() -> None:
     """Every judge in the ensemble is consulted exactly once."""
@@ -73,16 +76,19 @@ def test_each_judge_called_once() -> None:
     GEvalMetric(judges).measure(make_case())
     assert all(len(judge.calls) == 1 for judge in judges)
 
+
 def test_per_judge_breakdown_labels() -> None:
     """Breakdown labels judges by position."""
     from metrics.g_eval import per_judge_breakdown
 
     assert per_judge_breakdown([0.1, 0.2, 0.3])["judge_b"] == 0.2
 
+
 def test_ensemble_details_keys() -> None:
     """measure_with_details exposes scores, mean, and disagreement."""
     details = make_metric(["4", "4", "4"]).measure_with_details(make_case())
     assert set(details) == {"scores", "mean", "disagreement"}
+
 
 def test_should_escalate_follows_flag() -> None:
     """Escalation follows the disagreement flag."""
@@ -90,17 +96,21 @@ def test_should_escalate_follows_flag() -> None:
 
     assert should_escalate(True) and not should_escalate(False)
 
+
 def test_verdict_with_text_around() -> None:
     """Prose around the digit still parses."""
-    assert GEvalMetric(StubJudge(["score: 5"])).measure(make_case()) == 1.0
+    assert make_metric(["score: 5", "5", "5"]).measure(make_case()) == 1.0
+
 
 def test_mean_of_all_ones_is_zero() -> None:
     """Three 1 verdicts average to 0.0."""
     assert make_metric(["1", "1", "1"]).measure(make_case()) == 0.0
 
+
 def test_ensemble_all_top_scores() -> None:
     """Three 5 verdicts average to 1.0."""
     assert make_metric(["5", "5", "5"]).measure(make_case()) == 1.0
+
 
 def test_ensemble_rejects_two_judges() -> None:
     """Two judges are not a valid ensemble."""
@@ -109,11 +119,13 @@ def test_ensemble_rejects_two_judges() -> None:
     with pytest.raises(ValueError):
         GEvalMetric([StubJudge([]), StubJudge([])])
 
+
 def test_ensemble_mean_symmetric() -> None:
     """Mean is insensitive to judge ordering."""
     assert make_metric(["1", "3", "5"]).measure(make_case()) == make_metric(
         ["5", "3", "1"]
     ).measure(make_case())
+
 
 def test_ensemble_confidence_perfect() -> None:
     """Perfect agreement gives full confidence."""
@@ -121,11 +133,13 @@ def test_ensemble_confidence_perfect() -> None:
 
     assert ensemble_confidence([0.5, 0.5, 0.5]) == 1.0
 
+
 def test_ensemble_confidence_drops_with_spread() -> None:
     """Confidence falls as judge spread widens."""
     from metrics.g_eval import ensemble_confidence
 
     assert ensemble_confidence([0.0, 1.0, 0.5]) == 0.0
+
 
 def test_details_scores_match_judges() -> None:
     """Per-judge scores appear in ensemble order."""

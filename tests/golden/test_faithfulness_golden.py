@@ -39,10 +39,12 @@ def test_golden_cases(case: dict) -> None:
     score = metric.measure(test_case)
     assert case["min_score"] <= score <= case["max_score"], case["id"]
 
+
 def test_golden_ids_unique() -> None:
     """Golden case ids never collide."""
     ids = [case["id"] for case in load_golden_cases()]
     assert len(ids) == len(set(ids))
+
 
 def test_golden_bands_valid() -> None:
     """Every golden band lies inside [0, 1] with min <= max."""

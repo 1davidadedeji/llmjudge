@@ -10,8 +10,8 @@ Contains:
 
 import hashlib
 import json
-import os
 from pathlib import Path
+from typing import Any
 
 from data.templates import QA_TEMPLATE, TOPICS
 from metrics.judge import JudgeClient
@@ -43,7 +43,7 @@ class SyntheticGenerator:
         """
         return hashlib.sha256(topic.encode()).hexdigest()[:16]
 
-    def generate(self, topic: str, count: int = 10) -> list[dict]:
+    def generate(self, topic: str, count: int = 10) -> list[dict[str, Any]]:
         """Produces a batch of synthetic cases, using the cache when warm.
 
         Args:
@@ -67,7 +67,7 @@ class SyntheticGenerator:
         cache_path.write_text("\n".join(json.dumps(case) for case in cases))
         return cases
 
-    def load_gold_set(self) -> list[dict]:
+    def load_gold_set(self) -> list[dict[str, Any]]:
         """Loads the cached synthetic gold set.
 
         Returns:
@@ -90,7 +90,7 @@ class SyntheticGenerator:
         """
         return list(TOPICS)
 
-    def generate_rag_cases(self, topic: str, count: int = 5) -> list[dict]:
+    def generate_rag_cases(self, topic: str, count: int = 5) -> list[dict[str, Any]]:
         """Generates cases with ranked retrieval contexts.
 
         Args:
@@ -102,7 +102,9 @@ class SyntheticGenerator:
         """
         from data.templates import RAG_TEMPLATE
 
-        return [json.loads(self.judge.complete(RAG_TEMPLATE.format(topic=topic))) for _ in range(count)]
+        return [
+            json.loads(self.judge.complete(RAG_TEMPLATE.format(topic=topic))) for _ in range(count)
+        ]
 
     def cache_size(self) -> int:
         """Counts cached case files.
@@ -123,7 +125,7 @@ class SyntheticGenerator:
         """
         return max(0, count)
 
-    def deduplicate(self, cases: list[dict]) -> list[dict]:
+    def deduplicate(self, cases: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """Drops cases whose question already appears in the batch.
 
         Args:
@@ -141,7 +143,7 @@ class SyntheticGenerator:
                 unique.append(case)
         return unique
 
-    def validate_case(self, case: dict) -> list[str]:
+    def validate_case(self, case: dict[str, Any]) -> list[str]:
         """Validates one generated case.
 
         Args:
@@ -150,9 +152,11 @@ class SyntheticGenerator:
         Returns:
             problems: Missing-field messages; empty when valid.
         """
-        return [f"missing {field}" for field in ("question", "answer", "context") if field not in case]
+        return [
+            f"missing {field}" for field in ("question", "answer", "context") if field not in case
+        ]
 
-    def generate_topics_batch(self, count_per_topic: int = 5) -> dict[str, list[dict]]:
+    def generate_topics_batch(self, count_per_topic: int = 5) -> dict[str, list[dict[str, Any]]]:
         """Generates a batch across every seed topic.
 
         Args:

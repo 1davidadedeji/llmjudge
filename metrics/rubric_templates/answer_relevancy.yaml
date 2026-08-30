@@ -2,7 +2,6 @@ metric: answer_relevancy
 version: 2
 criteria:
   - "The answer must address the question directly, not a neighboring topic."
+  - "Off-topic but fluent answers still fail this metric."
 scale_min: 0
 scale_max: 1
-
-  - "Off-topic but fluent answers still fail this metric."

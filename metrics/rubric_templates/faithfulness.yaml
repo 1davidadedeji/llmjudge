@@ -3,7 +3,6 @@ version: 2
 criteria:
   - "A claim is supported only when the context states or directly implies it."
   - "Paraphrased claims count as supported when the meaning is preserved."
+  - "When the answer mixes supported and unsupported claims, score per claim."
 scale_min: 0
 scale_max: 1
-
-  - "When the answer mixes supported and unsupported claims, score per claim."

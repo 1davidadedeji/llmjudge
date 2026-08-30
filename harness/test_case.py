@@ -7,6 +7,7 @@ Contains:
 """
 
 from dataclasses import dataclass, field, replace
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -31,7 +32,7 @@ class LLMTestCase:
     context: list[str] = field(default_factory=list)
     tools_called: list[str] = field(default_factory=list)
     expected_tools: list[str] = field(default_factory=list)
-    metadata: dict = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def tag(self, key: str, value: str) -> "LLMTestCase":
         """Returns a copy with one metadata tag added.
@@ -85,7 +86,7 @@ class LLMTestCase:
         return bool(self.tools_called or self.expected_tools)
 
     @staticmethod
-    def from_dict(payload: dict) -> "LLMTestCase":
+    def from_dict(payload: dict[str, Any]) -> "LLMTestCase":
         """Deserializes a case from its API payload.
 
         Args:
@@ -96,7 +97,7 @@ class LLMTestCase:
         """
         return LLMTestCase(**payload)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         """Serializes the case for the results API.
 
         Returns:

@@ -76,6 +76,7 @@ class HallucinationMetric(BaseMetric):
         verdict = self.judge.complete(prompt)
         return verdict.strip().lower().startswith("yes")
 
+
 def hallucination_rate(score: float) -> float:
     """Converts a hallucination score into a hallucination rate.
 
@@ -87,6 +88,7 @@ def hallucination_rate(score: float) -> float:
     """
     return 1.0 - score
 
+
 def contradicted_claims(claims: list[str], verdicts: list[bool]) -> list[str]:
     """Pairs claims with verdicts and returns the contradicted ones.
 
@@ -97,7 +99,8 @@ def contradicted_claims(claims: list[str], verdicts: list[bool]) -> list[str]:
     Returns:
         flagged: Claims the context contradicts.
     """
-    return [claim for claim, flagged in zip(claims, verdicts) if flagged]
+    return [claim for claim, flagged in zip(claims, verdicts, strict=True) if flagged]
+
 
 def is_clean(score: float, threshold: float = 0.9) -> bool:
     """Reports whether an answer counts as hallucination-free.

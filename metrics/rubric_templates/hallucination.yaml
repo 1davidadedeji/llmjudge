@@ -3,7 +3,6 @@ version: 2
 criteria:
   - "A claim is hallucinated when the context contradicts it."
   - "Unsupported-but-not-contradicted claims are not hallucinations."
+  - "Quoted text that appears verbatim in the context is never hallucinated."
 scale_min: 0
 scale_max: 1
-
-  - "Quoted text that appears verbatim in the context is never hallucinated."

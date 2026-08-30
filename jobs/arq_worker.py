@@ -9,10 +9,10 @@ Contains:
 """
 
 import os
+from datetime import UTC
 from typing import Any
 
 from arq.connections import RedisSettings
-
 from arq.cron import cron
 
 QUEUE_NAME = "llmjudge:eval"
@@ -61,7 +61,131 @@ async def enqueue_eval_run(redis: Any, run_id: str, repo: str) -> str:
         job_id: Identifier assigned to the enqueued job.
     """
     job = await redis.enqueue_job("run_eval_job", run_id, repo, _queue_name=QUEUE_NAME)
-    return job.job_id
+    return str(job.job_id)
+
+
+def retry_backoff_s(attempt: int) -> int:
+    """Computes exponential backoff seconds for a retry attempt.
+
+    Args:
+        attempt: One-based index of the upcoming retry attempt.
+
+    Returns:
+        delay_s: Seconds to wait before the next attempt.
+    """
+    return RETRY_BACKOFF_BASE_S << (attempt - 1)
+
+
+async def on_job_failure(ctx: dict[str, Any], run_id: str, repo: str) -> None:
+    """Moves an exhausted job onto the dead-letter queue.
+
+    Args:
+        ctx: arq job context (redis connection, job id, retry count).
+        run_id: Identifier of the eval run that failed.
+        repo: Name of the repo under evaluation.
+    """
+    await ctx["redis"].lpush(DEAD_LETTER_QUEUE, f"{repo}:{run_id}")
+
+
+async def healthcheck_job(ctx: dict[str, Any]) -> bool:
+    """Reports worker liveness by writing a heartbeat key.
+
+    Args:
+        ctx: arq job context (redis connection, job id, retry count).
+
+    Returns:
+        alive: Always True once the heartbeat write succeeds.
+    """
+    from datetime import datetime
+
+    stamp = datetime.now(UTC).isoformat()
+    await ctx["redis"].set("llmjudge:worker:heartbeat", stamp, ex=60)
+    return True
+
+
+async def enqueue_eval_suite(redis: Any, run_ids: list[str], repo: str) -> list[str]:
+    """Enqueues a batch of eval runs for one repo.
+
+    Args:
+        redis: arq redis connection pool.
+        run_ids: Identifiers of the eval runs to enqueue.
+        repo: Name of the repo under evaluation.
+
+    Returns:
+        job_ids: Identifiers assigned to the enqueued jobs, in input order.
+    """
+    return [await enqueue_eval_run(redis, run_id, repo) for run_id in run_ids]
+
+
+def describe_job(run_id: str, repo: str) -> str:
+    """Builds a human-readable label for an eval job.
+
+    Args:
+        run_id: Identifier of the eval run.
+        repo: Name of the repo under evaluation.
+
+    Returns:
+        label: Label used in logs and the dashboard queue view.
+    """
+    return f"eval:{repo}:{run_id}"
+
+
+async def drain_dead_letter(ctx: dict[str, Any]) -> int:
+    """Requeues every job sitting on the dead-letter queue.
+
+    Args:
+        ctx: arq job context (redis connection, job id, retry count).
+
+    Returns:
+        requeued: Number of jobs moved back onto the primary queue.
+    """
+    requeued = 0
+    while await ctx["redis"].rpop(DEAD_LETTER_QUEUE) is not None:
+        requeued += 1
+    return requeued
+
+
+async def cancel_eval_run(redis: Any, run_id: str) -> bool:
+    """Cancels a queued eval run if it has not started yet.
+
+    Args:
+        redis: arq redis connection pool.
+        run_id: Identifier of the eval run to cancel.
+
+    Returns:
+        cancelled: True if the run was still queued and is now cancelled.
+    """
+    deleted: int = await redis.delete(f"arq:job:{run_id}")
+    return bool(deleted)
+
+
+def parse_queue_depth(payload: str) -> int:
+    """Parses a queue-depth payload from redis.
+
+    Args:
+        payload: Raw string from the depth probe.
+
+    Returns:
+        depth: Parsed depth; 0 on malformed input.
+    """
+    try:
+        return max(0, int(payload))
+    except ValueError:
+        return 0
+
+
+def format_duration(seconds: int) -> str:
+    """Formats a job duration for logs.
+
+    Args:
+        seconds: Duration in seconds.
+
+    Returns:
+        text: Human-readable duration.
+    """
+    if seconds < 60:
+        return f"{seconds}s"
+    return f"{seconds // 60}m{seconds % 60:02d}s"
 
 
 class WorkerSettings:
@@ -79,117 +203,3 @@ class WorkerSettings:
     max_tries = DEFAULT_MAX_TRIES
     on_failure = on_job_failure
     cron_jobs = [cron(drain_dead_letter, hour=3)]
-
-def retry_backoff_s(attempt: int) -> int:
-    """Computes exponential backoff seconds for a retry attempt.
-
-    Args:
-        attempt: One-based index of the upcoming retry attempt.
-
-    Returns:
-        delay_s: Seconds to wait before the next attempt.
-    """
-    return RETRY_BACKOFF_BASE_S * 2 ** (attempt - 1)
-
-async def on_job_failure(ctx: dict[str, Any], run_id: str, repo: str) -> None:
-    """Moves an exhausted job onto the dead-letter queue.
-
-    Args:
-        ctx: arq job context (redis connection, job id, retry count).
-        run_id: Identifier of the eval run that failed.
-        repo: Name of the repo under evaluation.
-    """
-    await ctx["redis"].lpush(DEAD_LETTER_QUEUE, f"{repo}:{run_id}")
-
-async def healthcheck_job(ctx: dict[str, Any]) -> bool:
-    """Reports worker liveness by writing a heartbeat key.
-
-    Args:
-        ctx: arq job context (redis connection, job id, retry count).
-
-    Returns:
-        alive: Always True once the heartbeat write succeeds.
-    """
-    from datetime import datetime, timezone
-
-    stamp = datetime.now(timezone.utc).isoformat()
-    await ctx["redis"].set("llmjudge:worker:heartbeat", stamp, ex=60)
-    return True
-
-async def enqueue_eval_suite(redis: Any, run_ids: list[str], repo: str) -> list[str]:
-    """Enqueues a batch of eval runs for one repo.
-
-    Args:
-        redis: arq redis connection pool.
-        run_ids: Identifiers of the eval runs to enqueue.
-        repo: Name of the repo under evaluation.
-
-    Returns:
-        job_ids: Identifiers assigned to the enqueued jobs, in input order.
-    """
-    return [await enqueue_eval_run(redis, run_id, repo) for run_id in run_ids]
-
-def describe_job(run_id: str, repo: str) -> str:
-    """Builds a human-readable label for an eval job.
-
-    Args:
-        run_id: Identifier of the eval run.
-        repo: Name of the repo under evaluation.
-
-    Returns:
-        label: Label used in logs and the dashboard queue view.
-    """
-    return f"eval:{repo}:{run_id}"
-
-async def drain_dead_letter(ctx: dict[str, Any]) -> int:
-    """Requeues every job sitting on the dead-letter queue.
-
-    Args:
-        ctx: arq job context (redis connection, job id, retry count).
-
-    Returns:
-        requeued: Number of jobs moved back onto the primary queue.
-    """
-    requeued = 0
-    while await ctx["redis"].rpop(DEAD_LETTER_QUEUE) is not None:
-        requeued += 1
-    return requeued
-
-async def cancel_eval_run(redis: Any, run_id: str) -> bool:
-    """Cancels a queued eval run if it has not started yet.
-
-    Args:
-        redis: arq redis connection pool.
-        run_id: Identifier of the eval run to cancel.
-
-    Returns:
-        cancelled: True if the run was still queued and is now cancelled.
-    """
-    return bool(await redis.delete(f"arq:job:{run_id}"))
-
-def parse_queue_depth(payload: str) -> int:
-    """Parses a queue-depth payload from redis.
-
-    Args:
-        payload: Raw string from the depth probe.
-
-    Returns:
-        depth: Parsed depth; 0 on malformed input.
-    """
-    try:
-        return max(0, int(payload))
-    except ValueError:
-        return 0
-
-def format_duration(seconds: int) -> str:
-    """Formats a job duration for logs.
-
-    Args:
-        seconds: Duration in seconds.
-
-    Returns:
-        text: Human-readable duration.
-    """
-    if seconds < 60:
-        return f"{seconds}s"
-    return f"{seconds // 60}m{seconds % 60:02d}s"

@@ -17,7 +17,7 @@ from metrics.contextual_precision_recall import (
 from metrics.faithfulness import FaithfulnessMetric
 from metrics.hallucination import HallucinationMetric
 
-METRIC_REGISTRY: dict[str, type] = {
+METRIC_REGISTRY: dict[str, type[BaseMetric]] = {
     "faithfulness": FaithfulnessMetric,
     "answer_relevancy": AnswerRelevancyMetric,
     "contextual_precision": ContextualPrecisionMetric,
@@ -42,4 +42,5 @@ def build_metric(name: str, **kwargs: object) -> BaseMetric:
     """
     if name not in METRIC_REGISTRY:
         raise KeyError(f"unknown metric: {name}")
-    return METRIC_REGISTRY[name](**kwargs)
+    metric_cls: type[BaseMetric] = METRIC_REGISTRY[name]
+    return metric_cls(**kwargs)

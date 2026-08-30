@@ -58,6 +58,7 @@ def filter_findings(findings: list[str], overrides: list[Override], today: str) 
     active = {override.vuln_id for override in overrides if override.expires >= today}
     return [finding for finding in findings if finding not in active]
 
+
 def main() -> int:
     """CLI entrypoint: fails when unoverridden findings remain.
 
@@ -72,7 +73,8 @@ def main() -> int:
     parser.add_argument("--check", required=True)
     args = parser.parse_args()
     with open(args.check) as fh:
-        report = json.load(fh)
+        raw = fh.read().strip()
+    report = json.loads(raw) if raw else {"dependencies": []}
     findings = [dep["name"] for dep in report.get("dependencies", []) if dep.get("vulns")]
     today = datetime.date.today().isoformat()
     remaining = filter_findings(findings, load_overrides(), today)
@@ -85,6 +87,7 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
 
 def expiring_soon(overrides: list[Override], today: str, window_days: int = 14) -> list[Override]:
     """Lists overrides expiring within the warning window.

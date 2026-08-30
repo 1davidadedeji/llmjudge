@@ -45,7 +45,10 @@ def desired_workers(queue_depth: int, policy: AutoscalePolicy = DEFAULT_POLICY) 
     wanted = (queue_depth + policy.scale_up_depth - 1) // policy.scale_up_depth
     return max(policy.min_workers, min(policy.max_workers, wanted))
 
-def should_scale_up(queue_depth: int, current: int, policy: AutoscalePolicy = DEFAULT_POLICY) -> bool:
+
+def should_scale_up(
+    queue_depth: int, current: int, policy: AutoscalePolicy = DEFAULT_POLICY
+) -> bool:
     """Reports whether the fleet should scale out.
 
     Args:
@@ -58,7 +61,10 @@ def should_scale_up(queue_depth: int, current: int, policy: AutoscalePolicy = DE
     """
     return desired_workers(queue_depth, policy) > current
 
-def should_scale_down(queue_depth: int, current: int, policy: AutoscalePolicy = DEFAULT_POLICY) -> bool:
+
+def should_scale_down(
+    queue_depth: int, current: int, policy: AutoscalePolicy = DEFAULT_POLICY
+) -> bool:
     """Reports whether the fleet should scale in.
 
     Args:
@@ -70,6 +76,7 @@ def should_scale_down(queue_depth: int, current: int, policy: AutoscalePolicy = 
         scale_down: True when current capacity exceeds desired capacity.
     """
     return desired_workers(queue_depth, policy) < current
+
 
 def load_policy(path: str = "config/autoscaling.yaml") -> AutoscalePolicy:
     """Loads an autoscaling policy from a YAML file.
@@ -86,6 +93,7 @@ def load_policy(path: str = "config/autoscaling.yaml") -> AutoscalePolicy:
         raw = yaml.safe_load(fh)
     return AutoscalePolicy(**raw)
 
+
 def headroom(queue_depth: int, current: int, policy: AutoscalePolicy = DEFAULT_POLICY) -> int:
     """Computes spare capacity before the next scale-out threshold.
 
@@ -99,7 +107,10 @@ def headroom(queue_depth: int, current: int, policy: AutoscalePolicy = DEFAULT_P
     """
     return max(0, current * policy.scale_up_depth - queue_depth)
 
-def in_cooldown(last_action_ts: float, now_ts: float, policy: AutoscalePolicy = DEFAULT_POLICY) -> bool:
+
+def in_cooldown(
+    last_action_ts: float, now_ts: float, policy: AutoscalePolicy = DEFAULT_POLICY
+) -> bool:
     """Reports whether a scaling action is still inside the cooldown window.
 
     Args:
@@ -111,6 +122,7 @@ def in_cooldown(last_action_ts: float, now_ts: float, policy: AutoscalePolicy = 
         cooling: True when fewer than cooldown_s seconds have elapsed.
     """
     return (now_ts - last_action_ts) < policy.cooldown_s
+
 
 def scale_step(queue_depth: int, current: int, policy: AutoscalePolicy = DEFAULT_POLICY) -> int:
     """Computes the signed worker delta for one scaling decision.

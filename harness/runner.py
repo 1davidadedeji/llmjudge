@@ -7,6 +7,8 @@ Contains:
     EvalRunner.run(): scores every case with every configured metric
 """
 
+from typing import Any
+
 from harness.test_case import LLMTestCase
 
 
@@ -17,7 +19,7 @@ class EvalRunner:
         metrics: Metric instances to apply to every case.
     """
 
-    def __init__(self, metrics: list) -> None:
+    def __init__(self, metrics: list[Any]) -> None:
         """Stores the metric list."""
         self.metrics = list(metrics)
 

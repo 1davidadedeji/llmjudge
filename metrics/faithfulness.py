@@ -80,6 +80,7 @@ class FaithfulnessMetric(BaseMetric):
         verdict = self.judge.complete(prompt)
         return verdict.strip().lower().startswith("yes")
 
+
 def claims_from_bullets(answer: str) -> list[str]:
     """Extracts claims from bullet-listed answers.
 
@@ -90,6 +91,7 @@ def claims_from_bullets(answer: str) -> list[str]:
         claims: One claim per bullet line, markers stripped.
     """
     return [line.lstrip("-* ").strip() for line in answer.splitlines() if line.strip()]
+
 
 def format_verdict_reason(claim: str, entailed: bool) -> str:
     """Builds a per-claim explanation for the metric reason field.
@@ -104,6 +106,7 @@ def format_verdict_reason(claim: str, entailed: bool) -> str:
     verdict = "supported" if entailed else "unsupported"
     return f"claim {claim!r} is {verdict} by the context"
 
+
 def normalize_answer(answer: str) -> str:
     """Normalizes an answer before claim extraction.
 
@@ -114,6 +117,7 @@ def normalize_answer(answer: str) -> str:
         normalized: Answer with collapsed whitespace.
     """
     return " ".join(answer.split())
+
 
 def is_passing_score(score: float, threshold: float = 0.8) -> bool:
     """Reports whether a faithfulness score passes.

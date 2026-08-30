@@ -31,7 +31,7 @@ def test_generate_writes_cache(tmp_path) -> None:
     generator = make_generator(tmp_path, [PAYLOAD, PAYLOAD])
     cases = generator.generate("geography", count=2)
     assert len(cases) == 2
-    assert list(tmp_path.glob("*.jsonl"))
+    assert list(tmp_path.glob("**/*.jsonl"))
 
 
 def test_generate_uses_warm_cache(tmp_path) -> None:
@@ -41,6 +41,7 @@ def test_generate_uses_warm_cache(tmp_path) -> None:
     cases = generator.generate("geography", count=1)
     assert len(cases) == 1
 
+
 def test_load_gold_set_aggregates_topics(tmp_path) -> None:
     """Gold set loads every cached topic file."""
     generator = make_generator(tmp_path, [PAYLOAD, PAYLOAD])
@@ -48,11 +49,13 @@ def test_load_gold_set_aggregates_topics(tmp_path) -> None:
     generator.generate("basic science", count=1)
     assert len(generator.load_gold_set()) == 2
 
+
 def test_cache_key_stable(tmp_path) -> None:
     """Cache keys are stable per topic."""
     generator = make_generator(tmp_path, [])
     assert generator.cache_key("geography") == generator.cache_key("geography")
     assert generator.cache_key("geography") != generator.cache_key("history")
+
 
 def test_topics_returns_copy(tmp_path) -> None:
     """topics() returns a copy, not the shared list."""
@@ -61,16 +64,19 @@ def test_topics_returns_copy(tmp_path) -> None:
     topics.append("extra")
     assert "extra" not in generator.topics()
 
+
 def test_generate_rag_cases(tmp_path) -> None:
     """RAG case generation uses the RAG template."""
     generator = make_generator(tmp_path, [PAYLOAD])
     cases = generator.generate_rag_cases("biology", count=1)
     assert cases == [{"question": "q", "answer": "a", "context": "c"}]
 
+
 def test_topics_nonempty(tmp_path) -> None:
     """Seed topic list is never empty."""
     generator = make_generator(tmp_path, [])
     assert generator.topics()
+
 
 def test_estimate_calls(tmp_path) -> None:
     """Cost estimate is one call per generated case."""
@@ -78,11 +84,13 @@ def test_estimate_calls(tmp_path) -> None:
     assert generator.estimate_calls(7) == 7
     assert generator.estimate_calls(-1) == 0
 
+
 def test_deduplicate(tmp_path) -> None:
     """Duplicate questions collapse to the first occurrence."""
     generator = make_generator(tmp_path, [])
     cases = [{"question": "q"}, {"question": "q"}, {"question": "r"}]
     assert len(generator.deduplicate(cases)) == 2
+
 
 def test_validate_case(tmp_path) -> None:
     """Validation flags cases missing required fields."""
@@ -90,11 +98,13 @@ def test_validate_case(tmp_path) -> None:
     assert generator.validate_case({"question": "q"}) == ["missing answer", "missing context"]
     assert generator.validate_case({"question": "q", "answer": "a", "context": "c"}) == []
 
+
 def test_generate_skips_invalid_cases(tmp_path) -> None:
     """Invalid generations are dropped from the batch."""
     generator = make_generator(tmp_path, ["{}", PAYLOAD])
     cases = generator.generate("economics", count=2)
-    assert cases == [{"question": "q", "answer": "a", "context": "c"}]
+    assert cases == [{"question": "q", "answer": "a", "context": "c", "provenance": "synthetic"}]
+
 
 def test_gold_set_excludes_real_queries(tmp_path) -> None:
     """Real production queries never leak into the synthetic gold set."""
@@ -110,11 +120,13 @@ def test_gold_set_excludes_real_queries(tmp_path) -> None:
     assert all(case.get("provenance") == "synthetic" for case in gold)
     assert not any(case.get("question") == "real-user-query" for case in gold)
 
+
 def test_difficulty_mix_sums_to_count(tmp_path) -> None:
     """Difficulty split always sums to the planned count."""
     generator = make_generator(tmp_path, [])
     for count in (5, 10, 33):
         assert sum(generator.difficulty_mix(count).values()) == count
+
 
 def test_gold_set_empty_cache(tmp_path) -> None:
     """Empty cache yields an empty gold set."""

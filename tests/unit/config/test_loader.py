@@ -15,6 +15,7 @@ def test_load_example_config() -> None:
     assert config.repos[0].repo == "retrieval-core"
     assert config.default_dataset == "gold-v1"
 
+
 def test_metric_threshold_bounds() -> None:
     """Threshold overrides must stay in [0, 1]."""
     import pytest
@@ -25,20 +26,24 @@ def test_metric_threshold_bounds() -> None:
     with pytest.raises(ValidationError):
         MetricSelection(name="faithfulness", threshold=1.5)
 
+
 def test_metric_names_helper() -> None:
     """metric_names lists enabled metrics in order."""
     config = load_config("llmjudge.example.yaml")
     assert config.repos[0].metric_names()[0] == "faithfulness"
+
 
 def test_threshold_for_unset() -> None:
     """threshold_for returns None when no override is set."""
     config = load_config("llmjudge.example.yaml")
     assert config.repos[0].threshold_for("faithfulness") is None
 
+
 def test_repo_names() -> None:
     """repo_names lists every configured repo."""
     config = load_config("llmjudge.example.yaml")
     assert "retrieval-core" in config.repo_names()
+
 
 def test_find_repo() -> None:
     """find_repo locates a configured repo and misses unknown ones."""
@@ -48,15 +53,18 @@ def test_find_repo() -> None:
     assert find_repo(config, "agentflow") is not None
     assert find_repo(config, "nope") is None
 
+
 def test_example_has_all_five_repos() -> None:
     """Example config covers all five repos."""
     config = load_config("llmjudge.example.yaml")
     assert len(config.repo_names()) == 5
 
+
 def test_default_dataset_applies() -> None:
     """default_dataset parses from the example."""
     config = load_config("llmjudge.example.yaml")
     assert config.default_dataset
+
 
 def test_metrics_nonempty_per_repo() -> None:
     """Every configured repo enables at least one metric."""
@@ -64,17 +72,20 @@ def test_metrics_nonempty_per_repo() -> None:
     for repo in config.repos:
         assert repo.metrics
 
+
 def test_repo_config_preserves_order() -> None:
     """Repo order in the file is preserved."""
     config = load_config("llmjudge.example.yaml")
     names = config.repo_names()
     assert names[0] == "retrieval-core"
 
+
 def test_uses_metric() -> None:
     """uses_metric reflects the repo's selections."""
     config = load_config("llmjudge.example.yaml")
     assert config.repos[0].uses_metric("faithfulness")
     assert not config.repos[0].uses_metric("agent_trajectory")
+
 
 def test_metric_selection_name_required() -> None:
     """MetricSelection requires a name."""
@@ -86,6 +97,7 @@ def test_metric_selection_name_required() -> None:
     with pytest.raises(ValidationError):
         MetricSelection()
 
+
 def test_datasets_in_use() -> None:
     """datasets_in_use deduplicates and sorts."""
     from config.loader import datasets_in_use
@@ -93,11 +105,13 @@ def test_datasets_in_use() -> None:
     config = load_config("llmjudge.example.yaml")
     assert datasets_in_use(config) == sorted(datasets_in_use(config))
 
+
 def test_config_immutable_semantics() -> None:
     """Loaded repos compare equal to a reload."""
     first = load_config("llmjudge.example.yaml")
     second = load_config("llmjudge.example.yaml")
     assert first == second
+
 
 def test_resolve_config_path_env(monkeypatch) -> None:
     """Config path honors the env override."""

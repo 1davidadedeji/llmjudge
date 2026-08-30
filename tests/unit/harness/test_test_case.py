@@ -24,16 +24,19 @@ def test_defaults_empty() -> None:
     assert case.retrieval_context == []
     assert case.metadata == {}
 
+
 def test_is_rag_case() -> None:
     """RAG flag reflects presence of retrieval context."""
     assert LLMTestCase(input="q", actual_output="a", retrieval_context=["p"]).is_rag_case
     assert not LLMTestCase(input="q", actual_output="a").is_rag_case
+
 
 def test_has_expected_output() -> None:
     """Expected-output flag reflects the field."""
     assert not LLMTestCase(input="q", actual_output="a").has_expected_output
     case = LLMTestCase(input="q", actual_output="a", expected_output="e")
     assert case.has_expected_output
+
 
 def test_frozen_immutable() -> None:
     """Cases are immutable once created."""
@@ -45,17 +48,20 @@ def test_frozen_immutable() -> None:
     with pytest.raises(dataclasses.FrozenInstanceError):
         case.input = "other"
 
+
 def test_metadata_independent_per_case() -> None:
     """Default metadata dicts are not shared."""
     first = LLMTestCase(input="q", actual_output="a")
     second = LLMTestCase(input="q", actual_output="a")
     assert first.metadata is not second.metadata
 
+
 def test_lists_independent_per_case() -> None:
     """Default list fields are not shared."""
     first = LLMTestCase(input="q", actual_output="a")
     second = LLMTestCase(input="q", actual_output="a")
     assert first.retrieval_context is not second.retrieval_context
+
 
 def test_full_case() -> None:
     """All fields round-trip through the constructor."""
@@ -72,6 +78,7 @@ def test_full_case() -> None:
     assert case.expected_output == "e"
     assert case.tools_called == ["search"]
 
+
 def test_to_dict_roundtrip() -> None:
     """Serialization covers every field."""
     case = LLMTestCase(input="q", actual_output="a", metadata={"k": "v"})
@@ -79,20 +86,24 @@ def test_to_dict_roundtrip() -> None:
     assert payload["metadata"] == {"k": "v"}
     assert payload["expected_output"] is None
 
+
 def test_from_dict_roundtrip() -> None:
     """from_dict inverts to_dict."""
     case = LLMTestCase(input="q", actual_output="a", tools_called=["t"])
     assert LLMTestCase.from_dict(case.to_dict()) == case
+
 
 def test_is_agent_run() -> None:
     """Agent flag reflects tool usage."""
     assert LLMTestCase(input="q", actual_output="a", tools_called=["t"]).is_agent_run
     assert not LLMTestCase(input="q", actual_output="a").is_agent_run
 
+
 def test_redacted_masks_metadata() -> None:
     """Redaction masks metadata values but keeps keys."""
     case = LLMTestCase(input="q", actual_output="a", metadata={"token": "secret"})
     assert case.redacted().metadata == {"token": "***"}
+
 
 def test_input_and_output_preserved() -> None:
     """Input and output survive construction verbatim."""
@@ -100,11 +111,13 @@ def test_input_and_output_preserved() -> None:
     assert case.input == "  spaced  "
     assert len(case.actual_output) == 500
 
+
 def test_tools_lists_independent() -> None:
     """tools_called defaults are not shared."""
     first = LLMTestCase(input="q", actual_output="a")
     second = LLMTestCase(input="q", actual_output="a")
     assert first.tools_called is not second.tools_called
+
 
 def test_context_default_independent() -> None:
     """context defaults are not shared."""
@@ -112,10 +125,13 @@ def test_context_default_independent() -> None:
     second = LLMTestCase(input="q", actual_output="a")
     assert first.context is not second.context
 
-def test_hashable_by_identity_fields() -> None:
-    """Cases hash consistently for set membership."""
+
+def test_cases_compare_by_value_not_identity() -> None:
+    """Cases with identical fields are equal but distinct objects."""
     case = LLMTestCase(input="q", actual_output="a")
-    assert case in {case}
+    twin = LLMTestCase(input="q", actual_output="a")
+    assert case == twin and case is not twin
+
 
 def test_with_output_copies() -> None:
     """with_output changes only the answer."""
@@ -124,9 +140,11 @@ def test_with_output_copies() -> None:
     assert updated.actual_output == "b"
     assert updated.retrieval_context == ["p"]
 
+
 def test_cases_equal_by_value() -> None:
     """Cases with identical fields compare equal."""
     assert LLMTestCase(input="q", actual_output="a") == LLMTestCase(input="q", actual_output="a")
+
 
 def test_tag_adds_metadata() -> None:
     """Tagging adds a metadata entry without mutating the original."""
@@ -135,16 +153,19 @@ def test_tag_adds_metadata() -> None:
     assert tagged.metadata == {"repo": "llmjudge"}
     assert case.metadata == {}
 
+
 def test_expected_tools_default_independent() -> None:
     """expected_tools defaults are not shared between cases."""
     first = LLMTestCase(input="q", actual_output="a")
     second = LLMTestCase(input="q", actual_output="a")
     assert first.expected_tools is not second.expected_tools
 
+
 def test_metadata_values_any_json() -> None:
     """Metadata accepts arbitrary JSON values."""
     case = LLMTestCase(input="q", actual_output="a", metadata={"n": 1, "tags": ["x"]})
     assert case.metadata["tags"] == ["x"]
+
 
 def test_expected_output_none_by_default() -> None:
     """expected_output defaults to None explicitly."""

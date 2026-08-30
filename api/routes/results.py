@@ -9,6 +9,8 @@ Contains:
     create_run(): records a new eval run
 """
 
+from typing import Any
+
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
@@ -33,7 +35,7 @@ class RunCreate(BaseModel):
 @router.get("/runs")
 def list_runs(
     repo: str | None = None, limit: int = 50, store: ResultsStore = Depends(get_store)
-) -> list[dict]:
+) -> list[dict[str, Any]]:
     """Lists recent runs, optionally filtered by repo.
 
     Args:
@@ -47,7 +49,7 @@ def list_runs(
 
 
 @router.get("/runs/{run_id}")
-def get_run(run_id: str, store: ResultsStore = Depends(get_store)) -> dict:
+def get_run(run_id: str, store: ResultsStore = Depends(get_store)) -> dict[str, Any]:
     """Fetches one run with its scores.
 
     Args:
@@ -64,7 +66,7 @@ def get_run(run_id: str, store: ResultsStore = Depends(get_store)) -> dict:
 
 
 @router.post("/runs", status_code=201)
-def create_run(body: RunCreate, store: ResultsStore = Depends(get_store)) -> dict:
+def create_run(body: RunCreate, store: ResultsStore = Depends(get_store)) -> dict[str, Any]:
     """Records a new eval run.
 
     Args:
@@ -77,8 +79,11 @@ def create_run(body: RunCreate, store: ResultsStore = Depends(get_store)) -> dic
     store.insert_run(body.id, body.repo)
     return {"id": body.id, "repo": body.repo, "status": "queued"}
 
+
 @router.post("/runs/{run_id}/scores", status_code=201)
-def add_score(run_id: str, metric: str, score: float, store: ResultsStore = Depends(get_store)) -> dict:
+def add_score(
+    run_id: str, metric: str, score: float, store: ResultsStore = Depends(get_store)
+) -> dict[str, Any]:
     """Writes one metric score for a run.
 
     Args:
@@ -95,8 +100,9 @@ def add_score(run_id: str, metric: str, score: float, store: ResultsStore = Depe
     store.upsert_score(run_id, metric, score)
     return {"run_id": run_id, "metric": metric, "score": score}
 
+
 @router.get("/health")
-def health() -> dict:
+def health() -> dict[str, Any]:
     """Reports API liveness.
 
     Returns:
@@ -104,7 +110,8 @@ def health() -> dict:
     """
     return {"status": "ok"}
 
-def serialize_run(run: dict) -> dict:
+
+def serialize_run(run: dict[str, Any]) -> dict[str, Any]:
     """Serializes a run payload with ISO-8601 UTC timestamps.
 
     Args:
@@ -120,8 +127,9 @@ def serialize_run(run: dict) -> dict:
             payload[field_name] = value.isoformat().replace("+00:00", "Z")
     return payload
 
+
 @router.get("/runs/{run_id}/scores")
-def get_scores(run_id: str, store: ResultsStore = Depends(get_store)) -> dict:
+def get_scores(run_id: str, store: ResultsStore = Depends(get_store)) -> dict[str, Any]:
     """Fetches just the scores mapping for a run.
 
     Args:
@@ -134,7 +142,9 @@ def get_scores(run_id: str, store: ResultsStore = Depends(get_store)) -> dict:
     run = store.get_run(run_id)
     if run is None:
         raise HTTPException(status_code=404, detail="run not found")
-    return run["scores"]
+    scores: dict[str, Any] = run["scores"]
+    return scores
+
 
 @router.delete("/runs/{run_id}", status_code=204)
 def delete_run(run_id: str, store: ResultsStore = Depends(get_store)) -> None:
@@ -146,6 +156,7 @@ def delete_run(run_id: str, store: ResultsStore = Depends(get_store)) -> None:
     """
     if not store.delete_run(run_id):
         raise HTTPException(status_code=404, detail="run not found")
+
 
 @router.get("/repos")
 def list_repos(store: ResultsStore = Depends(get_store)) -> list[str]:
@@ -159,6 +170,7 @@ def list_repos(store: ResultsStore = Depends(get_store)) -> list[str]:
     """
     return store.repos_with_runs()
 
+
 @router.get("/metrics")
 def list_metric_names() -> list[str]:
     """Lists the metric names the platform can score.
@@ -170,8 +182,9 @@ def list_metric_names() -> list[str]:
 
     return sorted(METRIC_REGISTRY)
 
+
 @router.get("/runs/{run_id}/summary")
-def run_summary(run_id: str, store: ResultsStore = Depends(get_store)) -> dict:
+def run_summary(run_id: str, store: ResultsStore = Depends(get_store)) -> dict[str, Any]:
     """Builds a compact summary of one run.
 
     Args:
@@ -191,8 +204,9 @@ def run_summary(run_id: str, store: ResultsStore = Depends(get_store)) -> dict:
         "score_count": len(run["scores"]),
     }
 
+
 @router.get("/repos/{repo}/latest")
-def latest_run(repo: str, store: ResultsStore = Depends(get_store)) -> dict:
+def latest_run(repo: str, store: ResultsStore = Depends(get_store)) -> dict[str, Any]:
     """Fetches the most recent run for a repo.
 
     Args:

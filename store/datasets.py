@@ -11,11 +11,10 @@ Contains:
 import hashlib
 import json
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+from typing import TYPE_CHECKING, Any
 
 import boto3
-
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from mypy_boto3_s3 import S3Client
@@ -99,7 +98,7 @@ class DatasetStore:
             version=version,
             sha256=sha256,
             key=key,
-            uploaded_at=datetime.now(timezone.utc),
+            uploaded_at=datetime.now(UTC),
         )
 
     def download(self, version_info: DatasetVersion) -> bytes:
@@ -112,7 +111,8 @@ class DatasetStore:
             payload: Raw dataset bytes.
         """
         response = self.client.get_object(Bucket=self.bucket, Key=version_info.key)
-        return response["Body"].read()
+        body: bytes = response["Body"].read()
+        return body
 
     def delete_dataset(self, dataset: str) -> int:
         """Deletes every stored version of a dataset.
@@ -139,7 +139,7 @@ class DatasetStore:
         """
         return content_hash(self.download(version_info)).startswith(version_info.sha256[:12])
 
-    def read_jsonl(self, version_info: DatasetVersion) -> list[dict]:
+    def read_jsonl(self, version_info: DatasetVersion) -> list[dict[str, Any]]:
         """Downloads a version and parses it as JSONL records.
 
         Args:
@@ -151,7 +151,7 @@ class DatasetStore:
         payload = self.download(version_info).decode()
         return [json.loads(line) for line in payload.splitlines() if line.strip()]
 
-    def upload_jsonl(self, dataset: str, records: list[dict]) -> DatasetVersion:
+    def upload_jsonl(self, dataset: str, records: list[dict[str, Any]]) -> DatasetVersion:
         """Serializes records as JSONL and uploads them as the next version.
 
         Args:
@@ -204,10 +204,11 @@ class DatasetStore:
         """
         prefix = f"{self.prefix}/{dataset}/"
         response = self.client.list_objects_v2(Bucket=self.bucket, Prefix=prefix)
-        versions = []
+        versions: list[DatasetVersion] = []
         for entry in response.get("Contents", []):
             versions.append(self._version_from_key(dataset, entry["Key"]))
         return sorted(versions, key=lambda version: version.version)
+
 
 def next_version(versions: list[DatasetVersion]) -> int:
     """Computes the next version number for a dataset.

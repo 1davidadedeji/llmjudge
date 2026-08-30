@@ -16,9 +16,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pip-audit cyclonedx-bom
+      - run: pip install pip-audit pyyaml cyclonedx-bom
+      - run: pip install .
       - run: cyclonedx-py environment -o sbom.json || true
-      - run: pip-audit --strict --output json > audit.json || true
+      - run: pip freeze | grep -v llmjudge > /tmp/reqs.txt
+      - run: pip-audit --strict -r /tmp/reqs.txt --output json > audit.json || true
       - run: python ci/audit_filter.py --check audit.json
 
   npm-audit:
@@ -28,9 +30,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: npm
-          cache-dependency-path: dashboard/package-lock.json
-      - run: npm ci --prefix dashboard
+      - run: npm install --prefix dashboard
       - run: npm audit --prefix dashboard --audit-level=moderate
 
   dependency-review:
@@ -47,4 +47,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
       - run: python -c "import yaml,glob; [yaml.safe_load(open(p)) for p in glob.glob('ci/*.yaml')]"

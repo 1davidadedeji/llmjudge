@@ -60,6 +60,7 @@ def load_rubric(metric: str) -> RubricTemplate:
         raw = yaml.safe_load(fh)
     return RubricTemplate(**raw)
 
+
 def list_rubrics() -> list[str]:
     """Lists every metric with a rubric template on disk.
 
@@ -67,6 +68,7 @@ def list_rubrics() -> list[str]:
         metrics: Sorted metric names with available templates.
     """
     return sorted(path.stem for path in TEMPLATE_DIR.glob("*.yaml"))
+
 
 def template_version(metric: str) -> int:
     """Reads just the version of a metric's rubric template.
@@ -78,6 +80,7 @@ def template_version(metric: str) -> int:
         version: Template version number.
     """
     return load_rubric(metric).version
+
 
 def validate_template(template: RubricTemplate) -> list[str]:
     """Validates a loaded rubric template.
@@ -94,6 +97,7 @@ def validate_template(template: RubricTemplate) -> list[str]:
     if template.scale_min >= template.scale_max:
         problems.append(f"{template.metric}: scale_min must be below scale_max")
     return problems
+
 
 def render_rubric(template: RubricTemplate) -> str:
     """Renders a template as judge-facing rubric text.

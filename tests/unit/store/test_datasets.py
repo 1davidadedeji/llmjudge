@@ -9,6 +9,7 @@ Contains:
 """
 
 import io
+from datetime import UTC
 
 from store.datasets import DatasetStore, content_hash
 
@@ -54,12 +55,14 @@ def test_upload_download_roundtrip() -> None:
     info = store.upload("gold", 1, b'{"q": 1}\n')
     assert store.download(info) == b'{"q": 1}\n'
 
+
 def test_object_key_layout() -> None:
     """Object keys follow the prefix/dataset/version-hash layout."""
     store = make_store()
     info = store.upload("gold", 3, b"payload")
     assert info.key.startswith("datasets/gold/v0003-")
     assert info.key.endswith(".jsonl")
+
 
 def test_upload_versions_independent() -> None:
     """Two versions of one dataset coexist under different keys."""
@@ -70,12 +73,14 @@ def test_upload_versions_independent() -> None:
     assert store.download(first) == b"v1"
     assert store.download(second) == b"v2"
 
+
 def test_version_from_key_roundtrip() -> None:
     """Keys produced by object_key parse back to their version."""
     store = make_store()
     key = store.object_key("gold", 7, "deadbeefcafe")
     parsed = store._version_from_key("gold", key)
     assert parsed.version == 7
+
 
 def test_next_version() -> None:
     """next_version increments past the highest existing version."""
@@ -84,6 +89,7 @@ def test_next_version() -> None:
     assert next_version([]) == 1
     versions = [DatasetVersion("gold", 2, "x", "k")]
     assert next_version(versions) == 3
+
 
 def test_upload_jsonl_uses_next_version() -> None:
     """upload_jsonl picks the next version automatically."""
@@ -95,9 +101,11 @@ def test_upload_jsonl_uses_next_version() -> None:
     info = store.upload_jsonl("gold", [{"q": 1}])
     assert info.version == 2
 
+
 def test_hash_length() -> None:
     """Content hash is a full sha256 hex digest."""
     assert len(content_hash(b"x")) == 64
+
 
 def test_read_jsonl_roundtrip() -> None:
     """read_jsonl parses back what upload_jsonl wrote."""
@@ -106,20 +114,22 @@ def test_read_jsonl_roundtrip() -> None:
     info = store.upload_jsonl("gold", [{"q": 1}, {"q": 2}])
     assert store.read_jsonl(info) == [{"q": 1}, {"q": 2}]
 
+
 def test_upload_returns_version_descriptor() -> None:
     """upload returns the version it stored."""
     store = make_store()
     info = store.upload("gold", 4, b"data")
     assert info.version == 4 and info.dataset == "gold"
 
+
 def test_upload_records_aware_timestamp() -> None:
     """Uploaded versions carry a timezone-aware upload time."""
-    from datetime import timezone
 
     store = make_store()
     info = store.upload("gold", 1, b"data")
     assert info.uploaded_at is not None
-    assert info.uploaded_at.tzinfo == timezone.utc
+    assert info.uploaded_at.tzinfo == UTC
+
 
 def test_verify_intact() -> None:
     """verify accepts an untampered payload."""
@@ -127,12 +137,14 @@ def test_verify_intact() -> None:
     info = store.upload("gold", 1, b"data")
     assert store.verify(info)
 
+
 def test_verify_detects_tampering() -> None:
     """verify rejects a payload changed after upload."""
     store = make_store()
     info = store.upload("gold", 1, b"data")
     store.client.objects[("test-bucket", info.key)] = b"tampered"
     assert not store.verify(info)
+
 
 def test_download_missing_key_raises() -> None:
     """Downloading an unknown key raises KeyError."""
@@ -142,11 +154,13 @@ def test_download_missing_key_raises() -> None:
     with pytest.raises(KeyError):
         store.client.get_object(Bucket="test-bucket", Key="nope")
 
+
 def test_prefix_in_every_key() -> None:
     """Every object key carries the configured prefix."""
     store = make_store()
     info = store.upload("gold", 1, b"x")
     assert info.key.startswith("datasets/")
+
 
 def test_distinct_datasets_isolated() -> None:
     """Two datasets never share keys."""
@@ -155,19 +169,23 @@ def test_distinct_datasets_isolated() -> None:
     second = store.upload("gold-b", 1, b"same")
     assert first.key != second.key
 
+
 def test_version_zero_padded_in_key() -> None:
     """Version numbers are zero-padded in keys."""
     store = make_store()
     key = store.object_key("gold", 12, "abcdef012345")
     assert "v0012-" in key
 
+
 def test_content_hash_binary_safe() -> None:
     """Hashing handles arbitrary bytes."""
     assert content_hash(bytes(range(256)))
 
+
 def test_store_default_prefix() -> None:
     """Default prefix is datasets."""
     assert DatasetStore("b", client=FakeS3Client()).prefix == "datasets"
+
 
 def test_uploaded_payload_stored_under_bucket() -> None:
     """Upload writes to the configured bucket."""

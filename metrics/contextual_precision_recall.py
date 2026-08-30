@@ -9,7 +9,6 @@ Contains:
 
 from harness.test_case import LLMTestCase
 from metrics.base import BaseMetric
-from metrics.base import BaseMetric
 from metrics.judge import JudgeClient
 
 VERDICT_PROMPT = (
@@ -109,6 +108,7 @@ class ContextualRecallMetric(BaseMetric):
         verdict = self.judge.complete(COVERAGE_PROMPT.format(passage=passage, expected=expected))
         return verdict.strip().lower().startswith("yes")
 
+
 def average_precision(verdicts: list[bool]) -> float:
     """Computes average precision from ranked relevance verdicts.
 
@@ -126,6 +126,7 @@ def average_precision(verdicts: list[bool]) -> float:
             weighted += relevant / rank
     return weighted / relevant if relevant else 0.0
 
+
 def recall_at_k(verdicts: list[bool], k: int) -> float:
     """Computes recall over only the top-k ranked passages.
 
@@ -140,6 +141,7 @@ def recall_at_k(verdicts: list[bool], k: int) -> float:
     if not window:
         return 1.0
     return sum(window) / len(window)
+
 
 def mrr(verdicts: list[bool]) -> float:
     """Computes mean reciprocal rank for ranked verdicts.

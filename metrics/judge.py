@@ -36,7 +36,7 @@ class StubJudge:
     def __init__(self, responses: list[str]) -> None:
         """Stores the scripted completions."""
         self.responses = list(responses)
-        self.calls = []
+        self.calls: list[str] = []
 
     def complete(self, prompt: str) -> str:
         """Returns the next scripted completion.

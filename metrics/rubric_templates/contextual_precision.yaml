@@ -2,7 +2,6 @@ metric: contextual_precision
 version: 2
 criteria:
   - "Relevant passages ranked earlier contribute more to the score."
+  - "A passage is relevant only if it helps answer the question."
 scale_min: 0
 scale_max: 1
-
-  - "A passage is relevant only if it helps answer the question."

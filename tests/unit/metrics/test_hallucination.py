@@ -36,15 +36,18 @@ def test_all_contradicted_scores_zero() -> None:
     metric = HallucinationMetric(StubJudge(["yes", "yes"]))
     assert metric.measure(make_case("A. B.", ["ctx"])) == 0.0
 
+
 def test_partial_contradiction() -> None:
     """Some contradicted claims yield a fractional score."""
     metric = HallucinationMetric(StubJudge(["no", "yes"]))
     assert metric.measure(make_case("A. B.", ["ctx"])) == 0.5
 
+
 def test_three_claims_one_contradicted() -> None:
     """One contradiction in three claims scores 0.667."""
     metric = HallucinationMetric(StubJudge(["no", "yes", "no"]))
     assert abs(metric.measure(make_case("A. B. C.", ["ctx"])) - 2 / 3) < 1e-9
+
 
 def test_prompt_contains_claim() -> None:
     """Contradiction prompt embeds the claim being judged."""
@@ -52,9 +55,11 @@ def test_prompt_contains_claim() -> None:
     HallucinationMetric(judge).measure(make_case("unique-claim-text.", ["ctx"]))
     assert "unique-claim-text." in judge.calls[0]
 
+
 def test_empty_answer_scores_one() -> None:
     """Empty answer hallucinates nothing."""
     assert HallucinationMetric(StubJudge([])).measure(make_case("", ["ctx"])) == 1.0
+
 
 def test_falls_back_to_retrieval_context() -> None:
     """Retrieval context is used when context is empty."""
@@ -64,6 +69,7 @@ def test_falls_back_to_retrieval_context() -> None:
     assert metric.measure(case) == 0.0
     assert "retrieved" in judge.calls[0]
 
+
 def test_context_preferred_over_retrieval() -> None:
     """Explicit context wins over retrieval context."""
     judge = StubJudge(["no"])
@@ -72,28 +78,34 @@ def test_context_preferred_over_retrieval() -> None:
     metric.measure(case)
     assert "explicit" in judge.calls[0]
 
+
 def test_verdict_case_insensitive() -> None:
     """Verdict parsing ignores casing."""
     metric = HallucinationMetric(StubJudge(["YES"]))
     assert metric.is_contradicted("c", "ctx")
 
+
 def test_threshold_default() -> None:
     """Default threshold is 0.9."""
     assert HallucinationMetric(StubJudge([])).threshold == 0.9
+
 
 def test_measure_returns_float() -> None:
     """Hallucination score is a plain float."""
     metric = HallucinationMetric(StubJudge(["no"]))
     assert isinstance(metric.measure(make_case("A.", ["ctx"])), float)
 
+
 def test_metric_name_stable() -> None:
     """Metric name is the stable registry key."""
     assert HallucinationMetric.name == "hallucination"
+
 
 def test_extract_claims_basic() -> None:
     """Claim extraction splits sentences."""
     metric = HallucinationMetric(StubJudge([]))
     assert metric.extract_claims("A. B? C!") == ["A.", "B?", "C!"]
+
 
 def test_score_bounded() -> None:
     """Score stays within [0, 1]."""
@@ -101,10 +113,12 @@ def test_score_bounded() -> None:
     score = metric.measure(make_case("A. B. C. D.", ["ctx"]))
     assert 0.0 <= score <= 1.0
 
+
 def test_single_claim_contradicted() -> None:
     """One contradicted claim on a one-claim answer scores zero."""
     metric = HallucinationMetric(StubJudge(["yes"]))
     assert metric.measure(make_case("Solo.", ["ctx"])) == 0.0
+
 
 def test_hallucination_rate_inverse() -> None:
     """Rate is the complement of the score."""
@@ -112,11 +126,13 @@ def test_hallucination_rate_inverse() -> None:
 
     assert hallucination_rate(0.75) == 0.25
 
+
 def test_prompt_version_pinned() -> None:
     """Prompt version is pinned for attributable score changes."""
     from metrics.hallucination import CONTRADICTION_PROMPT_VERSION
 
     assert CONTRADICTION_PROMPT_VERSION == 1
+
 
 def test_contradicted_claims_filtered() -> None:
     """Only verdict-flagged claims are returned."""
@@ -124,10 +140,12 @@ def test_contradicted_claims_filtered() -> None:
 
     assert contradicted_claims(["a", "b"], [False, True]) == ["b"]
 
+
 def test_five_claims_two_contradicted() -> None:
     """Two contradictions in five claims score 0.6."""
     metric = HallucinationMetric(StubJudge(["yes", "no", "yes", "no", "no"]))
     assert abs(metric.measure(make_case("A. B. C. D. E.", ["ctx"])) - 0.6) < 1e-9
+
 
 def test_judge_call_count_matches_claims() -> None:
     """One judge call per claim."""
@@ -135,14 +153,17 @@ def test_judge_call_count_matches_claims() -> None:
     HallucinationMetric(judge).measure(make_case("A. B. C.", ["ctx"]))
     assert len(judge.calls) == 3
 
+
 def test_threshold_custom() -> None:
     """Custom threshold is stored."""
     assert HallucinationMetric(StubJudge([]), threshold=0.95).threshold == 0.95
+
 
 def test_exclamation_splits_claims() -> None:
     """Exclamations split claims too."""
     metric = HallucinationMetric(StubJudge([]))
     assert metric.extract_claims("Wow! Really? Yes.") == ["Wow!", "Really?", "Yes."]
+
 
 def test_contradiction_prompt_version_constant() -> None:
     """Prompt version constant exists and is an int."""
@@ -150,21 +171,25 @@ def test_contradiction_prompt_version_constant() -> None:
 
     assert isinstance(CONTRADICTION_PROMPT_VERSION, int)
 
+
 def test_is_clean_boundary() -> None:
     """Clean boundary is inclusive of the threshold."""
     from metrics.hallucination import is_clean
 
     assert is_clean(0.9) and not is_clean(0.89)
 
+
 def test_two_thirds_clean() -> None:
     """One contradiction in three claims scores 0.667."""
     metric = HallucinationMetric(StubJudge(["no", "no", "yes"]))
     assert abs(metric.measure(make_case("A. B. C.", ["ctx"])) - 2 / 3) < 1e-9
 
+
 def test_whitespace_claim_dropped() -> None:
     """Whitespace-only fragments are not claims."""
     metric = HallucinationMetric(StubJudge([]))
     assert metric.extract_claims("A.   ") == ["A."]
+
 
 def test_name_matches_registry_key() -> None:
     """Hallucination name matches the registry key."""

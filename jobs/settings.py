@@ -41,6 +41,7 @@ def load_queue_config() -> QueueConfig:
         max_tries=int(os.environ.get("EVAL_JOB_MAX_TRIES", "3")),
     )
 
+
 def dead_letter_key(queue_name: str) -> str:
     """Derives the dead-letter queue key for a queue.
 
@@ -52,7 +53,9 @@ def dead_letter_key(queue_name: str) -> str:
     """
     return f"{queue_name}:dead"
 
+
 DEFAULT_QUEUE_NAME = "llmjudge:eval"
+
 
 def is_dead_letter_enabled(config: QueueConfig) -> bool:
     """Reports whether dead-lettering is active for the queue.
@@ -64,6 +67,7 @@ def is_dead_letter_enabled(config: QueueConfig) -> bool:
         enabled: True when the queue allows more than one attempt.
     """
     return config.max_tries > 1
+
 
 def validate_config(config: QueueConfig) -> list[str]:
     """Validates a queue configuration.

@@ -9,8 +9,8 @@ Contains:
     ResultsStore.get_run(): fetches one run with its scores
 """
 
-from datetime import datetime
-from typing import Any, timezone
+from datetime import UTC, datetime
+from typing import Any
 
 import psycopg
 
@@ -47,7 +47,7 @@ class ResultsStore:
         with self.connect() as conn:
             conn.execute(
                 "INSERT INTO eval_runs (id, repo, status, created_at) VALUES (%s, %s, %s, %s)",
-                (run_id, repo, status, datetime.now(timezone.utc)),
+                (run_id, repo, status, datetime.now(UTC)),
             )
 
     def upsert_score(self, run_id: str, metric: str, score: float) -> None:
@@ -65,10 +65,10 @@ class ResultsStore:
                 " ON CONFLICT (run_id, metric) DO UPDATE"
                 " SET score = EXCLUDED.score, updated_at = EXCLUDED.updated_at,"
                 " version = eval_scores.version + 1",
-                (run_id, metric, score, datetime.now(timezone.utc)),
+                (run_id, metric, score, datetime.now(UTC)),
             )
 
-    def get_run(self, run_id: str) -> dict | None:
+    def get_run(self, run_id: str) -> dict[str, Any] | None:
         """Fetches one run with its scores.
 
         Args:
@@ -97,6 +97,31 @@ class ResultsStore:
             "scores": {metric: score for metric, score in score_rows},
         }
 
+    def save_score(self, run_id: str, metric: str, score: float, expected_version: int) -> int:
+        """Writes a score only if the row's version matches expectations.
+
+        Args:
+            run_id: Run the score belongs to.
+            metric: Metric name.
+            score: New metric score.
+            expected_version: Version the caller read earlier.
+
+        Returns:
+            version: The new row version after the write.
+
+        Raises:
+            OptimisticLockError: When another writer bumped the version first.
+        """
+        with self.connect() as conn:
+            cursor = conn.execute(
+                "UPDATE eval_scores SET score = %s, updated_at = %s, version = version + 1"
+                " WHERE run_id = %s AND metric = %s AND version = %s",
+                (score, datetime.now(UTC), run_id, metric, expected_version),
+            )
+        if cursor.rowcount == 0:
+            raise OptimisticLockError(f"{run_id}/{metric}: version {expected_version} is stale")
+        return expected_version + 1
+
     def failing_metrics(self, repo: str, floor: float) -> list[str]:
         """Lists metrics whose latest score is below a floor.
 
@@ -112,7 +137,7 @@ class ResultsStore:
             return []
         return [name for name, score in latest["scores"].items() if score < floor]
 
-    def runs_by_status(self, status: str) -> list[dict]:
+    def runs_by_status(self, status: str) -> list[dict[str, Any]]:
         """Lists runs with a given status.
 
         Args:
@@ -128,8 +153,7 @@ class ResultsStore:
                 (status,),
             ).fetchall()
         return [
-            {"id": row[0], "repo": row[1], "status": row[2], "created_at": row[3]}
-            for row in rows
+            {"id": row[0], "repo": row[1], "status": row[2], "created_at": row[3]} for row in rows
         ]
 
     def average_score(self, repo: str, metric: str, days: int = 7) -> float | None:
@@ -173,7 +197,7 @@ class ResultsStore:
             scores[run_id][metric] = score
         return scores
 
-    def metric_history(self, repo: str, metric: str, limit: int = 30) -> list[dict]:
+    def metric_history(self, repo: str, metric: str, limit: int = 30) -> list[dict[str, Any]]:
         """Fetches the recent score history of one metric for a repo.
 
         Args:
@@ -228,15 +252,17 @@ class ResultsStore:
             count: Number of runs matching the filter.
         """
         query = "SELECT COUNT(*) FROM eval_runs"
-        params: tuple = ()
+        params: tuple[Any, ...] = ()
         if repo is not None:
             query += " WHERE repo = %s"
             params = (repo,)
         with self.connect() as conn:
             row = conn.execute(query, params).fetchone()
+        if row is None:
+            return 0
         return int(row[0])
 
-    def latest_run(self, repo: str) -> dict | None:
+    def latest_run(self, repo: str) -> dict[str, Any] | None:
         """Fetches the most recent run for a repo.
 
         Args:
@@ -260,10 +286,10 @@ class ResultsStore:
         with self.connect() as conn:
             conn.execute(
                 "UPDATE eval_runs SET status = %s, finished_at = %s WHERE id = %s",
-                (status, datetime.now(timezone.utc), run_id),
+                (status, datetime.now(UTC), run_id),
             )
 
-    def list_runs(self, repo: str | None = None, limit: int = 50) -> list[dict]:
+    def list_runs(self, repo: str | None = None, limit: int = 50) -> list[dict[str, Any]]:
         """Lists recent runs, optionally filtered by repo.
 
         Args:
@@ -274,7 +300,7 @@ class ResultsStore:
             runs: Run rows newest-first, without scores.
         """
         query = "SELECT id, repo, status, created_at FROM eval_runs"
-        params: list = []
+        params: list[Any] = []
         if repo is not None:
             query += " WHERE repo = %s"
             params.append(repo)
@@ -286,6 +312,7 @@ class ResultsStore:
             {"id": row[0], "repo": row[1], "status": row[2], "created_at": ensure_utc(row[3])}
             for row in rows
         ]
+
 
 def ensure_utc(value: datetime) -> datetime:
     """Coerces a database timestamp to timezone-aware UTC.
@@ -299,33 +326,9 @@ def ensure_utc(value: datetime) -> datetime:
     if isinstance(value, str):
         value = datetime.fromisoformat(value.replace("Z", "+00:00"))
     if value.tzinfo is None:
-        return value.replace(tzinfo=timezone.utc)
-    return value.astimezone(timezone.utc)
+        return value.replace(tzinfo=UTC)
+    return value.astimezone(UTC)
+
 
 class OptimisticLockError(Exception):
     """Raised when a score write loses an optimistic-lock race."""
-
-    def save_score(self, run_id: str, metric: str, score: float, expected_version: int) -> int:
-        """Writes a score only if the row's version matches expectations.
-
-        Args:
-            run_id: Run the score belongs to.
-            metric: Metric name.
-            score: New metric score.
-            expected_version: Version the caller read earlier.
-
-        Returns:
-            version: The new row version after the write.
-
-        Raises:
-            OptimisticLockError: When another writer bumped the version first.
-        """
-        with self.connect() as conn:
-            cursor = conn.execute(
-                "UPDATE eval_scores SET score = %s, updated_at = %s, version = version + 1"
-                " WHERE run_id = %s AND metric = %s AND version = %s",
-                (score, datetime.now(timezone.utc), run_id, metric, expected_version),
-            )
-        if cursor.rowcount == 0:
-            raise OptimisticLockError(f"{run_id}/{metric}: version {expected_version} is stale")
-        return expected_version + 1

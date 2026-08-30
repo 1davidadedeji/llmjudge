@@ -2,7 +2,6 @@ metric: contextual_recall
 version: 2
 criteria:
   - "Each passage is judged on whether it supports the expected answer."
+  - "Partial support counts; the passage need not cover everything."
 scale_min: 0
 scale_max: 1
-
-  - "Partial support counts; the passage need not cover everything."

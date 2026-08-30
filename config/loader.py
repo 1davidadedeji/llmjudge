@@ -27,6 +27,7 @@ def load_config(path: str = DEFAULT_CONFIG_PATH) -> LlmjudgeConfig:
         raw = yaml.safe_load(fh)
     return LlmjudgeConfig(**raw)
 
+
 def find_repo(config: LlmjudgeConfig, repo: str) -> "RepoEvalConfig | None":
     """Finds one repo's config by name.
 
@@ -42,6 +43,7 @@ def find_repo(config: LlmjudgeConfig, repo: str) -> "RepoEvalConfig | None":
             return repo_config
     return None
 
+
 def datasets_in_use(config: LlmjudgeConfig) -> list[str]:
     """Lists every dataset referenced by the config.
 
@@ -52,6 +54,7 @@ def datasets_in_use(config: LlmjudgeConfig) -> list[str]:
         datasets: Sorted distinct dataset identifiers.
     """
     return sorted({repo.dataset for repo in config.repos})
+
 
 def resolve_config_path() -> str:
     """Resolves the config path, honoring the env override.

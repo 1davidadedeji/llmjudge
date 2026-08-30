@@ -105,6 +105,7 @@ class AgentTrajectoryMetric(BaseMetric):
             return 0.0
         return min(1.0, len(expected) / len(called))
 
+
 def redundant_calls(called: list[str]) -> list[str]:
     """Lists tools called more than once.
 
@@ -122,6 +123,7 @@ def redundant_calls(called: list[str]) -> list[str]:
         seen.add(tool)
     return repeated
 
+
 def step_count_delta(called: list[str], expected: list[str]) -> int:
     """Computes how many extra steps the run took over the expectation.
 
@@ -133,6 +135,7 @@ def step_count_delta(called: list[str], expected: list[str]) -> int:
         delta: Extra step count; negative when the run was shorter.
     """
     return len(called) - len(expected)
+
 
 def trajectory_summary(called: list[str], expected: list[str]) -> str:
     """Builds a one-line summary of a scored trajectory.
@@ -146,6 +149,7 @@ def trajectory_summary(called: list[str], expected: list[str]) -> str:
     """
     return f"called {len(called)} tools, expected {len(expected)}: {', '.join(called)}"
 
+
 def has_loop(called: list[str], window: int = 3) -> bool:
     """Detects immediate repetition loops in a trajectory.
 
@@ -157,7 +161,7 @@ def has_loop(called: list[str], window: int = 3) -> bool:
         looping: True when any tool repeats window times in a row.
     """
     run = 1
-    for prev, cur in zip(called, called[1:]):
+    for prev, cur in zip(called, called[1:], strict=False):
         run = run + 1 if cur == prev else 1
         if run >= window:
             return True

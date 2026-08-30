@@ -9,6 +9,7 @@ Contains:
 """
 
 import re
+from typing import Any
 
 from harness.test_case import LLMTestCase
 from metrics.base import BaseMetric
@@ -57,9 +58,10 @@ class GEvalMetric(BaseMetric):
         Returns:
             score: Mean of the three judges' normalized scores.
         """
-        return self.measure_with_details(test_case)["mean"]
+        details = self.measure_with_details(test_case)
+        return float(details["mean"])
 
-    def measure_with_details(self, test_case: LLMTestCase) -> dict:
+    def measure_with_details(self, test_case: LLMTestCase) -> dict[str, Any]:
         """Computes per-judge scores and the disagreement flag.
 
         Args:
@@ -104,6 +106,7 @@ class GEvalMetric(BaseMetric):
             return 0.0
         return (int(match.group()) - 1) / 4
 
+
 def per_judge_breakdown(scores: list[float]) -> dict[str, float]:
     """Labels ensemble scores by judge position for reporting.
 
@@ -114,7 +117,8 @@ def per_judge_breakdown(scores: list[float]) -> dict[str, float]:
         breakdown: Mapping of judge_a/b/c labels to scores.
     """
     labels = ["judge_a", "judge_b", "judge_c"]
-    return dict(zip(labels, scores))
+    return dict(zip(labels, scores, strict=True))
+
 
 def should_escalate(disagreement: bool) -> bool:
     """Reports whether a run should be escalated for human review.
@@ -127,6 +131,7 @@ def should_escalate(disagreement: bool) -> bool:
     """
     return disagreement
 
+
 def ensemble_confidence(scores: list[float]) -> float:
     """Converts judge agreement into a confidence figure.
 
@@ -137,6 +142,7 @@ def ensemble_confidence(scores: list[float]) -> float:
         confidence: 1.0 for perfect agreement, lower as spread grows.
     """
     return 1.0 - (max(scores) - min(scores))
+
 
 def spread(scores: list[float]) -> float:
     """Computes the max-min spread of ensemble scores.

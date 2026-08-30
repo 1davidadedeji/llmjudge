@@ -59,7 +59,9 @@ def agreement(judge_scores: list[float], labels: list[float], tolerance: float =
     """
     if not labels:
         return 1.0
-    matches = sum(abs(score - label) <= tolerance for score, label in zip(judge_scores, labels))
+    matches = sum(
+        abs(score - label) <= tolerance for score, label in zip(judge_scores, labels, strict=True)
+    )
     return matches / len(labels)
 
 
@@ -80,11 +82,14 @@ def suggest_threshold(labels: list[float], steps: int = 20) -> float:
     for step in range(1, steps):
         candidate = step / steps
         predicted = [label >= candidate for label in labels]
-        accuracy = sum(pred == (label >= 0.5) for pred, label in zip(predicted, labels))
+        accuracy = sum(
+            pred == (label >= 0.5) for pred, label in zip(predicted, labels, strict=True)
+        )
         if accuracy > best_accuracy:
             best_accuracy = accuracy
             best_threshold = candidate
     return best_threshold
+
 
 def cohens_kappa(judge_pass: list[bool], human_pass: list[bool]) -> float:
     """Computes Cohen's kappa between judge and human pass decisions.
@@ -99,13 +104,14 @@ def cohens_kappa(judge_pass: list[bool], human_pass: list[bool]) -> float:
     if not human_pass:
         return 1.0
     total = len(human_pass)
-    observed = sum(j == h for j, h in zip(judge_pass, human_pass)) / total
+    observed = sum(j == h for j, h in zip(judge_pass, human_pass, strict=True)) / total
     judge_rate = sum(judge_pass) / total
     human_rate = sum(human_pass) / total
     expected = judge_rate * human_rate + (1 - judge_rate) * (1 - human_rate)
     if expected == 1.0:
         return 1.0
     return (observed - expected) / (1 - expected)
+
 
 def mean_absolute_error(judge_scores: list[float], labels: list[float]) -> float:
     """Computes MAE between judge scores and human labels.
@@ -119,9 +125,10 @@ def mean_absolute_error(judge_scores: list[float], labels: list[float]) -> float
     """
     if not labels:
         return 0.0
-    return sum(abs(s - label) for s, label in zip(judge_scores, labels)) / len(labels)
+    return sum(abs(s - label) for s, label in zip(judge_scores, labels, strict=True)) / len(labels)
 
-def calibration_report(judge_scores: list[float], labels: list[float]) -> dict:
+
+def calibration_report(judge_scores: list[float], labels: list[float]) -> dict[str, float]:
     """Bundles calibration statistics into one report.
 
     Args:

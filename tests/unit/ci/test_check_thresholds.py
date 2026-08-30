@@ -29,22 +29,27 @@ def test_validate_config_accepts_valid() -> None:
     """A well-formed config produces no validation problems."""
     assert validate_config(CONFIG) == []
 
+
 def test_validate_config_flags_out_of_range() -> None:
     """Thresholds outside [0, 1] are rejected."""
     bad = {"default_threshold": 0.75, "repos": {"x": {"threshold": 1.5}}}
     assert validate_config(bad) == ["x: threshold 1.5 out of range [0, 1]"]
 
+
 def test_validate_config_requires_default() -> None:
     """Config without a default_threshold is rejected."""
     assert validate_config({"repos": {}}) == ["missing default_threshold"]
+
 
 def test_all_repos_sorted() -> None:
     """Repo listing is sorted for deterministic CI logs."""
     assert all_repos(CONFIG) == ["agentflow"]
 
+
 def test_strictest_picks_highest_floor() -> None:
     """Strictest repo is the one with the highest threshold."""
     assert strictest(CONFIG).repo == "agentflow"
+
 
 def test_blended_score_mean() -> None:
     """Blended score is the plain mean of metric scores."""
@@ -52,11 +57,13 @@ def test_blended_score_mean() -> None:
 
     assert blended_score({"a": 0.8, "b": 1.0}) == 0.9
 
+
 def test_blended_score_empty() -> None:
     """Empty score mapping blends to zero, never a pass."""
     from ci.check_thresholds import blended_score
 
     assert blended_score({}) == 0.0
+
 
 def test_thresholds_yaml_loads() -> None:
     """Shipped thresholds file parses."""
@@ -65,12 +72,14 @@ def test_thresholds_yaml_loads() -> None:
     config = load_threshold_config()
     assert "default_threshold" in config
 
+
 def test_gate_decision_pass_and_fail() -> None:
     """Gate decision follows the blended score against the repo floor."""
     from ci.check_thresholds import gate_decision
 
     assert gate_decision(CONFIG, "agentflow", {"m": 0.9})
     assert not gate_decision(CONFIG, "agentflow", {"m": 0.5})
+
 
 def test_all_five_repos_configured() -> None:
     """All five repos have explicit thresholds."""
@@ -79,17 +88,20 @@ def test_all_five_repos_configured() -> None:
     repos = all_repos(load_threshold_config())
     assert len(repos) == 5
 
+
 def test_thresholds_within_range() -> None:
     """Every configured threshold lies in [0, 1]."""
     from ci.check_thresholds import load_threshold_config, validate_config
 
     assert validate_config(load_threshold_config()) == []
 
+
 def test_resolve_unknown_repo_type() -> None:
     """Resolution returns a RepoThreshold."""
     from ci.check_thresholds import RepoThreshold
 
     assert isinstance(resolve_threshold(CONFIG, "x"), RepoThreshold)
+
 
 def test_default_threshold_documented() -> None:
     """Default threshold is a float in (0, 1)."""
@@ -98,17 +110,20 @@ def test_default_threshold_documented() -> None:
     value = float(load_threshold_config()["default_threshold"])
     assert 0.0 < value < 1.0
 
+
 def test_gate_decision_empty_scores_fails() -> None:
     """Empty scores never pass the gate."""
     from ci.check_thresholds import gate_decision
 
     assert not gate_decision(CONFIG, "agentflow", {})
 
+
 def test_repo_threshold_equality() -> None:
     """RepoThreshold compares by value."""
     from ci.check_thresholds import RepoThreshold
 
     assert RepoThreshold("a", 0.5) == RepoThreshold("a", 0.5)
+
 
 def test_repo_threshold_frozen() -> None:
     """RepoThreshold is immutable once resolved."""
@@ -122,11 +137,13 @@ def test_repo_threshold_frozen() -> None:
     with pytest.raises(dataclasses.FrozenInstanceError):
         entry.threshold = 0.1
 
+
 def test_blended_single_metric() -> None:
     """A single metric blends to itself."""
     from ci.check_thresholds import blended_score
 
     assert blended_score({"m": 0.42}) == 0.42
+
 
 def test_strictest_empty_raises() -> None:
     """strictest on an empty config raises."""
@@ -135,11 +152,13 @@ def test_strictest_empty_raises() -> None:
     with pytest.raises(ValueError):
         strictest({"repos": {}})
 
+
 def test_thresholds_file_repos_mapping() -> None:
     """Thresholds file stores repos under a mapping."""
     from ci.check_thresholds import load_threshold_config
 
     assert isinstance(load_threshold_config()["repos"], dict)
+
 
 def test_config_path_constant() -> None:
     """CONFIG_PATH points at the shipped file."""
@@ -149,11 +168,13 @@ def test_config_path_constant() -> None:
 
     assert Path(CONFIG_PATH).name == "thresholds.yaml"
 
+
 def test_describe_unknown_repo_uses_default() -> None:
     """Description falls back to the default floor."""
     from ci.check_thresholds import describe
 
     assert "0.75" in describe(CONFIG, "mystery") or "0.76" in describe(CONFIG, "mystery")
+
 
 def test_describe_renders_floor() -> None:
     """Description includes the resolved threshold value."""

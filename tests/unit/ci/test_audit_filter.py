@@ -26,6 +26,7 @@ def test_filter_passes_through_unrelated() -> None:
     """Findings with no matching override always survive."""
     assert filter_findings(["CVE-1111-2"], [], "2026-06-21") == ["CVE-1111-2"]
 
+
 def test_override_requires_reason() -> None:
     """Overrides without a justification are rejected at construction time."""
     import pytest
@@ -33,10 +34,12 @@ def test_override_requires_reason() -> None:
     with pytest.raises(TypeError):
         Override("CVE-0000-1", "2999-01-01")
 
+
 def test_override_fields() -> None:
     """Override stores id, expiry, and reason."""
     override = Override("CVE-1", "2999-01-01", "justified")
     assert override.vuln_id == "CVE-1"
+
 
 def test_filter_multiple_findings() -> None:
     """Filtering handles mixed covered/uncovered lists."""
@@ -44,10 +47,12 @@ def test_filter_multiple_findings() -> None:
     remaining = filter_findings(["CVE-1", "CVE-2"], overrides, "2026-07-01")
     assert remaining == ["CVE-2"]
 
+
 def test_filter_preserves_order() -> None:
     """Remaining findings keep their reported order."""
     findings = ["CVE-3", "CVE-1", "CVE-2"]
     assert filter_findings(findings, [], "2026-07-01") == findings
+
 
 def test_load_overrides_empty(tmp_path) -> None:
     """An empty overrides file parses to an empty list."""
@@ -57,24 +62,26 @@ def test_load_overrides_empty(tmp_path) -> None:
     cfg.write_text("overrides: []\n")
     assert load_overrides(str(cfg)) == []
 
+
 def test_filter_empty_findings() -> None:
     """No findings means nothing to filter."""
     assert filter_findings([], [], "2026-07-01") == []
+
 
 def test_load_overrides_roundtrip(tmp_path) -> None:
     """Overrides round-trip from YAML into Override entries."""
     from ci.audit_filter import load_overrides
 
     cfg = tmp_path / "overrides.yaml"
-    cfg.write_text(
-        "overrides:\n  - vuln_id: CVE-1\n    expires: '2999-01-01'\n    reason: ok\n"
-    )
+    cfg.write_text("overrides:\n  - vuln_id: CVE-1\n    expires: '2999-01-01'\n    reason: ok\n")
     assert load_overrides(str(cfg))[0].vuln_id == "CVE-1"
+
 
 def test_filter_boundary_date_is_live() -> None:
     """An override expiring today still applies today."""
     overrides = [Override("CVE-9", "2026-07-28", "boundary")]
     assert filter_findings(["CVE-9"], overrides, "2026-07-28") == []
+
 
 def test_expiring_soon_empty() -> None:
     """No overrides means nothing expiring."""
@@ -82,16 +89,19 @@ def test_expiring_soon_empty() -> None:
 
     assert expiring_soon([], "2026-08-04") == []
 
+
 def test_override_expiry_string_format() -> None:
     """Expiry dates are ISO strings."""
     override = Override("CVE-1", "2026-12-31", "x")
     assert override.expires.count("-") == 2
+
 
 def test_filter_idempotent() -> None:
     """Filtering twice changes nothing further."""
     overrides = [Override("CVE-1", "2999-01-01", "ok")]
     once = filter_findings(["CVE-1", "CVE-2"], overrides, "2026-07-28")
     assert filter_findings(once, overrides, "2026-07-28") == once
+
 
 def test_expiring_soon_window() -> None:
     """Only overrides inside the warning window are flagged."""
@@ -102,6 +112,7 @@ def test_expiring_soon_window() -> None:
         Override("CVE-2", "2999-01-01", "far"),
     ]
     assert [o.vuln_id for o in expiring_soon(overrides, "2026-08-04")] == ["CVE-1"]
+
 
 def test_expiring_soon_ignores_expired() -> None:
     """Already-expired overrides are not reported as expiring soon."""

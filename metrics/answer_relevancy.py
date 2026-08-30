@@ -18,7 +18,29 @@ RELEVANCY_PROMPT = (
     "Does the answer address the question directly? Answer yes or no."
 )
 STOPWORDS = frozenset(
-    "a an the is are was were of to in on for and or with that this it as at by".split()
+    [
+        "a",
+        "an",
+        "the",
+        "is",
+        "are",
+        "was",
+        "were",
+        "of",
+        "to",
+        "in",
+        "on",
+        "for",
+        "and",
+        "or",
+        "with",
+        "that",
+        "this",
+        "it",
+        "as",
+        "at",
+        "by",
+    ]
 )
 
 
@@ -82,7 +104,9 @@ class AnswerRelevancyMetric(BaseMetric):
         answer_tokens = set(tokenize(answer))
         return len(question_tokens & answer_tokens) / len(question_tokens)
 
+
 JUDGE_WEIGHT = 0.5
+
 
 def is_on_topic(score: float, threshold: float = 0.75) -> bool:
     """Reports whether a relevancy score counts as on-topic.
@@ -95,6 +119,7 @@ def is_on_topic(score: float, threshold: float = 0.75) -> bool:
         on_topic: True when the score meets the threshold.
     """
     return score >= threshold
+
 
 def coverage(answer_tokens: list[str], question_tokens: list[str]) -> float:
     """Computes what fraction of the question the answer covers.

@@ -7,6 +7,8 @@ Contains:
     test_insert_run_sql: insert_run issues the expected statement
 """
 
+from datetime import UTC
+
 from store.results_store import ResultsStore
 
 
@@ -20,6 +22,7 @@ class FakeCursor:
     def __init__(self) -> None:
         """Initializes empty capture state."""
         self.statements: list[tuple] = []
+        self.rowcount = 0
         self.rows: list[tuple] = []
         self.one: tuple | None = None
 
@@ -70,6 +73,7 @@ def test_insert_run_sql() -> None:
     assert "INSERT INTO eval_runs" in sql
     assert params[:3] == ("r-1", "agentflow", "queued")
 
+
 def test_upsert_score_sql() -> None:
     """upsert_score issues an upsert with the score fields."""
     conn = FakeConnection()
@@ -77,6 +81,7 @@ def test_upsert_score_sql() -> None:
     sql, params = conn.statements[0]
     assert "ON CONFLICT" in sql
     assert params[:3] == ("r-1", "faithfulness", 0.9)
+
 
 def test_list_runs_filters_by_repo() -> None:
     """list_runs adds a WHERE clause only when a repo filter is given."""
@@ -86,6 +91,7 @@ def test_list_runs_filters_by_repo() -> None:
     assert "WHERE repo = %s" in sql
     assert params[0] == "graphmind"
 
+
 def test_list_runs_no_filter() -> None:
     """list_runs without a repo lists everything."""
     conn = FakeConnection()
@@ -93,14 +99,16 @@ def test_list_runs_no_filter() -> None:
     sql, _ = conn.statements[0]
     assert "WHERE" not in sql
 
+
 def test_ensure_utc_naive() -> None:
     """Naive timestamps are coerced to aware UTC."""
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     from store.results_store import ensure_utc
 
     naive = datetime(2026, 6, 19, 12, 0, 0)
-    assert ensure_utc(naive).tzinfo == timezone.utc
+    assert ensure_utc(naive).tzinfo == UTC
+
 
 def test_finish_run_updates_status() -> None:
     """finish_run sets status and finished_at."""
@@ -111,18 +119,24 @@ def test_finish_run_updates_status() -> None:
     assert params[0] == "succeeded"
     assert params[2] == "r-1"
 
+
 def test_get_run_missing_returns_none() -> None:
     """get_run returns None for an unknown run id."""
     conn = FakeConnection()
     assert make_store(conn).get_run("nope") is None
 
+
 def test_get_run_assembles_scores() -> None:
     """get_run merges the scores rows into a mapping."""
     conn = FakeConnection()
-    conn.one = ("r-1", "agentflow", "succeeded", None, None)
+    from datetime import datetime
+
+    stamp = datetime(2026, 7, 1, tzinfo=UTC)
+    conn.one = ("r-1", "agentflow", "succeeded", stamp, stamp)
     conn.rows = [("faithfulness", 0.9), ("hallucination", 1.0)]
     run = make_store(conn).get_run("r-1")
     assert run["scores"] == {"faithfulness": 0.9, "hallucination": 1.0}
+
 
 def test_metric_history_joins_runs() -> None:
     """metric_history joins scores to runs and filters by repo+metric."""
@@ -132,30 +146,35 @@ def test_metric_history_joins_runs() -> None:
     assert "JOIN eval_runs" in sql
     assert params[:2] == ("agentflow", "faithfulness")
 
+
 def test_optimistic_lock_error_raised_on_stale_version() -> None:
     """save_score refuses to write over a newer version."""
     import pytest
 
-    from store.results_store import OptimisticLockError, ResultsStore
+    from store.results_store import OptimisticLockError
 
-    store = ResultsStore("postgresql://unused")
+    conn = FakeConnection()
+    store = make_store(conn)
     with pytest.raises(OptimisticLockError):
         store.save_score("r-1", "faithfulness", 0.9, expected_version=3)
 
+
 def test_ensure_utc_already_aware() -> None:
     """Aware timestamps pass through ensure_utc unchanged."""
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     from store.results_store import ensure_utc
 
-    aware = datetime(2026, 7, 21, 8, 0, 0, tzinfo=timezone.utc)
+    aware = datetime(2026, 7, 21, 8, 0, 0, tzinfo=UTC)
     assert ensure_utc(aware) == aware
+
 
 def test_scores_for_runs_empty() -> None:
     """scores_for_runs short-circuits on an empty id list."""
     conn = FakeConnection()
     assert make_store(conn).scores_for_runs([]) == {}
     assert conn.statements == []
+
 
 def test_average_score_window() -> None:
     """average_score bounds the window with an interval clause."""
@@ -165,12 +184,14 @@ def test_average_score_window() -> None:
     assert "INTERVAL" in sql
     assert params == ("agentflow", "faithfulness", 3)
 
+
 def test_insert_run_params_order() -> None:
     """insert_run binds params in column order."""
     conn = FakeConnection()
     make_store(conn).insert_run("r-7", "shipwright", "running")
     _, params = conn.statements[0]
     assert params[0] == "r-7" and params[1] == "shipwright" and params[2] == "running"
+
 
 def test_runs_by_status() -> None:
     """runs_by_status filters on the status column."""
@@ -180,6 +201,7 @@ def test_runs_by_status() -> None:
     assert "WHERE status = %s" in sql
     assert params == ("failed",)
 
+
 def test_upsert_score_conflict_target() -> None:
     """Upsert targets the (run_id, metric) conflict key."""
     conn = FakeConnection()
@@ -187,12 +209,14 @@ def test_upsert_score_conflict_target() -> None:
     sql, _ = conn.statements[0]
     assert "(run_id, metric)" in sql
 
+
 def test_list_runs_limit_param() -> None:
     """list_runs binds the limit parameter."""
     conn = FakeConnection()
     make_store(conn).list_runs(limit=5)
     _, params = conn.statements[0]
     assert params[-1] == 5
+
 
 def test_get_run_selects_by_id() -> None:
     """get_run selects on the run id."""
@@ -202,11 +226,13 @@ def test_get_run_selects_by_id() -> None:
     assert "WHERE id = %s" in sql
     assert params == ("r-42",)
 
+
 def test_failing_metrics_empty_without_runs() -> None:
     """failing_metrics returns empty when the repo has no runs."""
     conn = FakeConnection()
     conn.rows = []
     assert make_store(conn).failing_metrics("agentflow", 0.5) == []
+
 
 def test_schema_index_on_repo_created() -> None:
     """Schema indexes runs by repo and creation time."""
@@ -215,6 +241,7 @@ def test_schema_index_on_repo_created() -> None:
     schema = Path("store/schema.sql").read_text()
     assert "idx_eval_runs_repo_created" in schema
 
+
 def test_finish_run_binds_run_id_last() -> None:
     """finish_run binds the run id as the last param."""
     conn = FakeConnection()
@@ -222,9 +249,11 @@ def test_finish_run_binds_run_id_last() -> None:
     _, params = conn.statements[0]
     assert params[-1] == "r-3"
 
+
 def test_store_init_stores_dsn() -> None:
     """ResultsStore keeps its DSN."""
     assert ResultsStore("postgresql://y").dsn == "postgresql://y"
+
 
 def test_delete_run_issues_two_statements() -> None:
     """delete_run clears scores then the run."""

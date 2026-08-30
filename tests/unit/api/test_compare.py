@@ -21,6 +21,7 @@ def test_find_regressions_respects_tolerance() -> None:
     assert find_regressions({"a": -0.015}) == []
     assert find_regressions({"a": -0.05}) == ["a"]
 
+
 def test_compare_route() -> None:
     """Compare endpoint returns deltas and regressions."""
     from fastapi.testclient import TestClient
@@ -41,12 +42,14 @@ def test_compare_route() -> None:
     payload = TestClient(app).get("/compare/b/c").json()
     assert payload["regressions"] == ["m"]
 
+
 def test_summarize_formats_deltas() -> None:
     """Summary shows signed deltas per metric."""
     from api.routes.compare import summarize
 
     assert summarize({"m": 0.1}) == "m +0.100"
     assert summarize({}) == "no shared metrics"
+
 
 def test_improvements() -> None:
     """Improvements mirror the regression logic on the positive side."""
@@ -55,24 +58,29 @@ def test_improvements() -> None:
     assert improvements({"a": 0.05}) == ["a"]
     assert improvements({"a": 0.005}) == []
 
+
 def test_deltas_empty_when_no_shared() -> None:
     """No shared metrics yields empty deltas."""
     assert score_deltas({"a": 1.0}, {"b": 1.0}) == {}
+
 
 def test_score_deltas_sorted() -> None:
     """Delta keys are sorted for stable API payloads."""
     deltas = score_deltas({"b": 1.0, "a": 1.0}, {"b": 1.0, "a": 1.0})
     assert list(deltas) == ["a", "b"]
 
+
 def test_regressions_empty_deltas() -> None:
     """Empty deltas regress nothing."""
     assert find_regressions({}) == []
+
 
 def test_deltas_symmetry() -> None:
     """Swapping runs negates the deltas."""
     forward = score_deltas({"m": 0.5}, {"m": 0.8})
     backward = score_deltas({"m": 0.8}, {"m": 0.5})
     assert forward["m"] == -backward["m"]
+
 
 def test_biggest_regression() -> None:
     """biggest_regression picks the most negative delta."""
@@ -81,10 +89,12 @@ def test_biggest_regression() -> None:
     assert biggest_regression({"a": -0.1, "b": -0.2}) == "b"
     assert biggest_regression({"a": 0.1}) is None
 
+
 def test_find_regressions_sorted_input() -> None:
     """Regression list follows delta key order."""
     result = find_regressions({"b": -0.5, "a": -0.5})
-    assert result == ["a", "b"]
+    assert result == ["b", "a"]
+
 
 def test_tolerance_boundary_exclusive() -> None:
     """Exactly -tolerance is not a regression."""
@@ -92,11 +102,13 @@ def test_tolerance_boundary_exclusive() -> None:
 
     assert find_regressions({"m": -REGRESSION_TOLERANCE}) == []
 
+
 def test_improvements_empty() -> None:
     """Empty deltas improve nothing."""
     from api.routes.compare import improvements
 
     assert improvements({}) == []
+
 
 def test_is_significant() -> None:
     """Significance uses the absolute delta."""
@@ -105,11 +117,13 @@ def test_is_significant() -> None:
     assert is_significant(0.1) and is_significant(-0.1)
     assert not is_significant(0.001)
 
+
 def test_biggest_regression_none_when_empty() -> None:
     """No deltas means no biggest regression."""
     from api.routes.compare import biggest_regression
 
     assert biggest_regression({}) is None
+
 
 def test_compare_summary_route() -> None:
     """Summary route renders the one-line delta listing."""
@@ -127,6 +141,7 @@ def test_compare_summary_route() -> None:
     payload = TestClient(app).get("/compare/b/c/summary").json()
     assert payload["summary"] == "m +0.000"
 
+
 def test_summarize_multiple_metrics() -> None:
     """Summary lists every metric."""
     from api.routes.compare import summarize
@@ -134,9 +149,11 @@ def test_summarize_multiple_metrics() -> None:
     text = summarize({"a": 0.1, "b": -0.1})
     assert "a +0.100" in text and "b -0.100" in text
 
+
 def test_score_deltas_zero_change() -> None:
     """Unchanged scores delta to zero."""
     assert score_deltas({"m": 0.7}, {"m": 0.7}) == {"m": 0.0}
+
 
 def test_compare_404_for_unknown_run() -> None:
     """Unknown run ids 404 the comparison."""
@@ -153,11 +170,13 @@ def test_compare_404_for_unknown_run() -> None:
     app.dependency_overrides[get_store] = _Empty
     assert TestClient(app).get("/compare/x/y").status_code == 404
 
+
 def test_is_significant_zero() -> None:
     """Zero delta is never significant."""
     from api.routes.compare import is_significant
 
     assert not is_significant(0.0)
+
 
 def test_regressions_only_negative() -> None:
     """Positive deltas are never regressions."""

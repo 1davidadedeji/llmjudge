@@ -9,6 +9,8 @@ Contains:
     find_regressions(): lists metrics that regressed past a tolerance
 """
 
+from typing import Any
+
 from fastapi import APIRouter, Depends, HTTPException
 
 from api.deps import get_store
@@ -51,7 +53,7 @@ def find_regressions(
 @router.get("/{base_run}/{candidate_run}")
 def compare_runs(
     base_run: str, candidate_run: str, store: ResultsStore = Depends(get_store)
-) -> dict:
+) -> dict[str, Any]:
     """Diffs two runs' scores per metric.
 
     Args:
@@ -79,6 +81,7 @@ def compare_runs(
         "candidate_created_at": serialize_run(candidate).get("created_at"),
     }
 
+
 def summarize(deltas: dict[str, float]) -> str:
     """Builds a one-line summary of score deltas.
 
@@ -92,6 +95,7 @@ def summarize(deltas: dict[str, float]) -> str:
         return "no shared metrics"
     return ", ".join(f"{metric} {delta:+.3f}" for metric, delta in deltas.items())
 
+
 def improvements(deltas: dict[str, float], tolerance: float = REGRESSION_TOLERANCE) -> list[str]:
     """Lists metrics that improved past the tolerance.
 
@@ -103,6 +107,7 @@ def improvements(deltas: dict[str, float], tolerance: float = REGRESSION_TOLERAN
         improved: Metric names whose delta exceeds +tolerance.
     """
     return [metric for metric, delta in deltas.items() if delta > tolerance]
+
 
 def biggest_regression(deltas: dict[str, float]) -> str | None:
     """Finds the metric with the largest negative delta.
@@ -118,6 +123,7 @@ def biggest_regression(deltas: dict[str, float]) -> str | None:
         return None
     return min(regressions, key=lambda metric: deltas[metric])
 
+
 def is_significant(delta: float, tolerance: float = REGRESSION_TOLERANCE) -> bool:
     """Reports whether a single delta exceeds the noise tolerance.
 
@@ -130,10 +136,11 @@ def is_significant(delta: float, tolerance: float = REGRESSION_TOLERANCE) -> boo
     """
     return abs(delta) > tolerance
 
+
 @router.get("/{base_run}/{candidate_run}/summary")
 def compare_summary(
     base_run: str, candidate_run: str, store: ResultsStore = Depends(get_store)
-) -> dict:
+) -> dict[str, Any]:
     """Renders a text summary of a run comparison.
 
     Args:
