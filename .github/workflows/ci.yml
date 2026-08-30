@@ -76,5 +76,5 @@ jobs:
       - run: pip install -e .[dev]
       - run: python ci/merge_gate.py --repo "${{ github.event.repository.name }}"
         if: env.LLMJUDGE_API_URL != ''
-      - run: echo 'merge gate skipped: LLMJUDGE_API_URL not configured'
+      - run: "echo 'merge gate skipped: LLMJUDGE_API_URL not configured'"
         if: env.LLMJUDGE_API_URL == ''
