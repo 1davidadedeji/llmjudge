@@ -30,7 +30,7 @@ dev = [
     "mypy",
     "pip-audit",
     "types-pyyaml",
-    "boto3-stubs",
+    "boto3-stubs[s3]",
 ]
 
 [tool.ruff]

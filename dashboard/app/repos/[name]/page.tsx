@@ -12,12 +12,13 @@ import { sortNewestFirst } from "../../../lib/repos";
 import RepoHeader from "../../../components/RepoHeader";
 import { fetchRuns } from "../../../lib/api";
 
-export default async function RepoPage({ params }: { params: { name: string } }) {
-  const runs = await fetchRuns(params.name);
+export default async function RepoPage({ params }: { params: Promise<{ name: string }> }) {
+  const { name } = await params;
+  const runs = await fetchRuns(name);
   const sorted = sortNewestFirst(runs);
   return (
     <section>
-      <RepoHeader name={params.name} runCount={runs.length} />
+      <RepoHeader name={name} runCount={runs.length} />
       <MetricBreakdown scores={{}} />
       <DrillDownTable runs={sorted} />
     </section>
