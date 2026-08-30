@@ -66,6 +66,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs: [lint, typecheck, test, integration-test]
+    env:
+      LLMJUDGE_API_URL: ${{ secrets.LLMJUDGE_API_URL }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -73,5 +75,6 @@ jobs:
           python-version: "3.12"
       - run: pip install -e .[dev]
       - run: python ci/merge_gate.py --repo "${{ github.event.repository.name }}"
-        env:
-          LLMJUDGE_API_URL: ${{ secrets.LLMJUDGE_API_URL }}
+        if: env.LLMJUDGE_API_URL != ''
+      - run: echo "merge gate skipped: LLMJUDGE_API_URL not configured"
+        if: env.LLMJUDGE_API_URL == ''
